@@ -1,0 +1,19 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 340px;
+  height: 90px;
+  justify-content: flex-start;
+  align-items: center;
+  background: #ffffff;
+  border-bottom-width: 1px;
+  border-bottom-style: dotted;
+}
+.text {
+  position: relative;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  min-width: 0;
+}
