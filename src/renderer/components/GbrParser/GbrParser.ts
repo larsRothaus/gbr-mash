@@ -80,6 +80,7 @@ export class GbrParser {
 
   private nodes: GbrNode[] = [];
   private currentReadPosition: Point2D = { x: 0, y: 0 };
+  private nodeIndex:number = 1;
 
   constructor() {
 
@@ -101,16 +102,19 @@ export class GbrParser {
     let currentNode: GbrNode = new GbrNode();
     currentNode.type = GbrNodeType.ToolUp;
     currentNode.addPoint(this.currentReadPosition);
+    currentNode.setRefId(`N-${this.nodeIndex}`);
+
 
     const storeAndCreateNewNode = (type: GbrNodeType) => {
       if (currentNode && currentNode.points.length > 1) {
         currentNode.close();
         this.nodes.push(currentNode);
-        // this.nodeIndex++
+         this.nodeIndex++
       }
       currentNode = new GbrNode();
       currentNode.type = type;
       currentNode.addPoint(this.currentReadPosition);
+      currentNode.setRefId(`N-${this.nodeIndex}`);
 
     };
 

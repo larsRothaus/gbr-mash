@@ -23,21 +23,11 @@ type State = {
   open: boolean
 };
 
-import Draggable, { DraggableCore, DraggableData, DraggableEvent } from 'react-draggable'; // Both at the same time
+import Draggable, { DraggableData, DraggableEvent } from 'react-draggable'; // Both at the same time
 
 class GbrToolContainer extends React.Component<Props, State> {
 
   componentDidMount() {
-    this.setState({
-      open: true,
-      activeDrags: 0,
-      deltaPosition: {
-        x: 0, y: 0
-      }
-      // controlledPosition: {
-      //   x: -400, y: 200
-      // }
-    });
   }
 
   state = {

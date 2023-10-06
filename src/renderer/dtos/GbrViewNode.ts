@@ -245,4 +245,12 @@ export class GbrViewNode {
   public set visible(value: boolean) {
     this.viewItem.visible(value);
   }
+
+  public setLabelVisibility(value: boolean) {
+    if(this.startLabel && this.endLabel){
+      this.startLabel.visible(value);
+      this.endLabel.visible(value);
+    }
+  }
+
 }

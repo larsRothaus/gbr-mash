@@ -89,6 +89,7 @@ class GbrView extends React.Component<Props, State> {
 
     });
     stage.scale({ x: this.scale, y: this.scale });
+    stage.setPosition({ x: 25, y: 25});
 
     return stage;
   }
@@ -226,13 +227,14 @@ class GbrView extends React.Component<Props, State> {
 
           }else{
             console.log(`## [GbrView] renderData | adding clone..`);
-            const clone = data.clone();
+            const clone = data.clone(`${x}${y}`);
             clone.offset(x * px, y * py);
             this.stage.add(clone.container);
           }
         }
       }
     } else {
+      console.log(`## [GbrView] renderData | adding default`);
       this.stage.add(data.container);
     }
     this.stage.add(this.ruler);

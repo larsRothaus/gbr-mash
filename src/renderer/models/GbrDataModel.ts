@@ -136,6 +136,7 @@ export class GbrDataModel extends EventEmitter {
   public frame: Konva.Rect;
   public container: Konva.Layer;
   public frameSize: Frame;
+  public isOriginal:boolean = true;
 
   constructor(nodes: GbrNode[], frameSize: Frame) {
     super();
@@ -171,23 +172,13 @@ export class GbrDataModel extends EventEmitter {
   }
 
   public removeMoveNodes() {
-    // for(let i in this.nodes){
-    //   console.log(this.nodes[i].type);
-    //   if(this.nodes[i].type === GbrNodeType.ToolUp){
-    //     this.nodes[i].visible = false;
-    //   }
-    // }
-
     let moveNodes = this.nodes.filter(value => value.type === GbrNodeType.ToolUp);
     this.removeNodes(moveNodes.map(value => value.id), true);
     this.render();
+
   }
 
   public removeNodes(ids: number[], rerender: boolean = false) {
-    // for (let i in ids) {
-    //   console.log(`## [GbrDataModel] removeNodes | removing node with id:${ids[i]}`);
-    //   this.nodes.splice(ids[i], 1);
-    // }
     console.log(`## [GbrDataModel] removeNodes | before delete -> ${this.nodes.length}`);
     const filteredArray = this.nodes.filter(value => !ids.includes(value.id));
     this.nodes = filteredArray;
@@ -298,11 +289,12 @@ export class GbrDataModel extends EventEmitter {
   }
 
   public render() {
-    this.frame.remove();
+    this.container.removeChildren();
+    // this.frame.remove();
     this.container.add(this.frame);
     console.log(`## [GbrDataModel] render | node_length:`, this.nodes.length);
     for (let i in this.nodes) {
-      this.nodes[i].viewItem.remove();
+      // this.nodes[i].viewItem.remove();
       this.container.add(this.nodes[i].viewItem);
       const startLabel = this.nodes[i].startLabel;
       const endLabel = this.nodes[i].endLabel;
@@ -311,8 +303,13 @@ export class GbrDataModel extends EventEmitter {
         this.container.add(endLabel);
       }
     }
+    this.testUpdate();
+  }
 
-    this.container.draw();
+  public setLabelVisibility(value:boolean){
+    for(let i in this.nodes){
+      this.nodes[i].setLabelVisibility(value);
+    }
   }
 
   public offset(x: number, y: number): void {
@@ -330,9 +327,12 @@ export class GbrDataModel extends EventEmitter {
     return this.nodes.map(value => value.node);
   }
 
-  public clone(): GbrDataModel {
-    let clonedNodes = this.getGbrNodes().map(value => value.clone());
-    return new GbrDataModel(clonedNodes, this.frameSize);
+  public clone(cloneId:string): GbrDataModel {
+    let clonedNodes = this.getGbrNodes().map(value => value.clone(cloneId));
+    let copy = new GbrDataModel(clonedNodes, this.frameSize);
+    copy.removeMoveNodes();
+    copy.isOriginal = false;
+    return copy;
   }
 
 }
