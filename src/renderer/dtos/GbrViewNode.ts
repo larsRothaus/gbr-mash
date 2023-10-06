@@ -62,6 +62,21 @@ export class GbrViewNode {
 
     let currentVectors: Point2D[] = this.node.points;
 
+    if(this.type === GbrNodeType.ToolUp){
+      if(currentVectors.length === 2 && currentVectors[0].x ===  currentVectors[1].x && currentVectors[0].y===  currentVectors[1].y) {
+        //@ts-ignore
+        this.viewItem = new Konva.Circle({
+          x: currentVectors[0].x,
+          y: currentVectors[0].y,
+          radius:10,
+          fill:'red'
+        });
+
+        //@ts-ignore
+        return this.viewItem;
+      }
+    }
+
     for (let v in currentVectors) {
       const { x, y } = currentVectors[v];
       //@ts-ignore
@@ -69,6 +84,8 @@ export class GbrViewNode {
       //@ts-ignore
       this.vectorConfig.points.push(y);
     }
+
+
     this.viewItem = new Konva.Line(this.vectorConfig);
     return this.viewItem;
   }

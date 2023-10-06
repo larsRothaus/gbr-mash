@@ -12,6 +12,7 @@ body {
     /*        #dd5789 51.77%,*/
     /*        #7a2c9e 129.35%*/
     /*);*/
+    background: black;
     font-family: sans-serif;
     overflow-y: hidden;
     display: flex;
@@ -125,4 +126,44 @@ a:hover {
     position: absolute;
     top:0px;
     right: 0px;
+}
+
+/*delete this shit*/
+
+.react-draggable, .cursor {
+    cursor: move;
+}
+.no-cursor {
+    cursor: auto;
+}
+.cursor-y {
+    cursor: ns-resize;
+}
+.cursor-x {
+    cursor: ew-resize;
+}
+
+.react-draggable strong {
+    background: #ddd;
+    border: 1px solid #999;
+    border-radius: 3px;
+    display: block;
+    margin-bottom: 1px;
+    padding: 3px 5px;
+    text-align: center;
+}
+
+.box {
+    background: #fff;
+    border: 1px solid #999;
+    border-radius: 3px;
+    margin: 0px;
+    padding: 0px;
+    float: left;
+}
+.no-pointer-events {
+    pointer-events: none;
+}
+.hovered {
+    background-color: gray;
 }

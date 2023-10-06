@@ -11,6 +11,7 @@ import { Utils } from '../components/GbrView/Utils';
 import { EventEmitter } from 'events';
 import { Point2D } from '../dtos/Point2D';
 import { GBRCodeGenerator } from '../components/GbrGenerator/GbrGenerator';
+import Konva from 'konva';
 
 
 export const getVectorDist = (seed: Point2D, candidate: Point2D): number => {
@@ -60,7 +61,7 @@ export const optimizeToolPathUtil = (nodes: GbrViewNode[], keepIndex: boolean = 
     if (currentBest) {
       seedNode = currentBest;
     } else {
-      console.log(`## | where are we_ `,nodes.length, optimizevectors.length);
+      console.log(`## | where are we_ `, nodes.length, optimizevectors.length);
       throw new Error(`Error class:GbrParser[optimizeToolPath] : No current best!`);
     }
   }
@@ -75,9 +76,9 @@ const GenerateMoveNode = (start: Point2D, end: Point2D): GbrViewNode => {
   moveNode.type = GbrNodeType.ToolUp;
   moveNode.points = [start, end];
 
-  return new GbrViewNode(0,moveNode);
-}
-export const  adjustTUNodes = (nodes:GbrViewNode[], keepIndex:boolean=false): GbrViewNode[] =>{
+  return new GbrViewNode(0, moveNode);
+};
+export const adjustTUNodes = (nodes: GbrViewNode[], keepIndex: boolean = false): GbrViewNode[] => {
   const tdNodes: GbrViewNode[] = nodes;
   const addLiftBetweenSections: boolean = true;
 
@@ -87,47 +88,70 @@ export const  adjustTUNodes = (nodes:GbrViewNode[], keepIndex:boolean=false): Gb
     adjustedNodes.push(nodes[0]);
   } else {
     console.log(`## [GbrParser] adjustTUNodes | GenerateMoveNode for init`);
-    adjustedNodes.push(GenerateMoveNode({x: 0, y: 0}, tdNodes[0].node.startEndVectors.start))
+    adjustedNodes.push(GenerateMoveNode({ x: 0, y: 0 }, tdNodes[0].node.startEndVectors.start));
   }
   //adding initNode
   //
   for (let i = 0; i < tdNodes.length; i++) {
-    const from = tdNodes[i]
+    const from = tdNodes[i];
     const to = tdNodes[i + 1];
 
     adjustedNodes.push(from);
 
-    if(!to || !from){
-      continue
+    if (!to || !from) {
+      continue;
     }
     if (getVectorDist(from.node.startEndVectors.end, to.node.startEndVectors.start) !== 0) {
       console.log(`## [GbrParser] adjustTUNodes | Adding a move node`);
       adjustedNodes.push(GenerateMoveNode(from.node.startEndVectors.end, to.node.startEndVectors.start));
     }
-    if(addLiftBetweenSections && to.node.type === GbrNodeType.ToolDown && from.node.type === GbrNodeType.ToolDown){
-      GenerateMoveNode(from.node.startEndVectors.end, to.node.startEndVectors.start);
+    if (addLiftBetweenSections && to.node.type === GbrNodeType.ToolDown && from.node.type === GbrNodeType.ToolDown) {
+      adjustedNodes.push(GenerateMoveNode(from.node.startEndVectors.end, to.node.startEndVectors.start));
     }
 
     // console.log(`## [GbrDataModel] adjustTUNodes |\n`,GBRCodeGenerator.generateCodeFromNotes(adjustedNodes.map(nodes => nodes.node)));
   }
 
   return adjustedNodes;
+};
+
+export interface Frame {
+  width: number,
+  height: number
 }
+
 export enum GbrDataModelEvents {
   Updated = 'GbrDataModelEvents.Updated'
 }
 
 interface OptPoint2D extends Point2D {
-  id:number
+  id: number;
 }
 
 export class GbrDataModel extends EventEmitter {
   public instanceId: string = Utils.GenerateId();
   public nodes: GbrViewNode[] = [];
+  public frame: Konva.Rect;
+  public container: Konva.Layer;
 
-  constructor(nodes: GbrNode[]) {
+  constructor(nodes: GbrNode[], frame: Frame) {
     super();
+    const sWidth = 2
+    this.frame = new Konva.Rect({
+      x: 0-(sWidth/2),
+      y: 0-(sWidth/2),
+      stroke: 'red',
+      strokeWidth: sWidth,
+      dash: [10, 10],
+      width: frame.width+(sWidth),
+      height:frame.height+(sWidth),
+      id:'temp'
+    });
     this.nodes = nodes.map((value, index) => new GbrViewNode(index, value));
+    this.container = new Konva.Layer({
+      clearBeforeDraw: true
+    });
+    this.render();
   }
 
   public testUpdate() {
@@ -152,6 +176,7 @@ export class GbrDataModel extends EventEmitter {
 
     let moveNodes = this.nodes.filter(value => value.type === GbrNodeType.ToolUp);
     this.removeNodes(moveNodes.map(value => value.id), true);
+    this.render();
   }
 
   public removeNodes(ids: number[], rerender: boolean = false) {
@@ -163,22 +188,21 @@ export class GbrDataModel extends EventEmitter {
     const filteredArray = this.nodes.filter(value => !ids.includes(value.id));
     this.nodes = filteredArray;
     console.log(`## [GbrDataModel] removeNodes | after delete -> ${this.nodes.length}`);
-    if (rerender) {
-      this.emit(GbrDataModelEvents.Updated);
-    }
+
+    this.render();
   }
 
-  public reverseSelectedNode(){
+  public reverseSelectedNode() {
     let selected = this.getSelected();
-    if(selected.length === 0){
+    if (selected.length === 0) {
       console.log(`## [GbrDataModel] reverseSelectedNode | No selectedItems`);
-      return
+      return;
     }
-    if(selected.length > 1){
+    if (selected.length > 1) {
       console.log(`## [GbrDataModel] reverseSelectedNode | only select one item`);
-      return
+      return;
     }
-    if(selected[0]) {
+    if (selected[0]) {
       let id = selected[0].id;
       let nNode = new GbrNode();
       nNode.type = selected[0].node.type;
@@ -194,6 +218,7 @@ export class GbrDataModel extends EventEmitter {
       this.emit(GbrDataModelEvents.Updated);
     }
     this.deselectAll();
+    this.render();
   }
 
   public joinSelected() {
@@ -233,34 +258,54 @@ export class GbrDataModel extends EventEmitter {
     this.emit(GbrDataModelEvents.Updated);
 
     this.deselectAll();
+
+    this.render();
+
   }
 
   public deselectAll() {
     this.nodes.forEach(value => {
       value.selected = false;
     });
+    this.render();
   }
 
-  public generateToolPath():void {
+  public generateToolPath(): void {
     let tbo = [];
     let rest = [];
-    for(let i in this.nodes){
-      let value = this.nodes[i]
-      if(value.type === GbrNodeType.ToolDown && value.selected === false) {
-        tbo.push(value)
-      }else{
+    for (let i in this.nodes) {
+      let value = this.nodes[i];
+      if (value.type === GbrNodeType.ToolDown && value.selected === false) {
+        tbo.push(value);
+      } else {
         rest.push(value);
       }
     }
     let optimized = optimizeToolPathUtil(tbo);
     this.nodes = adjustTUNodes([...rest, ...optimized]);
-    this.emit(GbrDataModelEvents.Updated);
+    // this.emit(GbrDataModelEvents.Updated);
+    this.container.draw();
   }
 
-  public saveWorkFile():void{
+  public saveWorkFile(): void {
     const gbrNodes = this.nodes.map(value => value.node);
     const gbrCode = GBRCodeGenerator.generateCodeFromNotes(gbrNodes);
-    Utils.download(gbrCode, "generated_gerber.gbr", "text/plain")
+    Utils.download(gbrCode, 'generated_gerber.gbr', 'text/plain');
+  }
+
+  public render(){
+    // this.container.remove();
+
+    this.container.add(this.frame);
+    for(let i in this.nodes){
+      this.container.add(this.nodes[i].viewItem);
+    }
+
+    this.container.draw();
   }
 
 }
+
+
+
+

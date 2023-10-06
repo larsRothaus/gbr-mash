@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {
   PlasmicGbrEditorToolBox,
-  DefaultGbrEditorToolBoxProps,
+  DefaultGbrEditorToolBoxProps
 } from './plasmic/arturel/PlasmicGbrEditorToolBox';
 import { HTMLElementRefOf } from '@plasmicapp/react-web';
 import { GbrDataModel } from '../renderer/models/GbrDataModel';
@@ -22,7 +22,7 @@ import { GbrDataModel } from '../renderer/models/GbrDataModel';
 // You can also stop extending from DefaultGbrEditorToolBoxProps altogether and have
 // total control over the props for your component.
 export interface GbrEditorToolBoxProps extends DefaultGbrEditorToolBoxProps {
-  nodeData?: GbrDataModel
+
 }
 
 function GbrEditorToolBox_(
@@ -44,27 +44,174 @@ function GbrEditorToolBox_(
   // By default, we are just piping all GbrEditorToolBoxProps here, but feel free
   // to do whatever works for you.
 
-  return <PlasmicGbrEditorToolBox
-    deselectAction={()=>{
-    props.nodeData?.deselectAll();
-  }}
-    joinSelected={()=>{
-      props.nodeData?.joinSelected();
-    }}
-    removeMoveNodes={()=>{
-      props.nodeData?.removeMoveNodes();
-    }}
-    reverseNode={()=>{
-      props.nodeData?.reverseSelectedNode();
-    }}
-    generateToolPath={()=>{
-      props.nodeData?.generateToolPath()
-    }}
-    saveFile={()=>{
-      props.nodeData?.saveWorkFile()
-    }}
-  />;
+  return;
 }
 
-const GbrEditorToolBox = React.forwardRef(GbrEditorToolBox_);
+
+type Props = {
+  nodeData?: GbrDataModel
+};
+
+type State = {
+  deltaPosition: { x: number, y: number }
+  activeDrags: number
+};
+
+import Draggable, { DraggableCore, DraggableData, DraggableEvent } from 'react-draggable'; // Both at the same time
+
+class GbrEditorToolBox extends React.Component<Props, State> {
+
+  componentDidMount() {
+    this.setState({
+      activeDrags: 0,
+      deltaPosition: {
+        x: 0, y: 0
+      }
+      // controlledPosition: {
+      //   x: -400, y: 200
+      // }
+    });
+  }
+
+  state = {
+    activeDrags: 0,
+    deltaPosition: {
+      x: 0, y: 0
+    },
+    controlledPosition: {
+      x: -400, y: 200
+    }
+  };
+
+  private handleDrag(e: DraggableEvent, data: DraggableData): void {
+    const { x, y } = this.state.deltaPosition;
+    this.setState({
+      deltaPosition: {
+        x: x + data.deltaX,
+        y: y + data.deltaY
+      }
+    });
+  };
+
+  private onStart() {
+    this.setState({ activeDrags: ++this.state.activeDrags });
+  };
+
+  private onStop() {
+    this.setState({ activeDrags: --this.state.activeDrags });
+  };
+
+  // private onDrop (e) {
+  //   this.setState({activeDrags: --this.state.activeDrags});
+  //   if (e.target.classList.contains("drop-target")) {
+  //     alert("Dropped!");
+  //     e.target.classList.remove('hovered');
+  //   }
+  // };
+  // private onDropAreaMouseEnter (e) {
+  //   if (this.state.activeDrags) {
+  //     e.target.classList.add('hovered');
+  //   }
+  // }
+  // private onDropAreaMouseLeave (e) {
+  //   e.target.classList.remove('hovered');
+  // }
+  //
+  // // For controlled component
+  // private adjustXPos (e) {
+  //   e.preventDefault();
+  //   e.stopPropagation();
+  //   const {x, y} = this.state.controlledPosition;
+  //   this.setState({controlledPosition: {x: x - 10, y}});
+  // };
+  //
+  // private adjustYPos (e) {
+  //   e.preventDefault();
+  //   e.stopPropagation();
+  //   const {controlledPosition} = this.state;
+  //   const {x, y} = controlledPosition;
+  //   this.setState({controlledPosition: {x, y: y - 10}});
+  // };
+  //
+  // private onControlledDrag (e, position) {
+  //   const {x, y} = position;
+  //   this.setState({controlledPosition: {x, y}});
+  // };
+  //
+  // private onControlledDragStop (e, position) {
+  //   this.onControlledDrag(e, position);
+  //   this.onStop();
+  // };
+
+  render() {
+    const { deltaPosition, controlledPosition } = this.state;
+
+    return (
+      <Draggable handle='strong'>
+        <div className='box no-cursor' style={{ display: 'flex', flexDirection: 'column' }}>
+          <strong className='cursor'>
+            <div>||</div>
+          </strong>
+          <div style={{ overflow: 'scroll' }}>
+            <PlasmicGbrEditorToolBox
+              deselectAction={() => {
+                this.props.nodeData?.deselectAll();
+              }}
+              joinSelected={() => {
+                this.props.nodeData?.joinSelected();
+              }}
+              removeMoveNodes={() => {
+                this.props.nodeData?.removeMoveNodes();
+              }}
+              reverseNode={() => {
+                this.props.nodeData?.reverseSelectedNode();
+              }}
+              generateToolPath={() => {
+                this.props.nodeData?.generateToolPath();
+              }}
+              saveFile={() => {
+                this.props.nodeData?.saveWorkFile();
+              }}
+            />
+          </div>
+        </div>
+      </Draggable>
+      // <Draggable
+      //   // axis='x'
+      //   // handle='.handle'
+      //   // defaultPosition={{ x: 0, y: 0 }}
+      //   // grid={[25, 25]}
+      //   // scale={1}
+      //   // disabled={false}
+      //   // onStart={this.onStart.bind(this)}
+      //   onDrag={this.handleDrag.bind(this)}
+      //   // onStop={this.onStop.bind(this)}
+      //  >
+      //   <PlasmicGbrEditorToolBox
+      //     deselectAction={() => {
+      //       this.props.nodeData?.deselectAll();
+      //     }}
+      //     joinSelected={() => {
+      //       this.props.nodeData?.joinSelected();
+      //     }}
+      //     removeMoveNodes={() => {
+      //       this.props.nodeData?.removeMoveNodes();
+      //     }}
+      //     reverseNode={() => {
+      //       this.props.nodeData?.reverseSelectedNode();
+      //     }}
+      //     generateToolPath={() => {
+      //       this.props.nodeData?.generateToolPath();
+      //     }}
+      //     saveFile={() => {
+      //       this.props.nodeData?.saveWorkFile();
+      //     }}
+      //   />
+      // </Draggable>
+
+    );
+  }
+}
+
 export default GbrEditorToolBox;
+

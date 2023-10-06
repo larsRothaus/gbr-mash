@@ -9,6 +9,7 @@ import { GbrNode, GbrNodeType } from '../../dtos/GbrNode';
 import { Point2D } from '../../dtos/Point2D';
 import { Utils } from './Utils';
 import { GbrDataModel, GbrDataModelEvents } from '../../models/GbrDataModel';
+import { Ruler } from './items/Ruler';
 
 type Props = {
   nodeData?: GbrDataModel
@@ -32,6 +33,7 @@ class GbrView extends React.Component<Props, State> {
     x: 80,
     y: 200
   };
+  private ruler:Ruler = new Ruler();
 
   componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any) {
     if (this.props.nodeData && this.props.nodeData.instanceId !== this.dataInstanceId) {
@@ -68,6 +70,7 @@ class GbrView extends React.Component<Props, State> {
       });
     }
 
+
   }
 
   private setupStage(): Konva.Stage {
@@ -77,7 +80,7 @@ class GbrView extends React.Component<Props, State> {
       container: 'container',
       width: width,
       height: height,
-      draggable: false
+      draggable: true
 
     });
     stage.scale({ x: this.scale, y: this.scale });
@@ -86,36 +89,38 @@ class GbrView extends React.Component<Props, State> {
   }
 
   private setupLayers(): void {
-    this.viewItemLayer = new Konva.Layer();
-    this.moveNodeLayer = new Konva.Layer();
-    this.labelsLayer = new Konva.Layer();
-    this.tabelLayer = new Konva.Layer();
-
-    this.stage.add(this.tabelLayer);
-    this.stage.add(this.labelsLayer);
-    this.stage.add(this.viewItemLayer);
-    this.stage.add(this.moveNodeLayer);
+    // this.viewItemLayer = new Konva.Layer();
+    // this.moveNodeLayer = new Konva.Layer();
+    // this.labelsLayer = new Konva.Layer();
+    // this.tabelLayer = new Konva.Layer();
+    //
+    //
+    // this.stage.add(this.tabelLayer);
+    // this.stage.add(this.labelsLayer);
+    // this.stage.add(this.viewItemLayer);
+    // this.stage.add(this.moveNodeLayer);
+    this.stage.add(this.ruler)
   }
 
   private setupTable(): void {
-    const backboardOffset = -500;
-    const backBoard = new Konva.Rect({
-      x: backboardOffset,
-      y: backboardOffset,
-      width: 27000 + Math.abs(backboardOffset),
-      height: 22500 + Math.abs(backboardOffset),
-      fill: '#616969'
-    });
-
-    const table = new Konva.Rect({
-      x: -10,
-      y: -10,
-      width: 27000,
-      height: 22500,
-      fill: '#000000'
-    });
-    this.tabelLayer.add(backBoard);
-    this.tabelLayer.add(table);
+    // const backboardOffset = -500;
+    // const backBoard = new Konva.Rect({
+    //   x: backboardOffset,
+    //   y: backboardOffset,
+    //   width: 27000 + Math.abs(backboardOffset),
+    //   height: 22500 + Math.abs(backboardOffset),
+    //   fill: '#616969'
+    // });
+    //
+    // const table = new Konva.Rect({
+    //   x: -10,
+    //   y: -10,
+    //   width: 27000,
+    //   height: 22500,
+    //   fill: '#000000'
+    // });
+    // this.tabelLayer.add(backBoard);
+    // this.tabelLayer.add(table);
   }
 
   private setupControls(): void {
@@ -124,6 +129,7 @@ class GbrView extends React.Component<Props, State> {
       // stop default scrolling
       e.evt.preventDefault();
 
+      console.log(`## | SCALING....`);
       var oldScale = this.stage.scaleX();
       var pointer = this.stage.getPointerPosition();
       if (!pointer) {
@@ -154,74 +160,75 @@ class GbrView extends React.Component<Props, State> {
       this.stage.position(newPos);
     });
 
-    document.addEventListener('keydown', (e) => {
-      // if (e.code === 'Enter') {
-      //   resolve();
-      // }
-      if (e.code === 'Space') {
-        this.stage.setDraggable(true);
-        return;
-      }
-      // if(!isRunning){
-      //   console.log(`## [main-fabric] key:`,e.key);
-      //   if(e.key === '$'){
-      //     simunitionSpeed = 'awaitKey'
-      //     resolve();
-      //     return;
-      //   }
-      //   let s = parseInt(e.key);
-      //   if(!isNaN(s)){
-      //     simunitionSpeed = s * 100
-      //     resolve();
-      //   }
-      // }
-
-    });
-    document.addEventListener('keyup', (e) => {
-      if (e.code === 'Space') {
-        this.stage.setDraggable(false);
-      }
-    });
+    // document.addEventListener('keydown', (e) => {
+    //   // if (e.code === 'Enter') {
+    //   //   resolve();
+    //   // }
+    //   if (e.code === 'Space') {
+    //     this.stage.setDraggable(true);
+    //     return;
+    //   }
+    //   // if(!isRunning){
+    //   //   console.log(`## [main-fabric] key:`,e.key);
+    //   //   if(e.key === '$'){
+    //   //     simunitionSpeed = 'awaitKey'
+    //   //     resolve();
+    //   //     return;
+    //   //   }
+    //   //   let s = parseInt(e.key);
+    //   //   if(!isNaN(s)){
+    //   //     simunitionSpeed = s * 100
+    //   //     resolve();
+    //   //   }
+    //   // }
+    //
+    // });
+    // document.addEventListener('keyup', (e) => {
+    //   if (e.code === 'Space') {
+    //     this.stage.setDraggable(false);
+    //   }
+    // });
   }
 
   private clear() {
-    this.viewItemLayer.remove();
-    this.moveNodeLayer.remove();
-    this.labelsLayer.remove();
-
-    this.viewItemLayer = new Konva.Layer();
-    this.moveNodeLayer = new Konva.Layer();
-    this.labelsLayer = new Konva.Layer();
-
-    this.stage.add(this.labelsLayer);
-    this.stage.add(this.viewItemLayer);
-    this.stage.add(this.moveNodeLayer);
+    // this.viewItemLayer.remove();
+    // this.moveNodeLayer.remove();
+    // this.labelsLayer.remove();
+    //
+    // this.viewItemLayer = new Konva.Layer();
+    // this.moveNodeLayer = new Konva.Layer();
+    // this.labelsLayer = new Konva.Layer();
+    //
+    // this.stage.add(this.labelsLayer);
+    // this.stage.add(this.viewItemLayer);
+    // this.stage.add(this.moveNodeLayer);
   }
 
   private renderData(data: GbrDataModel) {
     this.clear();
-    const viewNodes = data.getViewNodes();
-
-    console.log(`## [GbrView] renderData |`, viewNodes);
-    for (let i in viewNodes) {
-      console.log(`## [GbrView] renderData | adding notes`);
-      const { viewItem, startLabel, endLabel, type } = viewNodes[i];
-      switch (type) {
-        case GbrNodeType.ToolUp: {
-          this.moveNodeLayer.add(viewItem);
-          break;
-        }
-        case GbrNodeType.ToolDown: {
-          this.viewItemLayer.add(viewItem);
-          break;
-        }
-
-      }
-      if (startLabel && endLabel) {
-        this.labelsLayer.add(startLabel);
-        this.labelsLayer.add(endLabel);
-      }
-    }
+    this.stage.add(data.container);
+    // const viewNodes = data.getViewNodes();
+    //
+    // console.log(`## [GbrView] renderData |`, viewNodes);
+    // for (let i in viewNodes) {
+    //   console.log(`## [GbrView] renderData | adding notes`);
+    //   const { viewItem, startLabel, endLabel, type } = viewNodes[i];
+    //   switch (type) {
+    //     case GbrNodeType.ToolUp: {
+    //       this.moveNodeLayer.add(viewItem);
+    //       break;
+    //     }
+    //     case GbrNodeType.ToolDown: {
+    //       this.viewItemLayer.add(viewItem);
+    //       break;
+    //     }
+    //
+    //   }
+    //   if (startLabel && endLabel) {
+    //     this.labelsLayer.add(startLabel);
+    //     this.labelsLayer.add(endLabel);
+    //   }
+    // }
   }
 
 
