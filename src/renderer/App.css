@@ -127,7 +127,11 @@ a:hover {
     top:0px;
     right: 0px;
 }
-
+.GbrCloneToolBox {
+    position: absolute;
+    top:100px;
+    right: 0px;
+}
 /*delete this shit*/
 
 .react-draggable, .cursor {

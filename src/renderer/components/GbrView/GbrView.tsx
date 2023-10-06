@@ -10,9 +10,11 @@ import { Point2D } from '../../dtos/Point2D';
 import { Utils } from './Utils';
 import { GbrDataModel, GbrDataModelEvents } from '../../models/GbrDataModel';
 import { Ruler } from './items/Ruler';
+import { CloneInfo } from '../../../view-components/GbrCloneTool';
 
 type Props = {
   nodeData?: GbrDataModel
+  cloneInfo?:CloneInfo
 };
 
 type State = {};
@@ -43,8 +45,11 @@ class GbrView extends React.Component<Props, State> {
           this.renderData(this.props.nodeData);
         }
       });
+
+    }else if(this.props.nodeData){
       this.renderData(this.props.nodeData);
     }
+
 
   }
 
@@ -206,7 +211,44 @@ class GbrView extends React.Component<Props, State> {
 
   private renderData(data: GbrDataModel) {
     this.clear();
-    this.stage.add(data.container);
+    this.stage.removeChildren()
+    const px = 6000;
+    const py = 6000;
+    if(this.props.cloneInfo){
+      for(let i=0;i<this.props.cloneInfo.cx;i++){
+        const clone = data.clone();
+        clone.offset(i * px, 0);
+        this.stage.add(clone.container)
+      }
+      // for(let i=1;i<this.props.cloneInfo.cx;i++){
+      //   const clone = data.clone();
+      //   clone.offset(i * px, 0);
+      // }
+    }else{
+      this.stage.add(data.container)
+    }
+
+    // const clone = data.clone();
+    // const clone1 = data.clone();
+    // const clone2 = data.clone();
+    //
+    // clone.offset(0,6000);
+    // clone1.offset(6000, 0);
+    // clone2.offset(6000,6000);
+    //
+    // this.stage.add(data.container);
+    // this.stage.add(clone.container);
+    // this.stage.add(clone1.container);
+    // this.stage.add(clone2.container)
+    // const clone1 = data.clone();
+    //
+    // clone1.offset(1,6000);
+    // this.stage.add(clone1.container);
+
+    // const clone2 = data.clone();
+    // clone2.offset(6000,6000);
+    // this.stage.add(clone2.container);
+
     // const viewNodes = data.getViewNodes();
     //
     // console.log(`## [GbrView] renderData |`, viewNodes);

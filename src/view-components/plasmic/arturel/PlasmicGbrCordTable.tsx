@@ -58,6 +58,8 @@ export interface DefaultGbrCordTableProps {
   className?: string;
 }
 
+const $$ = {};
+
 function PlasmicGbrCordTable__RenderFunc(props: {
   variants: PlasmicGbrCordTable__VariantsArgs;
   args: PlasmicGbrCordTable__ArgsType;

@@ -54,7 +54,8 @@ type Props = {
 
 type State = {
   deltaPosition: { x: number, y: number }
-  activeDrags: number
+  activeDrags: number,
+  open: boolean
 };
 
 import Draggable, { DraggableCore, DraggableData, DraggableEvent } from 'react-draggable'; // Both at the same time
@@ -63,6 +64,7 @@ class GbrEditorToolBox extends React.Component<Props, State> {
 
   componentDidMount() {
     this.setState({
+      open: true,
       activeDrags: 0,
       deltaPosition: {
         x: 0, y: 0
@@ -74,6 +76,7 @@ class GbrEditorToolBox extends React.Component<Props, State> {
   }
 
   state = {
+    open: true,
     activeDrags: 0,
     deltaPosition: {
       x: 0, y: 0
@@ -144,15 +147,20 @@ class GbrEditorToolBox extends React.Component<Props, State> {
   // };
 
   render() {
-    const { deltaPosition, controlledPosition } = this.state;
+    const { deltaPosition, controlledPosition, open } = this.state;
 
     return (
       <Draggable handle='strong'>
-        <div className='box no-cursor' style={{ display: 'flex', flexDirection: 'column' }}>
+        <div className='box no-cursor' style={{ display: 'flex', flexDirection: 'column' }} onDoubleClick={() => {
+          console.log(`## [GbrEditorToolBox] Change open...`);
+            this.setState({
+              open: this.state.open ? false : true
+            })
+        }}>
           <strong className='cursor'>
-            <div>||</div>
+            <div>| Tool |</div>
           </strong>
-          <div style={{ overflow: 'scroll' }}>
+          <div style={{ overflow: 'scroll', height: `${open ? 'auto' : '0px'}` }}>
             <PlasmicGbrEditorToolBox
               deselectAction={() => {
                 this.props.nodeData?.deselectAll();

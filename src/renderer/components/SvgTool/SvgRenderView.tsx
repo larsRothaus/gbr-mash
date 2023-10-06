@@ -81,7 +81,8 @@ export class SvgRenderView extends React.Component<Props, State> {
       // const resourceUrl = 'http://localhost:8080/pik.svg';
       //const resourceUrl = 'http://127.0.0.1:8080/single_wave_100x70.svg';
       // const resourceUrl = 'http://127.0.0.1:8080/WAVE_60X60_UPD2022.svg';
-      const resourceUrl = 'http://127.0.0.1:8080/WAVE_60X60_UPD2022_Fliped.svg';
+      // const resourceUrl = 'http://127.0.0.1:8080/WAVE_60X60_UPD2022_Fliped.svg';
+      const resourceUrl = 'http://127.0.0.1:8080/test_squ.svg';
 
       const res = await fetch(resourceUrl);
       const content = await res.text();
@@ -265,8 +266,6 @@ export class SvgRenderView extends React.Component<Props, State> {
 
     });
 
-
-    // this.frame.src = "http://127.0.0.1:8080/Wave700x1000_Artwork_JUNE2023.svg"
   }
 
   componentDidUpdate() {

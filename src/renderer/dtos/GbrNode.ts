@@ -35,6 +35,12 @@ export class GbrNode {
       this.startEndVectors.end = this.points[this.points.length-1];
     }
 
-
-
+  public clone():GbrNode {
+    const clone = new GbrNode();
+    clone.startEndVectors = JSON.parse(JSON.stringify(this.startEndVectors));
+    clone.type = this.type;
+    clone.refId = this.refId;
+    clone.points = JSON.parse(JSON.stringify(this.points));
+    return clone;
+  }
  }

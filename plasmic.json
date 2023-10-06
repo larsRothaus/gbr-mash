@@ -443,6 +443,19 @@
           "cssFilePath": "plasmic/arturel/PlasmicGbrCordTableItem.module.css",
           "scheme": "blackbox",
           "componentType": "component"
+        },
+        {
+          "id": "05mOR9eSl0_B",
+          "name": "GbrCloneTool",
+          "type": "managed",
+          "projectId": "dgFPhDvLY4vKuXTDNeS2uD",
+          "renderModuleFilePath": "plasmic/arturel/PlasmicGbrCloneTool.tsx",
+          "importSpec": {
+            "modulePath": "GbrCloneTool.tsx"
+          },
+          "cssFilePath": "plasmic/arturel/PlasmicGbrCloneTool.module.css",
+          "scheme": "blackbox",
+          "componentType": "component"
         }
       ],
       "icons": [

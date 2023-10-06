@@ -71,6 +71,7 @@ export const optimizeToolPathUtil = (nodes: GbrViewNode[], keepIndex: boolean = 
   }
   return nodes;
 };
+
 const GenerateMoveNode = (start: Point2D, end: Point2D): GbrViewNode => {
   const moveNode = new GbrNode();
   moveNode.type = GbrNodeType.ToolUp;
@@ -78,6 +79,7 @@ const GenerateMoveNode = (start: Point2D, end: Point2D): GbrViewNode => {
 
   return new GbrViewNode(0, moveNode);
 };
+
 export const adjustTUNodes = (nodes: GbrViewNode[], keepIndex: boolean = false): GbrViewNode[] => {
   const tdNodes: GbrViewNode[] = nodes;
   const addLiftBetweenSections: boolean = true;
@@ -133,19 +135,21 @@ export class GbrDataModel extends EventEmitter {
   public nodes: GbrViewNode[] = [];
   public frame: Konva.Rect;
   public container: Konva.Layer;
+  public frameSize: Frame;
 
-  constructor(nodes: GbrNode[], frame: Frame) {
+  constructor(nodes: GbrNode[], frameSize: Frame) {
     super();
-    const sWidth = 2
+    this.frameSize = frameSize;
+    const sWidth = 2;
     this.frame = new Konva.Rect({
-      x: 0-(sWidth/2),
-      y: 0-(sWidth/2),
+      x: 0 - (sWidth / 2),
+      y: 0 - (sWidth / 2),
       stroke: 'red',
       strokeWidth: sWidth,
       dash: [10, 10],
-      width: frame.width+(sWidth),
-      height:frame.height+(sWidth),
-      id:'temp'
+      width: this.frameSize.width + (sWidth),
+      height: this.frameSize.height + (sWidth),
+      id: 'temp'
     });
     this.nodes = nodes.map((value, index) => new GbrViewNode(index, value));
     this.container = new Konva.Layer({
@@ -293,15 +297,42 @@ export class GbrDataModel extends EventEmitter {
     Utils.download(gbrCode, 'generated_gerber.gbr', 'text/plain');
   }
 
-  public render(){
-    // this.container.remove();
-
+  public render() {
+    this.frame.remove();
     this.container.add(this.frame);
-    for(let i in this.nodes){
+    console.log(`## [GbrDataModel] render | node_length:`, this.nodes.length);
+    for (let i in this.nodes) {
+      this.nodes[i].viewItem.remove();
       this.container.add(this.nodes[i].viewItem);
+      const startLabel = this.nodes[i].startLabel;
+      const endLabel = this.nodes[i].endLabel;
+      if(startLabel && endLabel){
+        this.container.add(startLabel);
+        this.container.add(endLabel);
+      }
     }
 
     this.container.draw();
+  }
+
+  public offset(x: number, y: number): void {
+    this.frame.setPosition({
+      x:x-1,
+      y:y-1
+    })
+    for (let i in this.nodes) {
+      this.nodes[i].offset(x, y);
+    }
+    this.render();
+  }
+
+  public getGbrNodes(): GbrNode[] {
+    return this.nodes.map(value => value.node);
+  }
+
+  public clone(): GbrDataModel {
+    let clonedNodes = this.getGbrNodes().map(value => value.clone());
+    return new GbrDataModel(clonedNodes, this.frameSize);
   }
 
 }

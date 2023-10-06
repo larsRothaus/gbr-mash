@@ -59,6 +59,8 @@ export interface DefaultLayerListItemProps {
   className?: string;
 }
 
+const $$ = {};
+
 function PlasmicLayerListItem__RenderFunc(props: {
   variants: PlasmicLayerListItem__VariantsArgs;
   args: PlasmicLayerListItem__ArgsType;

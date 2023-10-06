@@ -68,6 +68,8 @@ export interface DefaultHomepageProps {
   className?: string;
 }
 
+const $$ = {};
+
 function PlasmicHomepage__RenderFunc(props: {
   variants: PlasmicHomepage__VariantsArgs;
   args: PlasmicHomepage__ArgsType;

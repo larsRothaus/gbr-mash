@@ -70,6 +70,8 @@ export interface DefaultGbrEditorProps {
   className?: string;
 }
 
+const $$ = {};
+
 function PlasmicGbrEditor__RenderFunc(props: {
   variants: PlasmicGbrEditor__VariantsArgs;
   args: PlasmicGbrEditor__ArgsType;

@@ -67,6 +67,8 @@ export interface DefaultPageLayoutProps {
   className?: string;
 }
 
+const $$ = {};
+
 function PlasmicPageLayout__RenderFunc(props: {
   variants: PlasmicPageLayout__VariantsArgs;
   args: PlasmicPageLayout__ArgsType;
