@@ -14,7 +14,7 @@ import { CloneInfo } from '../../../view-components/GbrCloneTool';
 
 type Props = {
   nodeData?: GbrDataModel
-  cloneInfo?:CloneInfo
+  cloneInfo?: CloneInfo
 };
 
 type State = {};
@@ -35,7 +35,7 @@ class GbrView extends React.Component<Props, State> {
     x: 80,
     y: 200
   };
-  private ruler:Ruler = new Ruler();
+  private ruler: Ruler = new Ruler();
 
   componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any) {
     if (this.props.nodeData && this.props.nodeData.instanceId !== this.dataInstanceId) {
@@ -46,7 +46,7 @@ class GbrView extends React.Component<Props, State> {
         }
       });
 
-    }else if(this.props.nodeData){
+    } else if (this.props.nodeData) {
       this.renderData(this.props.nodeData);
     }
 
@@ -56,11 +56,11 @@ class GbrView extends React.Component<Props, State> {
   componentDidMount() {
 
     //@ts-ignore
-    window.render = ()=>{
+    window.render = () => {
       if (this.props.nodeData) {
         this.renderData(this.props.nodeData);
       }
-    }
+    };
     this.stage = this.setupStage();
     this.setupLayers();
     this.setupTable();
@@ -104,7 +104,7 @@ class GbrView extends React.Component<Props, State> {
     // this.stage.add(this.labelsLayer);
     // this.stage.add(this.viewItemLayer);
     // this.stage.add(this.moveNodeLayer);
-    this.stage.add(this.ruler)
+    this.stage.add(this.ruler);
   }
 
   private setupTable(): void {
@@ -211,66 +211,32 @@ class GbrView extends React.Component<Props, State> {
 
   private renderData(data: GbrDataModel) {
     this.clear();
-    this.stage.removeChildren()
-    const px = 6000;
-    const py = 6000;
-    if(this.props.cloneInfo){
-      for(let i=0;i<this.props.cloneInfo.cx;i++){
-        const clone = data.clone();
-        clone.offset(i * px, 0);
-        this.stage.add(clone.container)
+    this.stage.removeChildren();
+
+    if (this.props.cloneInfo) {
+      const px = data.frameSize.width + this.props.cloneInfo.px;
+      const py = data.frameSize.height + this.props.cloneInfo.py;
+      console.log(`## [GbrView] renderData | clone info:`,this.props.cloneInfo);
+      if (!this.props.cloneInfo.cy) this.props.cloneInfo.cy = 1;
+      for (let y = 0; y < this.props.cloneInfo.cy; y++) {
+        for (let x = 0; x < this.props.cloneInfo.cx; x++) {
+          console.log(`## [GbrView] renderData | x:${x},y:${y}`, x !== 0 && y !== 0);
+          if(x === 0 && y === 0){
+            this.stage.add(data.container);
+
+          }else{
+            console.log(`## [GbrView] renderData | adding clone..`);
+            const clone = data.clone();
+            clone.offset(x * px, y * py);
+            this.stage.add(clone.container);
+          }
+        }
       }
-      // for(let i=1;i<this.props.cloneInfo.cx;i++){
-      //   const clone = data.clone();
-      //   clone.offset(i * px, 0);
-      // }
-    }else{
-      this.stage.add(data.container)
+    } else {
+      this.stage.add(data.container);
     }
+    this.stage.add(this.ruler);
 
-    // const clone = data.clone();
-    // const clone1 = data.clone();
-    // const clone2 = data.clone();
-    //
-    // clone.offset(0,6000);
-    // clone1.offset(6000, 0);
-    // clone2.offset(6000,6000);
-    //
-    // this.stage.add(data.container);
-    // this.stage.add(clone.container);
-    // this.stage.add(clone1.container);
-    // this.stage.add(clone2.container)
-    // const clone1 = data.clone();
-    //
-    // clone1.offset(1,6000);
-    // this.stage.add(clone1.container);
-
-    // const clone2 = data.clone();
-    // clone2.offset(6000,6000);
-    // this.stage.add(clone2.container);
-
-    // const viewNodes = data.getViewNodes();
-    //
-    // console.log(`## [GbrView] renderData |`, viewNodes);
-    // for (let i in viewNodes) {
-    //   console.log(`## [GbrView] renderData | adding notes`);
-    //   const { viewItem, startLabel, endLabel, type } = viewNodes[i];
-    //   switch (type) {
-    //     case GbrNodeType.ToolUp: {
-    //       this.moveNodeLayer.add(viewItem);
-    //       break;
-    //     }
-    //     case GbrNodeType.ToolDown: {
-    //       this.viewItemLayer.add(viewItem);
-    //       break;
-    //     }
-    //
-    //   }
-    //   if (startLabel && endLabel) {
-    //     this.labelsLayer.add(startLabel);
-    //     this.labelsLayer.add(endLabel);
-    //   }
-    // }
   }
 
 

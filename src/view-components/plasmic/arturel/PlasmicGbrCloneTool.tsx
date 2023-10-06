@@ -63,7 +63,9 @@ export const PlasmicGbrCloneTool__ArgProps = new Array<ArgPropType>(
 export type PlasmicGbrCloneTool__OverridesType = {
   root?: p.Flex<'div'>;
   cx?: p.Flex<typeof AntdInputNumber>;
-  cx2?: p.Flex<typeof AntdInputNumber>;
+  cy?: p.Flex<typeof AntdInputNumber>;
+  px?: p.Flex<typeof AntdInputNumber>;
+  py?: p.Flex<typeof AntdInputNumber>;
   clone?: p.Flex<typeof AntdButton>;
   clear?: p.Flex<typeof AntdButton>;
 };
@@ -104,13 +106,25 @@ function PlasmicGbrCloneTool__RenderFunc(props: {
         path: 'cx.value',
         type: 'private',
         variableType: 'text',
-        initFunc: ({ $props, $state, $queries, $ctx }) => undefined,
+        initFunc: ({ $props, $state, $queries, $ctx }) => 1,
       },
       {
-        path: 'cx2.value',
+        path: 'cy.value',
         type: 'private',
         variableType: 'text',
-        initFunc: ({ $props, $state, $queries, $ctx }) => undefined,
+        initFunc: ({ $props, $state, $queries, $ctx }) => 1,
+      },
+      {
+        path: 'px.value',
+        type: 'private',
+        variableType: 'text',
+        initFunc: ({ $props, $state, $queries, $ctx }) => 0,
+      },
+      {
+        path: 'py.value',
+        type: 'private',
+        variableType: 'text',
+        initFunc: ({ $props, $state, $queries, $ctx }) => 0,
       },
     ],
     [$props, $ctx, $refs]
@@ -152,49 +166,8 @@ function PlasmicGbrCloneTool__RenderFunc(props: {
           data-plasmic-name={'cx'}
           data-plasmic-override={overrides.cx}
           className={classNames('__wab_instance', sty.cx)}
-          onChange={async (...eventArgs: any) => {
-            p.generateStateOnChangeProp($state, ['cx', 'value']).apply(
-              null,
-              eventArgs
-            );
-            (async (value) => {
-              const $steps = {};
-              $steps['runOnChange'] = true
-                ? (() => {
-                    const actionArgs = {
-                      eventRef: $props['onChange'],
-                      args: [
-                        (() => {
-                          try {
-                            return $state.cx.value;
-                          } catch (e) {
-                            if (
-                              e instanceof TypeError ||
-                              e?.plasmicType === 'PlasmicUndefinedDataError'
-                            ) {
-                              return 0;
-                            }
-                            throw e;
-                          }
-                        })(),
-                        0,
-                        0,
-                        0,
-                      ],
-                    };
-                    return (({ eventRef, args }) => {
-                      return eventRef?.(...(args ?? []));
-                    })?.apply(null, [actionArgs]);
-                  })()
-                : undefined;
-              if (
-                typeof $steps['runOnChange'] === 'object' &&
-                typeof $steps['runOnChange'].then === 'function'
-              ) {
-                $steps['runOnChange'] = await $steps['runOnChange'];
-              }
-            }).apply(null, eventArgs);
-          }}
+          min={1}
+          onChange={p.generateStateOnChangeProp($state, ['cx', 'value'])}
           placeholder={'0'}
           value={p.generateStateValueProp($state, ['cx', 'value'])}
         />
@@ -210,12 +183,62 @@ function PlasmicGbrCloneTool__RenderFunc(props: {
           {'Clone Y'}
         </div>
         <AntdInputNumber
-          data-plasmic-name={'cx2'}
-          data-plasmic-override={overrides.cx2}
-          className={classNames('__wab_instance', sty.cx2)}
-          onChange={p.generateStateOnChangeProp($state, ['cx2', 'value'])}
-          placeholder={'0'}
-          value={p.generateStateValueProp($state, ['cx2', 'value'])}
+          data-plasmic-name={'cy'}
+          data-plasmic-override={overrides.cy}
+          className={classNames('__wab_instance', sty.cy)}
+          min={1}
+          onChange={p.generateStateOnChangeProp($state, ['cy', 'value'])}
+          onPressEnter={async (event) => {
+            const $steps = {};
+          }}
+          placeholder={``}
+          value={p.generateStateValueProp($state, ['cy', 'value'])}
+        />
+      </div>
+      <div className={classNames(projectcss.all, sty.freeBox__lluiV)}>
+        <div
+          className={classNames(
+            projectcss.all,
+            projectcss.__wab_text,
+            sty.text__z7Ylp
+          )}
+        >
+          {'Spacing X'}
+        </div>
+        <AntdInputNumber
+          data-plasmic-name={'px'}
+          data-plasmic-override={overrides.px}
+          className={classNames('__wab_instance', sty.px)}
+          min={0}
+          onChange={p.generateStateOnChangeProp($state, ['px', 'value'])}
+          onPressEnter={async (event) => {
+            const $steps = {};
+          }}
+          placeholder={``}
+          value={p.generateStateValueProp($state, ['px', 'value'])}
+        />
+      </div>
+      <div className={classNames(projectcss.all, sty.freeBox__rks1)}>
+        <div
+          className={classNames(
+            projectcss.all,
+            projectcss.__wab_text,
+            sty.text__icvBt
+          )}
+        >
+          {'Spacing Y'}
+        </div>
+        <AntdInputNumber
+          data-plasmic-name={'py'}
+          data-plasmic-override={overrides.py}
+          className={classNames('__wab_instance', sty.py)}
+          min={0}
+          onChange={p.generateStateOnChangeProp($state, ['py', 'value'])}
+          onPressEnter={async (event) => {
+            const $steps = {};
+          }}
+          placeholder={``}
+          value={p.generateStateValueProp($state, ['py', 'value'])}
         />
       </div>
       <div className={classNames(projectcss.all, sty.freeBox__sjJ9J)}>
@@ -225,19 +248,75 @@ function PlasmicGbrCloneTool__RenderFunc(props: {
           className={classNames('__wab_instance', sty.clone)}
           onClick={async () => {
             const $steps = {};
-            $steps['runClone'] = true
+            $steps['runOnChange'] = true
               ? (() => {
-                  const actionArgs = { eventRef: $props['clone'] };
+                  const actionArgs = {
+                    eventRef: $props['onChange'],
+                    args: [
+                      (() => {
+                        try {
+                          return $state.cx.value;
+                        } catch (e) {
+                          if (
+                            e instanceof TypeError ||
+                            e?.plasmicType === 'PlasmicUndefinedDataError'
+                          ) {
+                            return 1;
+                          }
+                          throw e;
+                        }
+                      })(),
+                      (() => {
+                        try {
+                          return $state.cy.value;
+                        } catch (e) {
+                          if (
+                            e instanceof TypeError ||
+                            e?.plasmicType === 'PlasmicUndefinedDataError'
+                          ) {
+                            return 1;
+                          }
+                          throw e;
+                        }
+                      })(),
+                      (() => {
+                        try {
+                          return $state.px.value;
+                        } catch (e) {
+                          if (
+                            e instanceof TypeError ||
+                            e?.plasmicType === 'PlasmicUndefinedDataError'
+                          ) {
+                            return 0;
+                          }
+                          throw e;
+                        }
+                      })(),
+                      (() => {
+                        try {
+                          return $state.py.value;
+                        } catch (e) {
+                          if (
+                            e instanceof TypeError ||
+                            e?.plasmicType === 'PlasmicUndefinedDataError'
+                          ) {
+                            return 0;
+                          }
+                          throw e;
+                        }
+                      })(),
+                    ],
+                  };
                   return (({ eventRef, args }) => {
                     return eventRef?.(...(args ?? []));
                   })?.apply(null, [actionArgs]);
                 })()
               : undefined;
             if (
-              typeof $steps['runClone'] === 'object' &&
-              typeof $steps['runClone'].then === 'function'
+              typeof $steps['runOnChange'] === 'object' &&
+              typeof $steps['runOnChange'].then === 'function'
             ) {
-              $steps['runClone'] = await $steps['runClone'];
+              $steps['runOnChange'] = await $steps['runOnChange'];
             }
           }}
         >
@@ -289,9 +368,11 @@ function PlasmicGbrCloneTool__RenderFunc(props: {
 }
 
 const PlasmicDescendants = {
-  root: ['root', 'cx', 'cx2', 'clone', 'clear'],
+  root: ['root', 'cx', 'cy', 'px', 'py', 'clone', 'clear'],
   cx: ['cx'],
-  cx2: ['cx2'],
+  cy: ['cy'],
+  px: ['px'],
+  py: ['py'],
   clone: ['clone'],
   clear: ['clear'],
 } as const;
@@ -301,7 +382,9 @@ type DescendantsType<T extends NodeNameType> =
 type NodeDefaultElementType = {
   root: 'div';
   cx: typeof AntdInputNumber;
-  cx2: typeof AntdInputNumber;
+  cy: typeof AntdInputNumber;
+  px: typeof AntdInputNumber;
+  py: typeof AntdInputNumber;
   clone: typeof AntdButton;
   clear: typeof AntdButton;
 };
@@ -367,7 +450,9 @@ export const PlasmicGbrCloneTool = Object.assign(
   {
     // Helper components rendering sub-elements
     cx: makeNodeComponent('cx'),
-    cx2: makeNodeComponent('cx2'),
+    cy: makeNodeComponent('cy'),
+    px: makeNodeComponent('px'),
+    py: makeNodeComponent('py'),
     clone: makeNodeComponent('clone'),
     clear: makeNodeComponent('clear'),
 

@@ -12,8 +12,8 @@ import { GbrDataModel } from '../renderer/models/GbrDataModel';
 
 type Props = {
   nodeData?: GbrDataModel
-  children:any,
-  heading:string
+  children: any,
+  heading: string
 
 };
 
@@ -75,19 +75,19 @@ class GbrToolContainer extends React.Component<Props, State> {
 
     return (
       <Draggable handle='strong'>
-      <div className='box no-cursor' style={{ display: 'flex', flexDirection: 'column' }} >
-    <strong className='cursor' onDoubleClick={() => {
-      this.setState({
-        open: this.state.open ? false : true
-      })
-    }}>
-      <div>{` |${this.props.heading}| `}</div>
-      </strong>
-      <div style={{ overflow: 'scroll', height: `${open ? 'auto' : '0px'}` }}>
-        {this.props.children}
-    </div>
-    </div>
-    </Draggable>
+        <div className='box no-cursor' style={{ display: 'flex', flexDirection: 'column' }}>
+          <strong className='cursor' onDoubleClick={() => {
+            this.setState({
+              open: this.state.open ? false : true
+            });
+          }}>
+            <div>{` |${this.props.heading}| `}</div>
+          </strong>
+          <div style={{ overflow: 'hidden', height: `${open ? 'auto' : '0px'}`, background: 'gray' , }}>
+            {this.props.children}
+          </div>
+        </div>
+      </Draggable>
     );
   }
 }

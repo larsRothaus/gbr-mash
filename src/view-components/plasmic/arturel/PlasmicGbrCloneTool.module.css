@@ -6,7 +6,7 @@
   height: auto;
   justify-content: flex-start;
   align-items: center;
-  background: var(--token-kzT08fQBAHgz);
+  background: linear-gradient(#858585, #858585), var(--token-kzT08fQBAHgz);
   min-height: 100px;
   padding-left: 17px;
   padding-right: 26px;
@@ -57,7 +57,59 @@
   color: #ffffff;
   min-width: 0;
 }
-.cx2:global(.__wab_instance) {
+.cy:global(.__wab_instance) {
+  max-width: 100%;
+  object-fit: cover;
+  position: relative;
+  margin-right: 0px;
+}
+.freeBox__lluiV {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: flex-start;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  min-width: 0;
+  padding: 8px;
+}
+.text__z7Ylp {
+  position: relative;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  color: #ffffff;
+  min-width: 0;
+}
+.px:global(.__wab_instance) {
+  max-width: 100%;
+  object-fit: cover;
+  position: relative;
+  margin-right: 0px;
+}
+.freeBox__rks1 {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: flex-start;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  min-width: 0;
+  padding: 8px;
+}
+.text__icvBt {
+  position: relative;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  color: #ffffff;
+  min-width: 0;
+}
+.py:global(.__wab_instance) {
   max-width: 100%;
   object-fit: cover;
   position: relative;
@@ -77,8 +129,8 @@
   max-width: 100%;
   object-fit: cover;
   position: absolute;
-  left: 5px;
-  top: 25px;
+  left: 4px;
+  top: 26px;
   width: 119px;
 }
 .text___7L33Y {
@@ -93,7 +145,7 @@
   object-fit: cover;
   position: absolute;
   left: 127px;
-  top: 25px;
+  top: 27px;
   width: 130px;
   z-index: 1;
 }
