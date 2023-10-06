@@ -64,7 +64,7 @@ class GbrToolContainer extends React.Component<Props, State> {
     const { deltaPosition, controlledPosition, open } = this.state;
 
     return (
-      <Draggable handle='strong'>
+      <Draggable handle='strong' >
         <div className='box no-cursor' style={{ display: 'flex', flexDirection: 'column' }}>
           <strong className='cursor' onDoubleClick={() => {
             this.setState({
