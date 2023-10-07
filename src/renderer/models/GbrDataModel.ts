@@ -326,6 +326,15 @@ export class GbrDataModel extends EventEmitter {
    this.container.visible(value);
   }
 
+  public hasToolPath():boolean {
+    this.getGbrNodes().forEach(value => {
+      if(value.type === GbrNodeType.ToolUp){
+        return true;
+      }
+    })
+    return false;
+  }
+
   public setToolPathVisibility(value: boolean) {
     this.nodes.forEach(node => {
       if(node.type === GbrNodeType.ToolUp){

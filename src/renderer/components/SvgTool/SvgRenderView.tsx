@@ -4,6 +4,8 @@ import { Point2D } from '../../dtos/Point2D';
 import { GbrNode } from '../../dtos/GbrNode';
 import { GbrDataModel } from '../../models/GbrDataModel';
 
+const allEqual = arr => arr.every(val => val === arr[0]);
+
 const delay = async (ms: number) => new Promise(resolve => {
   setTimeout(resolve, ms);
 });
@@ -81,8 +83,8 @@ export class SvgRenderView extends React.Component<Props, State> {
       // const resourceUrl = 'http://localhost:8080/pik.svg';
       //const resourceUrl = 'http://127.0.0.1:8080/single_wave_100x70.svg';
       // const resourceUrl = 'http://127.0.0.1:8080/WAVE_60X60_UPD2022.svg';
-      // const resourceUrl = 'http://127.0.0.1:8080/WAVE_60X60_UPD2022_Fliped.svg';
-      const resourceUrl = 'http://127.0.0.1:8080/test_100X100.svg';
+      const resourceUrl = 'http://127.0.0.1:8080/WAVE_60X60_UPD2022_Fliped.svg';
+      // const resourceUrl = 'http://127.0.0.1:8080/test_100X100.svg';
 
       const res = await fetch(resourceUrl);
       const content = await res.text();
@@ -197,15 +199,7 @@ export class SvgRenderView extends React.Component<Props, State> {
         ctx.lineTo(startPoint.x, startPoint.y);
         for (let a = 0; a < interpolationPoints.length; a++) {
           let point2D = objects[obj].getPointAtLength(interpolationPoints[a]);
-          // if (lastPoint.x === point2D.x || lastPoint.y === point2D.y) {
-          //   if(interpolationPoints.length-1 !== a){
-          //     currentProgress += resolution;
-          //     continue;
-          //   }
-          // }
-
           lastValidPoint = point2D;
-
 
           currentNode.addPoint({
             x: point2D.x,
@@ -234,6 +228,27 @@ export class SvgRenderView extends React.Component<Props, State> {
       console.log(`## [SvgRenderView] componentDidMount | Finn `, completedNodes);
       console.log(`## [SvgRenderView]  | `, widthPx, widthUnit, heightPx, heightUnit);
       console.log(`## [SvgRenderView] Total Notes; | `, totalNotes);
+
+
+      ///////// Optimizer ////////////
+      for (let o in completedNodes) {
+        const xs = completedNodes[o].points.map(value => value.x);
+        const ys = completedNodes[o].points.map(value => value.y);
+        const xIsStraight = allEqual(xs);
+        const yIsStraight = allEqual(ys);
+        if (xIsStraight || yIsStraight) {
+          console.log(`## [SvgRenderView] is ${yIsStraight ? 'Y' : 'X'} a straight Line:`);
+          console.log(`## [SvgRenderView] simplifying node`);
+          const nNode = new GbrNode();
+          nNode.type = completedNodes[o].type;
+          nNode.refId = completedNodes[o].refId;
+          nNode.addPoint(completedNodes[o].startEndVectors.start)
+          nNode.addPoint(completedNodes[o].startEndVectors.end)
+          nNode.close();
+          completedNodes[o] = nNode;
+        }
+      }
+
 
       ///////// Convert ////////////
       for (let n in completedNodes) {

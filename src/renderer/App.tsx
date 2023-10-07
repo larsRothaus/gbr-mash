@@ -29,20 +29,20 @@ class MainView extends React.Component<Props, State> {
 
   componentDidMount() {
 
-    // setTimeout(() => this.render(), 5000);
-    // this.gbrParser.complete = (nodes: GbrNode[]) => {
-    //   loading = false;
-    //   if (nodes.length > 0) {
-    //     // const gbrCode = GBRCodeGenerator.generateCodeFromNotes(nodes);
-    //     const dataModel = new GbrDataModel(nodes, {width:6000,height: 12000});
-    //     this.setState({ nodes, nodeData: dataModel });
-    //   }
-    // };
-    // // this.gbrParser.loadAndParse('http://127.0.0.1:8080/test_v2_2X4(60X60).gbr');
-    // // this.gbrParser.loadAndParse('http://127.0.0.1:8080/WAVE_60X60_UPD2022.cut');
-    // //  this.gbrParser.loadAndParse('http://127.0.0.1:8080/generated_gerber.gbr');
-    // this.gbrParser.loadAndParse('http://127.0.0.1:8080/Wave60x60_X2_Design.gbr');
-    // // this.gbrParser.loadAndParse('http://localhost:8080/v1_tool_generated_file.gbr');
+   //  setTimeout(() => this.render(), 5000);
+   //  this.gbrParser.complete = (nodes: GbrNode[]) => {
+   //    loading = false;
+   //    if (nodes.length > 0) {
+   //      // const gbrCode = GBRCodeGenerator.generateCodeFromNotes(nodes);
+   //      const dataModel = new GbrDataModel(nodes, {width:6000,height: 12000});
+   //      this.setState({ nodes, nodeData: dataModel });
+   //    }
+   //  };
+   //  // this.gbrParser.loadAndParse('http://127.0.0.1:8080/test_v2_2X4(60X60).gbr');
+   // this.gbrParser.loadAndParse('http://127.0.0.1:8080/packV3_gen.gbr');
+   //  // this.gbrParser.loadAndParse('http://127.0.0.1:8080/generated_gerber.gbr');
+   //  // this.gbrParser.loadAndParse('http://127.0.0.1:8080/Wave60x60_X2_Design.gbr');
+   //  // this.gbrParser.loadAndParse('http://localhost:8080/v1_tool_generated_file.gbr');
 
   }
 

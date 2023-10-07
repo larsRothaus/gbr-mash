@@ -24,7 +24,6 @@ type Props = {
   nodeData?: GbrDataModel
 };
 
-
 type State = {
   viewNodeLayers?: GbrViewNodeLayers
 };
@@ -58,7 +57,6 @@ class GbrEditor extends React.Component<Props, State> {
       viewNodeLayers
     });
   }
-
 
   private updateFrameNode(frameNode?: GbrDataModel): void {
     let viewNodeLayers = this.state.viewNodeLayers;
@@ -175,10 +173,7 @@ class GbrEditor extends React.Component<Props, State> {
                     this.updateViewNodes(this.currentViewNodes);
                     this.currentViewNodes = undefined;
                   }
-
-
                 }
-
               }}
               generateToolPath={includeFrames => {
                 if (this.toolPathViewNode) {
@@ -204,11 +199,8 @@ class GbrEditor extends React.Component<Props, State> {
                     this.state.viewNodeLayers.frameViewNode.getGbrNodes().forEach(value => nodes.push(value));
                   }
                   this.toolPathViewNode.getGbrNodes().forEach(value => nodes.push(value));
-
                   const gbrCode = GBRCodeGenerator.generateCodeFromNotes(nodes);
-
                   Utils.download(gbrCode, "design.gbr", "text/plain")
-
                 }
               }}
               saveFrames={() => {
@@ -216,7 +208,6 @@ class GbrEditor extends React.Component<Props, State> {
                   //adding frame nodes
                   const nodes = this.state.viewNodeLayers.frameViewNode.getGbrNodes();
                   const gbrCode = GBRCodeGenerator.generateCodeFromNotes(nodes);
-
                   Utils.download(gbrCode, "frame.gbr", "text/plain")
                 }
               }}
