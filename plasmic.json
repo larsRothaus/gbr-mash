@@ -469,6 +469,19 @@
           "cssFilePath": "plasmic/arturel/PlasmicGbrViewTool.module.css",
           "scheme": "blackbox",
           "componentType": "component"
+        },
+        {
+          "id": "EtaPIGcLwHv0",
+          "name": "GbrFrameTool",
+          "type": "managed",
+          "projectId": "dgFPhDvLY4vKuXTDNeS2uD",
+          "renderModuleFilePath": "plasmic/arturel/PlasmicGbrFrameTool.tsx",
+          "importSpec": {
+            "modulePath": "GbrFrameTool.tsx"
+          },
+          "cssFilePath": "plasmic/arturel/PlasmicGbrFrameTool.module.css",
+          "scheme": "blackbox",
+          "componentType": "component"
         }
       ],
       "icons": [

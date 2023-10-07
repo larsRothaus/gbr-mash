@@ -160,12 +160,22 @@
         {
           "type": "renderModule",
           "assetId": "9eQClZasp6EW",
-          "checksum": "25fc407b7488d490418e70072b097360"
+          "checksum": "871281b58c751485be48d09781980be8"
         },
         {
           "type": "cssRules",
           "assetId": "9eQClZasp6EW",
-          "checksum": "25fc407b7488d490418e70072b097360"
+          "checksum": "871281b58c751485be48d09781980be8"
+        },
+        {
+          "type": "renderModule",
+          "assetId": "EtaPIGcLwHv0",
+          "checksum": "bd37d377d0c3d49175c6cbfd4334994e"
+        },
+        {
+          "type": "cssRules",
+          "assetId": "EtaPIGcLwHv0",
+          "checksum": "bd37d377d0c3d49175c6cbfd4334994e"
         },
         {
           "assetId": "dgFPhDvLY4vKuXTDNeS2uD",

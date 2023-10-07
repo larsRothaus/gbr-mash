@@ -14,6 +14,7 @@ import { CloneInfo } from '../../../view-components/GbrCloneTool';
 
 type Props = {
   nodeData?: GbrDataModel
+  frameData?: GbrDataModel
   cloneInfo?: CloneInfo
 };
 
@@ -213,7 +214,7 @@ class GbrView extends React.Component<Props, State> {
   private renderData(data: GbrDataModel) {
     this.clear();
     this.stage.removeChildren();
-
+    this.stage.add(this.ruler);
     if (this.props.cloneInfo) {
       const px = data.frameSize.width + this.props.cloneInfo.px;
       const py = data.frameSize.height + this.props.cloneInfo.py;
@@ -237,7 +238,11 @@ class GbrView extends React.Component<Props, State> {
       console.log(`## [GbrView] renderData | adding default`);
       this.stage.add(data.container);
     }
-    this.stage.add(this.ruler);
+    if(this.props.frameData){
+      console.log(`## [GbrView] renderData | adding FrameData`);
+      this.stage.add(this.props.frameData.container);
+    }
+
 
   }
 

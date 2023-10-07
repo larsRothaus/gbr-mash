@@ -97,7 +97,7 @@ function PlasmicGbrViewTool__RenderFunc(props: {
         path: '_switch.checked',
         type: 'private',
         variableType: 'boolean',
-        initFunc: ({ $props, $state, $queries, $ctx }) => undefined,
+        initFunc: ({ $props, $state, $queries, $ctx }) => true,
       },
     ],
     [$props, $ctx, $refs]
@@ -159,6 +159,7 @@ function PlasmicGbrViewTool__RenderFunc(props: {
           data-plasmic-override={overrides._switch}
           checked={p.generateStateValueProp($state, ['_switch', 'checked'])}
           className={classNames('__wab_instance', sty._switch)}
+          defaultChecked={true}
           onChange={async (...eventArgs: any) => {
             p.generateStateOnChangeProp($state, ['_switch', 'checked']).apply(
               null,
