@@ -119,7 +119,7 @@ export class SvgRenderView extends React.Component<Props, State> {
       objects = [...objects, ...this.svg.querySelectorAll('rect')];
       objects = [...objects, ...this.svg.querySelectorAll('ellipse')];
 
-      const resolution = 10;
+      const resolution = 1;
 
       const completedNodes: GbrNode[] = [];
       let currentNode: GbrNode = new GbrNode();

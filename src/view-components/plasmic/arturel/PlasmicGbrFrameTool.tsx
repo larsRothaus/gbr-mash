@@ -132,7 +132,7 @@ function PlasmicGbrFrameTool__RenderFunc(props: {
         path: 'cellCountY.value',
         type: 'private',
         variableType: 'text',
-        initFunc: ({ $props, $state, $queries, $ctx }) => 4,
+        initFunc: ({ $props, $state, $queries, $ctx }) => 2,
       },
     ],
     [$props, $ctx, $refs]
