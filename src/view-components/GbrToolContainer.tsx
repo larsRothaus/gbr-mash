@@ -13,7 +13,8 @@ import { GbrDataModel } from '../renderer/models/GbrDataModel';
 type Props = {
   nodeData?: GbrDataModel
   children: any,
-  heading: string
+  heading: string,
+  open:boolean
 
 };
 
@@ -31,7 +32,7 @@ class GbrToolContainer extends React.Component<Props, State> {
   }
 
   state = {
-    open: true,
+    open: this.props.open,
     activeDrags: 0,
     deltaPosition: {
       x: 0, y: 0
@@ -71,7 +72,7 @@ class GbrToolContainer extends React.Component<Props, State> {
               open: this.state.open ? false : true
             });
           }}>
-            <div>{` |${this.props.heading}| `}</div>
+            <div>{` |  ${this.props.heading}  | `}</div>
           </strong>
           <div style={{ overflow: 'hidden', height: `${open ? 'auto' : '0px'}`, background: 'gray' , }}>
             {this.props.children}

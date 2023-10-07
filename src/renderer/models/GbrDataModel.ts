@@ -7,7 +7,7 @@
 
 import { GbrNode, GbrNodeType } from '../dtos/GbrNode';
 import { GbrViewNode } from '../dtos/GbrViewNode';
-import { Utils } from '../components/GbrView/Utils';
+import { RGBValues, Utils } from '../components/GbrView/Utils';
 import { EventEmitter } from 'events';
 import { Point2D } from '../dtos/Point2D';
 import { GBRCodeGenerator } from '../components/GbrGenerator/GbrGenerator';
@@ -130,15 +130,19 @@ interface OptPoint2D extends Point2D {
   id: number;
 }
 
+export interface GbrDataModelConfiguration {
+  color?: RGBValues;
+}
+
 export class GbrDataModel extends EventEmitter {
   public instanceId: string = Utils.GenerateId();
   public nodes: GbrViewNode[] = [];
   public frame: Konva.Rect;
   public container: Konva.Layer;
   public frameSize: Frame;
-  public isOriginal:boolean = true;
+  public isOriginal: boolean = true;
 
-  constructor(nodes: GbrNode[], frameSize: Frame) {
+  constructor(nodes: GbrNode[], frameSize: Frame, config?: GbrDataModelConfiguration) {
     super();
     this.frameSize = frameSize;
     const sWidth = 2;
@@ -152,7 +156,13 @@ export class GbrDataModel extends EventEmitter {
       height: this.frameSize.height + (sWidth),
       id: 'temp'
     });
-    this.nodes = nodes.map((value, index) => new GbrViewNode(index, value));
+    this.nodes = nodes.map((value, index) => {
+      const viewNode = new GbrViewNode(index, value);
+      if (config?.color) {
+        viewNode.updateColor(config.color);
+      }
+      return viewNode;
+    });
     this.container = new Konva.Layer({
       clearBeforeDraw: true
     });
@@ -279,7 +289,7 @@ export class GbrDataModel extends EventEmitter {
     let optimized = optimizeToolPathUtil(tbo);
     this.nodes = adjustTUNodes([...rest, ...optimized]);
     // this.emit(GbrDataModelEvents.Updated);
-    this.container.draw();
+    this.render();
   }
 
   public saveWorkFile(): void {
@@ -298,7 +308,7 @@ export class GbrDataModel extends EventEmitter {
       this.container.add(this.nodes[i].viewItem);
       const startLabel = this.nodes[i].startLabel;
       const endLabel = this.nodes[i].endLabel;
-      if(startLabel && endLabel){
+      if (startLabel && endLabel) {
         this.container.add(startLabel);
         this.container.add(endLabel);
       }
@@ -306,17 +316,17 @@ export class GbrDataModel extends EventEmitter {
     this.testUpdate();
   }
 
-  public setLabelVisibility(value:boolean){
-    for(let i in this.nodes){
+  public setLabelVisibility(value: boolean) {
+    for (let i in this.nodes) {
       this.nodes[i].setLabelVisibility(value);
     }
   }
 
   public offset(x: number, y: number): void {
     this.frame.setPosition({
-      x:x-1,
-      y:y-1
-    })
+      x: x - 1,
+      y: y - 1
+    });
     for (let i in this.nodes) {
       this.nodes[i].offset(x, y);
     }
@@ -327,7 +337,7 @@ export class GbrDataModel extends EventEmitter {
     return this.nodes.map(value => value.node);
   }
 
-  public clone(cloneId:string): GbrDataModel {
+  public clone(cloneId: string): GbrDataModel {
     let clonedNodes = this.getGbrNodes().map(value => value.clone(cloneId));
     let copy = new GbrDataModel(clonedNodes, this.frameSize);
     copy.removeMoveNodes();

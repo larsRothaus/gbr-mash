@@ -482,6 +482,19 @@
           "cssFilePath": "plasmic/arturel/PlasmicGbrFrameTool.module.css",
           "scheme": "blackbox",
           "componentType": "component"
+        },
+        {
+          "id": "yPi8m4SnU-qf",
+          "name": "GbrToolPathTool",
+          "type": "managed",
+          "projectId": "dgFPhDvLY4vKuXTDNeS2uD",
+          "renderModuleFilePath": "plasmic/arturel/PlasmicGbrToolPathTool.tsx",
+          "importSpec": {
+            "modulePath": "GbrToolPathTool.tsx"
+          },
+          "cssFilePath": "plasmic/arturel/PlasmicGbrToolPathTool.module.css",
+          "scheme": "blackbox",
+          "componentType": "component"
         }
       ],
       "icons": [

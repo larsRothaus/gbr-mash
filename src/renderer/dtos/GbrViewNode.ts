@@ -52,8 +52,6 @@ export class GbrViewNode {
       hitStrokeWidth: 50
     };
 
-
-
     this.viewItem = this.buildViewItem();
 
     this.setupLabels();
@@ -131,6 +129,16 @@ export class GbrViewNode {
         this.vectorConfig.points[i] = this.vectorConfig.points[i] + y;
         xor = 1;
       }
+    }
+  }
+
+  public updateColor(color:RGBValues):void {
+    if (this.node.type === GbrNodeType.ToolDown) {
+      this.rgbColor = color;
+      this.strokeNutral = Utils.GenerateColorFromRGB(this.rgbColor, .7);
+      this.StrokeHower = Utils.GenerateColorFromRGB(this.rgbColor, 1);
+      //@ts-ignore
+      this.viewItem.setStroke(this.strokeNutral);
     }
   }
 

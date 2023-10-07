@@ -14,7 +14,7 @@ export class GbrCloneGenerator {
 
   }
 
-  public generateCloneItems(masterNode: GbrDataModel, cloneInfo: CloneInfo) {
+  public generateCloneItems(masterNode: GbrDataModel, cloneInfo: CloneInfo):GbrDataModel[] {
     const cloneViews: GbrDataModel[] = [];
     const px = masterNode.frameSize.width + cloneInfo.px;
     const py = masterNode.frameSize.height + cloneInfo.py;
@@ -34,5 +34,6 @@ export class GbrCloneGenerator {
         }
       }
     }
+    return cloneViews;
   }
 }
