@@ -20,19 +20,14 @@ export class GbrGenerator {
   }
 }
 
-export class GBRCodeGeneratorOptions {
-  public insertToolUpAfterEveryMove: boolean = false;
-
-  constructor(args: Partial<GBRCodeGeneratorOptions>) {
-    args.insertToolUpAfterEveryMove && (this.insertToolUpAfterEveryMove = args.insertToolUpAfterEveryMove);
-
-  }
+export interface GBRCodeGeneratorOptions {
+  insertToolUpAfterEveryMove: boolean
+  frameNodes?:GbrNode[]
 }
 
 export class GBRCodeGenerator {
   public static generateCodeFromNotes(nodes: GbrNode[], options: Partial<GBRCodeGeneratorOptions> = {}): string {
 
-    const _options = new GBRCodeGeneratorOptions(options);
     const lines: string[] = [
       'H1*',
       'G71*',
@@ -69,9 +64,6 @@ export class GBRCodeGenerator {
       let lastPoint: Point2D | undefined = undefined;
       for (let v = 0; v < points.length; v++) {
 
-        // if(lastPoint && (lastPoint.x === points[v].x && lastPoint.x === points[v].x)){
-        //   continue;
-        // }
         const command = `X${points[v].x}Y${points[v].y}*`;
         if (command !== lastCommand) {
           lastCommand = command;
@@ -80,22 +72,6 @@ export class GBRCodeGenerator {
         }
         lastPoint = points[v];
       }
-      // if(vectors.length <= 2){
-      //   const command = `X${vectors[vectors.length-1].x}Y${vectors[vectors.length-1].y}*`;
-      //   // if (command !== lastCommand) {
-      //   //   lastCommand = command;
-      //   //   lines.push(command)
-      //   // }
-      //   lines.push(command)
-      // }else{
-      //   for (let v in vectors) {
-      //     const command = `X${vectors[v].x}Y${vectors[v].x}*`;
-      //     if (command !== lastCommand) {
-      //       lastCommand = command;
-      //       lines.push(command)
-      //     }
-      //   }
-      // }
 
     }
     lines.push('M15*')

@@ -14,13 +14,15 @@ import { CloneInfo } from '../../../view-components/GbrCloneTool';
 import { BaseViewItem } from './items/BaseViewItem';
 
 type Props = {
-  viewNodeLayers?:GbrViewNodeLayers
+  viewNodeLayers?: GbrViewNodeLayers
 };
+
 export interface GbrViewNodeLayers {
-  ruler?:BaseViewItem
-  frameViewNode?:GbrDataModel
-  viewNodes?:GbrDataModel[]
+  ruler?: BaseViewItem;
+  frameViewNode?: GbrDataModel;
+  viewNodes?: GbrDataModel[];
 }
+
 type State = {};
 
 class GbrView extends React.Component<Props, State> {
@@ -42,15 +44,15 @@ class GbrView extends React.Component<Props, State> {
   private ruler: Ruler = new Ruler();
 
   componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any) {
-    if(this.props.viewNodeLayers){
+    if (this.props.viewNodeLayers) {
       this.renderData(this.props.viewNodeLayers);
     }
   }
 
   componentDidMount() {
     this.stage = this.setupStage();
-
-    if(this.props.viewNodeLayers){
+    this.setupControls();
+    if (this.props.viewNodeLayers) {
       this.renderData(this.props.viewNodeLayers);
     }
   }
@@ -66,27 +68,62 @@ class GbrView extends React.Component<Props, State> {
 
     });
     stage.scale({ x: this.scale, y: this.scale });
-    stage.setPosition({ x: 25, y: 60});
+    stage.setPosition({ x: 25, y: 60 });
 
     return stage;
   }
 
+  private setupControls(): void {
+    var scaleBy = 1.05;
+    this.stage.on('wheel', (e) => {
+      // stop default scrolling
+      e.evt.preventDefault();
+
+      var oldScale = this.stage.scaleX();
+      var pointer = this.stage.getPointerPosition();
+      if (!pointer) {
+        return;
+      }
+
+      var mousePointTo = {
+        x: (pointer.x - this.stage.x()) / oldScale,
+        y: (pointer.y - this.stage.y()) / oldScale
+      };
+
+      let direction = e.evt.deltaY > 0 ? 1 : -1;
+
+      if (e.evt.ctrlKey) {
+        direction = -direction;
+      }
+
+      var newScale = direction > 0 ? oldScale * scaleBy : oldScale / scaleBy;
+      this.stage.scale({ x: newScale, y: newScale });
+
+      var newPos = {
+        x: pointer.x - mousePointTo.x * newScale,
+        y: pointer.y - mousePointTo.y * newScale
+      };
+      this.stage.position(newPos);
+    });
+
+  }
+
   private renderData(layers?: GbrViewNodeLayers) {
-    if(!layers){
+    if (!layers) {
       console.log(`## [GbrView] renderData | No layers`);
       return;
     }
     this.stage.removeChildren();
 
-    if(layers.ruler){
+    if (layers.ruler) {
       this.stage.add(layers.ruler);
     }
-    if(layers.viewNodes && layers.viewNodes.length){
-      for(let i in layers.viewNodes){
+    if (layers.viewNodes && layers.viewNodes.length) {
+      for (let i in layers.viewNodes) {
         this.stage.add(layers.viewNodes[i].container);
       }
     }
-    if(layers.frameViewNode){
+    if (layers.frameViewNode) {
       this.stage.add(layers.frameViewNode.container);
     }
   }

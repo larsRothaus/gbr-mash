@@ -106,13 +106,13 @@ function PlasmicGbrCloneTool__RenderFunc(props: {
         path: 'cx.value',
         type: 'private',
         variableType: 'text',
-        initFunc: ({ $props, $state, $queries, $ctx }) => 1,
+        initFunc: ({ $props, $state, $queries, $ctx }) => 3,
       },
       {
         path: 'cy.value',
         type: 'private',
         variableType: 'text',
-        initFunc: ({ $props, $state, $queries, $ctx }) => 1,
+        initFunc: ({ $props, $state, $queries, $ctx }) => 2,
       },
       {
         path: 'px.value',

@@ -22,9 +22,18 @@ export class GbrFrameGenerator {
   }
 
   /** Vertical is Y **/
-  private generateHorizontal(args: GenerateFrameNodesArgs): GbrNode[] {
+  private generateHorizontal(args: GenerateFrameNodesArgs, pastLastNode?:GbrNode): GbrNode[] {
     const { cellCountX, cellCountY, cellSizeX, cellSizeY } = args;
     const lines: GbrNode[] = [];
+
+    const zeroNode: GbrNode = new GbrNode();
+    zeroNode.type = GbrNodeType.ToolUp;
+    zeroNode.addPoint({ x: 0, y: 0 });
+    zeroNode.addPoint({ x: 0, y: 0 });
+    zeroNode.close();
+
+    let lastNode: GbrNode | undefined = pastLastNode ?? zeroNode;
+
     for (let i = 0; i < cellCountY + 1; i++) {
       const node = new GbrNode();
       node.addPoint({
@@ -37,20 +46,35 @@ export class GbrFrameGenerator {
       });
       node.type = GbrNodeType.ToolDown;
       node.close();
-      lines.push(node);
-      /**
-       * Here we could generate the move node as well
-       */
 
+      if (lastNode) {
+        const moveNode = new GbrNode();
+        moveNode.type = GbrNodeType.ToolUp;
+        moveNode.addPoint(lastNode.startEndVectors.end);
+        moveNode.addPoint(node.startEndVectors.start);
+        moveNode.close();
+        lines.push(moveNode);
+      }
+      lines.push(node);
+      lastNode = node;
 
     }
     return lines;
   }
 
   /** Vertical is X **/
-  private generateVertical(args: GenerateFrameNodesArgs): GbrNode[] {
+  private generateVertical(args: GenerateFrameNodesArgs, pastLastNode?:GbrNode): GbrNode[] {
     const { cellCountX, cellCountY, cellSizeX, cellSizeY } = args;
     const lines: GbrNode[] = [];
+
+    const zeroNode: GbrNode = new GbrNode();
+    zeroNode.type = GbrNodeType.ToolUp;
+    zeroNode.addPoint({ x: 0, y: 0 });
+    zeroNode.addPoint({ x: 0, y: 0 });
+    zeroNode.close();
+
+    let lastNode: GbrNode | undefined = pastLastNode ?? zeroNode;
+
     for (let i = 0; i < cellCountX + 1; i++) {
       const node = new GbrNode();
       node.addPoint({
@@ -63,7 +87,17 @@ export class GbrFrameGenerator {
       });
       node.type = GbrNodeType.ToolDown;
       node.close();
+
+      if (lastNode) {
+        const moveNode = new GbrNode();
+        moveNode.type = GbrNodeType.ToolUp;
+        moveNode.addPoint(lastNode.startEndVectors.end);
+        moveNode.addPoint(node.startEndVectors.start);
+        moveNode.close();
+        lines.push(moveNode);
+      }
       lines.push(node);
+      lastNode = node;
       /**
        * Here we could generate the move node as well
        */
@@ -74,7 +108,7 @@ export class GbrFrameGenerator {
 
   public generateFrameNodes(args: GenerateFrameNodesArgs): GbrNode[] {
     const horizontal: GbrNode[] = this.generateHorizontal(args);
-    const vertical: GbrNode[] = this.generateVertical(args);
+    const vertical: GbrNode[] = this.generateVertical(args, horizontal[horizontal.length-1]);
     return [...horizontal, ...vertical];
   }
 
@@ -82,7 +116,7 @@ export class GbrFrameGenerator {
     const gbrNodes: GbrNode[] = this.generateFrameNodes(args);
     const dataModel = new GbrDataModel(gbrNodes, {
       width: args.cellCountX * args.cellSizeX,
-      height:args.cellCountY * args.cellSizeY
+      height: args.cellCountY * args.cellSizeY
     });
     return dataModel;
   }

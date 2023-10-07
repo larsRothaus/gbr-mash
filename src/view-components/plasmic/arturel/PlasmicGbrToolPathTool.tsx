@@ -51,23 +51,36 @@ export const PlasmicGbrToolPathTool__VariantProps =
 
 export type PlasmicGbrToolPathTool__ArgsType = {
   toolPathModeChanged?: (toolPathMode: boolean) => void;
-  generateToolPath?: () => void;
+  removeExistingToolPath?: () => void;
+  generateToolPath?: (includeFrames: boolean) => void;
+  showFrames?: (show: boolean) => void;
+  saveDesign?: () => void;
+  saveFrames?: () => void;
 };
 type ArgPropType = keyof PlasmicGbrToolPathTool__ArgsType;
 export const PlasmicGbrToolPathTool__ArgProps = new Array<ArgPropType>(
   'toolPathModeChanged',
-  'generateToolPath'
+  'removeExistingToolPath',
+  'generateToolPath',
+  'showFrames',
+  'saveDesign',
+  'saveFrames'
 );
 
 export type PlasmicGbrToolPathTool__OverridesType = {
   root?: p.Flex<'div'>;
   toolPathMode?: p.Flex<typeof AntdSwitch>;
-  button?: p.Flex<typeof AntdButton>;
+  showFrames?: p.Flex<typeof AntdSwitch>;
+  includeFrames?: p.Flex<typeof AntdSwitch>;
 };
 
 export interface DefaultGbrToolPathToolProps {
   toolPathModeChanged?: (toolPathMode: boolean) => void;
-  generateToolPath?: () => void;
+  removeExistingToolPath?: () => void;
+  generateToolPath?: (includeFrames: boolean) => void;
+  showFrames?: (show: boolean) => void;
+  saveDesign?: () => void;
+  saveFrames?: () => void;
   className?: string;
 }
 
@@ -98,6 +111,18 @@ function PlasmicGbrToolPathTool__RenderFunc(props: {
     () => [
       {
         path: 'toolPathMode.checked',
+        type: 'private',
+        variableType: 'boolean',
+        initFunc: ({ $props, $state, $queries, $ctx }) => undefined,
+      },
+      {
+        path: 'showFrames.checked',
+        type: 'private',
+        variableType: 'boolean',
+        initFunc: ({ $props, $state, $queries, $ctx }) => true,
+      },
+      {
+        path: 'includeFrames.checked',
         type: 'private',
         variableType: 'boolean',
         initFunc: ({ $props, $state, $queries, $ctx }) => undefined,
@@ -190,11 +215,91 @@ function PlasmicGbrToolPathTool__RenderFunc(props: {
           }}
         />
       </div>
+      <div className={classNames(projectcss.all, sty.freeBox__zavuY)}>
+        <div
+          className={classNames(
+            projectcss.all,
+            projectcss.__wab_text,
+            sty.text__cPdG
+          )}
+        >
+          {'Show Frames'}
+        </div>
+        <AntdSwitch
+          data-plasmic-name={'showFrames'}
+          data-plasmic-override={overrides.showFrames}
+          checked={p.generateStateValueProp($state, ['showFrames', 'checked'])}
+          className={classNames('__wab_instance', sty.showFrames)}
+          defaultChecked={true}
+          onChange={async (...eventArgs: any) => {
+            p.generateStateOnChangeProp($state, [
+              'showFrames',
+              'checked',
+            ]).apply(null, eventArgs);
+            (async (checked) => {
+              const $steps = {};
+              $steps['runShowFrames'] = true
+                ? (() => {
+                    const actionArgs = {
+                      eventRef: $props['showFrames'],
+                      args: [
+                        (() => {
+                          try {
+                            return $state.showFrames.checked;
+                          } catch (e) {
+                            if (
+                              e instanceof TypeError ||
+                              e?.plasmicType === 'PlasmicUndefinedDataError'
+                            ) {
+                              return undefined;
+                            }
+                            throw e;
+                          }
+                        })(),
+                      ],
+                    };
+                    return (({ eventRef, args }) => {
+                      return eventRef?.(...(args ?? []));
+                    })?.apply(null, [actionArgs]);
+                  })()
+                : undefined;
+              if (
+                typeof $steps['runShowFrames'] === 'object' &&
+                typeof $steps['runShowFrames'].then === 'function'
+              ) {
+                $steps['runShowFrames'] = await $steps['runShowFrames'];
+              }
+            }).apply(null, eventArgs);
+          }}
+        />
+      </div>
+      <div className={classNames(projectcss.all, sty.freeBox___7VFcP)}>
+        <div
+          className={classNames(
+            projectcss.all,
+            projectcss.__wab_text,
+            sty.text__xnVw6
+          )}
+        >
+          {'Include frames in tool-path'}
+        </div>
+        <AntdSwitch
+          data-plasmic-name={'includeFrames'}
+          data-plasmic-override={overrides.includeFrames}
+          checked={p.generateStateValueProp($state, [
+            'includeFrames',
+            'checked',
+          ])}
+          className={classNames('__wab_instance', sty.includeFrames)}
+          onChange={p.generateStateOnChangeProp($state, [
+            'includeFrames',
+            'checked',
+          ])}
+        />
+      </div>
       <div className={classNames(projectcss.all, sty.freeBox__k9Mac)}>
         <AntdButton
-          data-plasmic-name={'button'}
-          data-plasmic-override={overrides.button}
-          className={classNames('__wab_instance', sty.button)}
+          className={classNames('__wab_instance', sty.button__r2Obz)}
           disabled={(() => {
             try {
               return !$state.toolPathMode.checked;
@@ -212,7 +317,10 @@ function PlasmicGbrToolPathTool__RenderFunc(props: {
             const $steps = {};
             $steps['runGenerateToolPath'] = true
               ? (() => {
-                  const actionArgs = { eventRef: $props['generateToolPath'] };
+                  const actionArgs = {
+                    eventRef: $props['generateToolPath'],
+                    args: [undefined],
+                  };
                   return (({ eventRef, args }) => {
                     return eventRef?.(...(args ?? []));
                   })?.apply(null, [actionArgs]);
@@ -239,14 +347,113 @@ function PlasmicGbrToolPathTool__RenderFunc(props: {
           </div>
         </AntdButton>
       </div>
+      <div className={classNames(projectcss.all, sty.freeBox___2WhmB)}>
+        <AntdButton
+          className={classNames('__wab_instance', sty.button___222V)}
+          onClick={async () => {
+            const $steps = {};
+            $steps['runRemoveExistingToolPath'] = true
+              ? (() => {
+                  const actionArgs = {
+                    eventRef: $props['removeExistingToolPath'],
+                  };
+                  return (({ eventRef, args }) => {
+                    return eventRef?.(...(args ?? []));
+                  })?.apply(null, [actionArgs]);
+                })()
+              : undefined;
+            if (
+              typeof $steps['runRemoveExistingToolPath'] === 'object' &&
+              typeof $steps['runRemoveExistingToolPath'].then === 'function'
+            ) {
+              $steps['runRemoveExistingToolPath'] = await $steps[
+                'runRemoveExistingToolPath'
+              ];
+            }
+          }}
+        >
+          <div
+            className={classNames(
+              projectcss.all,
+              projectcss.__wab_text,
+              sty.text__z6C9P
+            )}
+          >
+            {'Remove existing ToolPath'}
+          </div>
+        </AntdButton>
+      </div>
+      <div className={classNames(projectcss.all, sty.freeBox___7NPd6)}>
+        <AntdButton
+          className={classNames('__wab_instance', sty.button__yapZs)}
+          onClick={async () => {
+            const $steps = {};
+            $steps['runSaveDesign'] = true
+              ? (() => {
+                  const actionArgs = { eventRef: $props['saveDesign'] };
+                  return (({ eventRef, args }) => {
+                    return eventRef?.(...(args ?? []));
+                  })?.apply(null, [actionArgs]);
+                })()
+              : undefined;
+            if (
+              typeof $steps['runSaveDesign'] === 'object' &&
+              typeof $steps['runSaveDesign'].then === 'function'
+            ) {
+              $steps['runSaveDesign'] = await $steps['runSaveDesign'];
+            }
+          }}
+        >
+          <div
+            className={classNames(
+              projectcss.all,
+              projectcss.__wab_text,
+              sty.text__hwQ1
+            )}
+          >
+            {'Save Design'}
+          </div>
+        </AntdButton>
+        <AntdButton
+          className={classNames('__wab_instance', sty.button__c7E3)}
+          onClick={async () => {
+            const $steps = {};
+            $steps['runSaveFrames'] = true
+              ? (() => {
+                  const actionArgs = { eventRef: $props['saveFrames'] };
+                  return (({ eventRef, args }) => {
+                    return eventRef?.(...(args ?? []));
+                  })?.apply(null, [actionArgs]);
+                })()
+              : undefined;
+            if (
+              typeof $steps['runSaveFrames'] === 'object' &&
+              typeof $steps['runSaveFrames'].then === 'function'
+            ) {
+              $steps['runSaveFrames'] = await $steps['runSaveFrames'];
+            }
+          }}
+        >
+          <div
+            className={classNames(
+              projectcss.all,
+              projectcss.__wab_text,
+              sty.text___1SMl9
+            )}
+          >
+            {'Save Frame'}
+          </div>
+        </AntdButton>
+      </div>
     </div>
   ) as React.ReactElement | null;
 }
 
 const PlasmicDescendants = {
-  root: ['root', 'toolPathMode', 'button'],
+  root: ['root', 'toolPathMode', 'showFrames', 'includeFrames'],
   toolPathMode: ['toolPathMode'],
-  button: ['button'],
+  showFrames: ['showFrames'],
+  includeFrames: ['includeFrames'],
 } as const;
 type NodeNameType = keyof typeof PlasmicDescendants;
 type DescendantsType<T extends NodeNameType> =
@@ -254,7 +461,8 @@ type DescendantsType<T extends NodeNameType> =
 type NodeDefaultElementType = {
   root: 'div';
   toolPathMode: typeof AntdSwitch;
-  button: typeof AntdButton;
+  showFrames: typeof AntdSwitch;
+  includeFrames: typeof AntdSwitch;
 };
 
 type ReservedPropsType = 'variants' | 'args' | 'overrides';
@@ -318,7 +526,8 @@ export const PlasmicGbrToolPathTool = Object.assign(
   {
     // Helper components rendering sub-elements
     toolPathMode: makeNodeComponent('toolPathMode'),
-    button: makeNodeComponent('button'),
+    showFrames: makeNodeComponent('showFrames'),
+    includeFrames: makeNodeComponent('includeFrames'),
 
     // Metadata about props expected for PlasmicGbrToolPathTool
     internalVariantProps: PlasmicGbrToolPathTool__VariantProps,
