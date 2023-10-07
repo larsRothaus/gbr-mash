@@ -121,7 +121,7 @@ export class SvgRenderView extends React.Component<Props, State> {
       objects = [...objects, ...this.svg.querySelectorAll('rect')];
       objects = [...objects, ...this.svg.querySelectorAll('ellipse')];
 
-      const resolution = 1;
+      const resolution = 5;
 
       const completedNodes: GbrNode[] = [];
       let currentNode: GbrNode = new GbrNode();
@@ -208,14 +208,12 @@ export class SvgRenderView extends React.Component<Props, State> {
 
           ctx.lineTo(point2D.x, point2D.y);
           ctx.stroke();
-          // console.log(`## [svg] x:${point2D.x}, y:${point2D.y}`);
-          // await delay(5)
+          await delay(resolution)
           totalNotes++;
 
           if (point2D.x < -20 || point2D.y < -20) {
             throw new Error(`Error class:SvgRenderView[] : Out of Bounce!`);
           }
-
         }
 
         ctx.lineTo(endPoint.x, endPoint.y);
@@ -296,6 +294,10 @@ export class SvgRenderView extends React.Component<Props, State> {
                 height={window.innerHeight}></iframe>
         <button id={'create'}>create gbr nodes</button>
         <button id={'readyBtn'} disabled={!dataModel}>ready</button>
+        <button onClick={()=>{
+          window.electron.openDialog();
+
+        }}>load</button>
         <img id={'preview'} style={{
           verticalAlign: 'top'
         }} width={window.innerWidth} height={window.innerHeight}></img>

@@ -4,7 +4,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import { IpcEvent } from './preload';
+import { FileFilter, IpcEvent } from './preload';
 import fetch from 'node-fetch-commonjs';
 import fs from 'fs'
 import { EventTypes } from '../Constants';
@@ -213,7 +213,6 @@ const createWindow = async () => {
         emuViewTitle = webContents.getTitle();
       }
       emuView?.show();
-      debugger;
     });
     emuView.on('resize', (e: any) => {
       updateEmuView();
@@ -266,11 +265,32 @@ const createWindow = async () => {
       }
     }
   });
-
+  // ipcMain.handle('dialog',async (fileType: FileFilter, cb: (data: Buffer) => void):Promise<void> => {
+  //   try{
+  //     const result = await dialog.showOpenDialog(mainWindow!, {
+  //       properties: ['openFile', 'openDirectory'],
+  //       filters: [{
+  //         name: 'svg',
+  //         extensions: ['svg']
+  //       }]
+  //     })
+  //     if(result.filePaths[0]){
+  //       const data = await fs.readFileSync(result.filePaths[0]);
+  //       console.log(data);
+  //     }
+  //   }catch (e){
+  //     console.error(e);
+  //     throw new Error(`Error class:main[] : we are fucked...!`)
+  //   }
+  // });
   ipcMain.handle('dialog',async (event, method, params):Promise<void>=> {
     try{
       const result = await dialog.showOpenDialog(mainWindow!, {
-        properties: ['openFile', 'openDirectory']
+        properties: ['openFile', 'openDirectory'],
+        filters: [{
+          name: 'svg',
+          extensions: ['svg']
+        }]
       })
       if(result.filePaths[0]){
         const data = await fs.readFileSync(result.filePaths[0]);
