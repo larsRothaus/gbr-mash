@@ -15,8 +15,10 @@ export interface FileFilter {
   extensions: string[];
 }
 
+
 contextBridge.exposeInMainWorld('electron', {
-  openDialog: (fileType: FileFilter, cb: (data: Buffer) => void) => ipcRenderer.invoke('dialog', method, config),
+  openFile: () => ipcRenderer.invoke('dialog:openFile'),
+  fileOven: () => ipcRenderer.invoke('dialog'),
   ipcRenderer: {
     sendMessage(channel: Channels, args: IpcEvent) {
       ipcRenderer.send(channel, args);

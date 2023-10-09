@@ -3,7 +3,8 @@ import {IpcEvent} from '../main/preload'
 declare global {
   interface Window {
     electron: {
-      openDialog:(method: any, config: any)=>void;
+      openFile:()=>any;
+      openDialog:()=>void;
       ipcRenderer: {
         sendMessage(channel: Channels, args: IpcEvent): void;
         on(

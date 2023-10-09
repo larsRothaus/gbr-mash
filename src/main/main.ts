@@ -294,7 +294,7 @@ const createWindow = async () => {
       })
       if(result.filePaths[0]){
         const data = await fs.readFileSync(result.filePaths[0]);
-        console.log(data);
+        mainWindow?.webContents.send('file-open', result.filePaths[0], data);
       }
     }catch (e){
       console.error(e);
@@ -320,7 +320,25 @@ const createWindow = async () => {
 };
 
 
+async function handleFileOpen () {
+  const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow!, {
+    properties: ['openFile', 'openDirectory'],
+    filters: [{
+      name: 'svg',
+      extensions: ['svg']
+    }]
+  })
+  if (canceled) {
+    return filePaths[0]
+  }
+
+  if(filePaths[0]){
+    return await fs.readFileSync(filePaths[0]);
+  }
+}
+
 app.whenReady().then(async () => {
+  ipcMain.handle('dialog:openFile', handleFileOpen)
   // session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
   //   callback({
   //     responseHeaders: {

@@ -57,13 +57,14 @@ class MainView extends React.Component<Props, State> {
       );
     } else {
       return (
-        <SvgRenderView completeHandler={(nodes: GbrDataModel) => {
-          // const gbrCode = GBRCodeGenerator.generateCodeFromNotes(nodes);
-          // Utils.download(gbrCode, 'first_go.gbr', 'text/plain');
-          this.setState({
-            nodeData:nodes
-          });
-        }}></SvgRenderView>
+        <div></div>
+        // <SvgRenderView completeHandler={(nodes: GbrDataModel) => {
+        //   // const gbrCode = GBRCodeGenerator.generateCodeFromNotes(nodes);
+        //   // Utils.download(gbrCode, 'first_go.gbr', 'text/plain');
+        //   this.setState({
+        //     nodeData:nodes
+        //   });
+        // }}></SvgRenderView>
       );
     }
 
@@ -74,9 +75,9 @@ class MainView extends React.Component<Props, State> {
     return (
       <div className='MainView'>
         {/* for testing GbrEditor stl */}
-        {/*<GbrEditor nodeData={this.state?.nodeData}></GbrEditor>*/}
+        <GbrEditor></GbrEditor>
 
-        {this.viewSelector()}
+        {/*{this.viewSelector()}*/}
 
         {/*<button ref={c => this.fileInput = c}> openFile</button>*/}
         {/*<button onClick={()=>{*/}

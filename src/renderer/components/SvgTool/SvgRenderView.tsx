@@ -4,6 +4,8 @@ import { Point2D } from '../../dtos/Point2D';
 import { GbrNode } from '../../dtos/GbrNode';
 import { GbrDataModel } from '../../models/GbrDataModel';
 
+import { ipcRenderer } from 'electron';
+
 const allEqual = arr => arr.every(val => val === arr[0]);
 
 const delay = async (ms: number) => new Promise(resolve => {
@@ -11,6 +13,7 @@ const delay = async (ms: number) => new Promise(resolve => {
 });
 type Props = {
   svgPath?: string,
+  svgData: Buffer
   completeHandler: (nodes: GbrDataModel) => void
 };
 
@@ -34,13 +37,11 @@ export class SvgRenderView extends React.Component<Props, State> {
   private readyBtn!: HTMLButtonElement;
   private svg: SVGSVGElement | null = null;
   private canvas: HTMLCanvasElement;
-  private preview: HTMLImageElement;
 
   componentDidMount() {
-    this.canvas = document.getElementById('canvas');
-    this.preview = document.getElementById('preview');
-    this.readyBtn = document.getElementById('readyBtn');
 
+    this.canvas = document.getElementById('canvas');
+    this.readyBtn = document.getElementById('readyBtn');
 
     this.canvas.hidden = true;
     let ctx = this.canvas.getContext('2d');
@@ -48,63 +49,20 @@ export class SvgRenderView extends React.Component<Props, State> {
     this.createBtn = document.getElementById('create') as HTMLButtonElement;
 
     if (!this.frame) return;
+    const iframedoc = this.frame.contentDocument || this.frame.contentWindow!.document;
 
-    this.frame.addEventListener('load', () => {
-      const svgRoot = this.frame.contentDocument;
-      const iframedoc = this.frame.contentDocument || this.frame.contentWindow!.document;
-      if (!svgRoot) {
-        console.error('No contentDocument');
-        return;
-      }
-      const svg = svgRoot.querySelector('svg');
-      if (!svg) {
-        console.error('No svg header');
-        return;
-      }
+    var contentString = new TextDecoder().decode(this.props.svgData);
+    iframedoc.body.innerHTML = contentString;
+    const svgRoot = iframedoc;
 
-
-      const widthPx = Math.floor(svg.width.baseVal.value);
-      const widthUnit = Math.floor(svg.width.baseVal.valueInSpecifiedUnits);
-      const heightPx = Math.floor(svg.height.baseVal.value);
-      const heightUnit = Math.floor(svg.height.baseVal.valueInSpecifiedUnits);
-
-      console.log(`## [SvgRenderView] :`, widthPx, widthUnit, heightPx, heightUnit);
-
-    });
-
-    setTimeout(async () => {
-
-      const iframedoc = this.frame.contentDocument || this.frame.contentWindow!.document;
-      if (!iframedoc) {
-        throw new Error(`Error class:SvgRenderView[ghg] : No doc!`);
-      }
-
-      // const resourceUrl = 'http://127.0.0.1:8080/Wave700x1000_test_v2.svg';
-      // const resourceUrl = 'http://localhost:8080/pik.svg';
-      //const resourceUrl = 'http://127.0.0.1:8080/single_wave_100x70.svg';
-      // const resourceUrl = 'http://127.0.0.1:8080/WAVE_60X60_UPD2022.svg';
-      const resourceUrl = 'http://127.0.0.1:8080/WAVE_60X60_UPD2022_Fliped.svg';
-      // const resourceUrl = 'http://127.0.0.1:8080/test_100X100.svg';
-
-      const res = await fetch(resourceUrl);
-      const content = await res.text();
-      iframedoc.body.innerHTML = content;
-
-      this.preview.src = resourceUrl;
-
-      const svgRoot = iframedoc;
-
-      this.svg = svgRoot.querySelector('svg');
-      if (!this.svg) {
-        console.error('No svg header');
-        return;
-      }
-
-    }, 1000);
+    this.svg = svgRoot.querySelector('svg');
+    if (!this.svg) {
+      console.error('No svg header');
+      return;
+    }
 
     this.createBtn.addEventListener('click', async () => {
       this.frame.hidden = true;
-      this.preview.hidden = true;
       this.canvas.hidden = false;
       if (!this.svg) {
         console.log('No SVG File');
@@ -126,6 +84,7 @@ export class SvgRenderView extends React.Component<Props, State> {
       const completedNodes: GbrNode[] = [];
       let currentNode: GbrNode = new GbrNode();
 
+      const scaleFactor = .25;
 
       let totalNotes = 0;
 
@@ -162,7 +121,7 @@ export class SvgRenderView extends React.Component<Props, State> {
 
         });
 
-        ctx.moveTo(startPoint.x, startPoint.y);
+        ctx.moveTo(startPoint.x * scaleFactor, startPoint.y * scaleFactor);
         ctx.beginPath();
         // let r = Math.floor(Math.random() * 255);
         // let g = Math.floor(Math.random() * 255);$
@@ -196,7 +155,7 @@ export class SvgRenderView extends React.Component<Props, State> {
 
         let lastValidPoint: Point2D | undefined = undefined;
         currentNode.addPoint(startPoint);
-        ctx.lineTo(startPoint.x, startPoint.y);
+        ctx.lineTo(startPoint.x * scaleFactor, startPoint.y * scaleFactor);
         for (let a = 0; a < interpolationPoints.length; a++) {
           let point2D = objects[obj].getPointAtLength(interpolationPoints[a]);
           lastValidPoint = point2D;
@@ -206,9 +165,9 @@ export class SvgRenderView extends React.Component<Props, State> {
             y: point2D.y
           });
 
-          ctx.lineTo(point2D.x, point2D.y);
+          ctx.lineTo(point2D.x * scaleFactor, point2D.y * scaleFactor);
           ctx.stroke();
-          await delay(resolution)
+          // await delay(resolution);
           totalNotes++;
 
           if (point2D.x < -20 || point2D.y < -20) {
@@ -216,7 +175,7 @@ export class SvgRenderView extends React.Component<Props, State> {
           }
         }
 
-        ctx.lineTo(endPoint.x, endPoint.y);
+        ctx.lineTo(endPoint.x * scaleFactor, endPoint.y * scaleFactor);
         currentNode.addPoint(endPoint);
         ctx.stroke();
 
@@ -240,8 +199,8 @@ export class SvgRenderView extends React.Component<Props, State> {
           const nNode = new GbrNode();
           nNode.type = completedNodes[o].type;
           nNode.refId = completedNodes[o].refId;
-          nNode.addPoint(completedNodes[o].startEndVectors.start)
-          nNode.addPoint(completedNodes[o].startEndVectors.end)
+          nNode.addPoint(completedNodes[o].startEndVectors.start);
+          nNode.addPoint(completedNodes[o].startEndVectors.end);
           nNode.close();
           completedNodes[o] = nNode;
         }
@@ -290,20 +249,13 @@ export class SvgRenderView extends React.Component<Props, State> {
     const { dataModel } = this.state ?? {};
     return (
       <div>
-        <iframe hidden={true} style={iframeStyle} id={'frame'} width={window.innerWidth}
-                height={window.innerHeight}></iframe>
         <button id={'create'}>create gbr nodes</button>
-        <button id={'readyBtn'} disabled={!dataModel}>ready</button>
-        <button onClick={()=>{
-          window.electron.openDialog();
-
-        }}>load</button>
-        <img id={'preview'} style={{
-          verticalAlign: 'top'
-        }} width={window.innerWidth} height={window.innerHeight}></img>
+        <button id={'readyBtn'} disabled={!dataModel}>import</button>
+        <iframe hidden={false} style={iframeStyle} id={'frame'} width={window.innerWidth}
+                height={window.innerHeight}></iframe>
         <canvas id={'canvas'} style={{
-          scale: .5
-        }} width={window.innerWidth} height={window.innerHeight - 300}></canvas>
+          scale: .2
+        }} width={window.innerWidth} height={window.innerHeight}></canvas>
       </div>
     );
   }
