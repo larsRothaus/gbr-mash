@@ -18,7 +18,7 @@ export class Ruler extends BaseViewItem {
 
 
     this.createXRuler(12000,1000)
-      this.createYRuler(24000,1000)
+    this.createYRuler(24000,1000)
 
   }
 

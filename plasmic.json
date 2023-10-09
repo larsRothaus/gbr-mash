@@ -495,6 +495,19 @@
           "cssFilePath": "plasmic/arturel/PlasmicGbrToolPathTool.module.css",
           "scheme": "blackbox",
           "componentType": "component"
+        },
+        {
+          "id": "iJ9VAOwmK_pG",
+          "name": "GbrInfoBox",
+          "type": "managed",
+          "projectId": "dgFPhDvLY4vKuXTDNeS2uD",
+          "renderModuleFilePath": "plasmic/arturel/PlasmicGbrInfoBox.tsx",
+          "importSpec": {
+            "modulePath": "GbrInfoBox.tsx"
+          },
+          "cssFilePath": "plasmic/arturel/PlasmicGbrInfoBox.module.css",
+          "scheme": "blackbox",
+          "componentType": "component"
         }
       ],
       "icons": [

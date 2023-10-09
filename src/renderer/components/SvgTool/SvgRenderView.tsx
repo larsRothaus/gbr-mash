@@ -34,6 +34,7 @@ export class SvgRenderView extends React.Component<Props, State> {
   private canvas: HTMLCanvasElement;
   private preview: HTMLImageElement;
 
+
   componentDidMount() {
     this.canvas = document.getElementById('canvas');
     this.preview = document.getElementById('preview');
@@ -80,9 +81,10 @@ export class SvgRenderView extends React.Component<Props, State> {
       // const resourceUrl = 'http://127.0.0.1:8080/Wave700x1000_test_v2.svg';
       // const resourceUrl = 'http://localhost:8080/pik.svg';
       //const resourceUrl = 'http://127.0.0.1:8080/single_wave_100x70.svg';
-      // const resourceUrl = 'http://127.0.0.1:8080/WAVE_60X60_UPD2022.svg';
-      // const resourceUrl = 'http://127.0.0.1:8080/WAVE_60X60_UPD2022_Fliped.svg';
-      const resourceUrl = 'http://127.0.0.1:8080/test_100X100.svg';
+      //const resourceUrl = 'http://127.0.0.1:8080/WAVE_60X60_UPD2022.svg';
+      // const resourceUrl = 'http://localhost:8080/Wave700x1000_Artwork_m_test.svg';
+      //  const resourceUrl = 'http://127.0.0.1:8080/ARCH_120X180_UPD2023_FUCKALL_test_1.svg';
+      const resourceUrl = 'http://127.0.0.1:8080/Geometric_1200x1350_UPD2023_FUCK_non_dynamic.svg';
 
       const res = await fetch(resourceUrl);
       const content = await res.text();
@@ -110,16 +112,30 @@ export class SvgRenderView extends React.Component<Props, State> {
       }
       const widthPx = Math.floor(this.svg.width.baseVal.value);
       const widthUnit = Math.floor(this.svg.width.baseVal.valueInSpecifiedUnits);
+      const xScaleFactor = widthPx / widthUnit;
       const heightPx = Math.floor(this.svg.height.baseVal.value);
       const heightUnit = Math.floor(this.svg.height.baseVal.valueInSpecifiedUnits);
-      console.log(`## [SvgRenderView] widthPx:${widthPx}widthUnit:${widthUnit}heightPx:${heightPx}heightUnit:${heightUnit}`);
+      const yScaleFactor = heightPx / heightUnit;
+
+      const masterScale = .25;
+      const pxToMmScaleFactor = (typeof widthUnit === 'number' && typeof heightUnit === 'number') ? 2.83 : 1;
+
+      const scalePoint2D = (point: Point2D | DOMPoint): Point2D => {
+        return {
+          x: (point.x / pxToMmScaleFactor) * masterScale,
+          y: (point.y / pxToMmScaleFactor) * masterScale
+        };
+      };
+      console.log(`## [SvgRenderView] widthPx:${widthPx}widthUnit:${widthUnit}heightPx:${heightPx}heightUnit:${heightUnit}heightPxScaled:${heightPx * xScaleFactor}widthPxScales:${widthUnit * yScaleFactor}`);
+      debugger;
       let objects = [];
 
       objects = [...this.svg.querySelectorAll('path')];
       objects = [...objects, ...this.svg.querySelectorAll('rect')];
       objects = [...objects, ...this.svg.querySelectorAll('ellipse')];
+      objects = [...objects, ...this.svg.querySelectorAll('line')];
 
-      const resolution = 1;
+      const resolution = 40;
 
       const completedNodes: GbrNode[] = [];
       let currentNode: GbrNode = new GbrNode();
@@ -149,8 +165,8 @@ export class SvgRenderView extends React.Component<Props, State> {
         //   mvX = x;
         //   mvY = y;
         // }
-        let startPoint = objects[obj].getPointAtLength(0);
-        let endPoint = objects[obj].getPointAtLength(totalLength);
+        let startPoint = scalePoint2D(objects[obj].getPointAtLength(0));
+        let endPoint = scalePoint2D(objects[obj].getPointAtLength(totalLength));
 
         objects[obj].addEventListener('click', (e) => {
           console.log(`## [svg] client`, e);
@@ -196,7 +212,7 @@ export class SvgRenderView extends React.Component<Props, State> {
         currentNode.addPoint(startPoint);
         ctx.lineTo(startPoint.x, startPoint.y);
         for (let a = 0; a < interpolationPoints.length; a++) {
-          let point2D = objects[obj].getPointAtLength(interpolationPoints[a]);
+          let point2D = scalePoint2D(objects[obj].getPointAtLength(interpolationPoints[a]));
           // if (lastPoint.x === point2D.x || lastPoint.y === point2D.y) {
           //   if(interpolationPoints.length-1 !== a){
           //     currentProgress += resolution;
@@ -215,7 +231,7 @@ export class SvgRenderView extends React.Component<Props, State> {
           ctx.lineTo(point2D.x, point2D.y);
           ctx.stroke();
           // console.log(`## [svg] x:${point2D.x}, y:${point2D.y}`);
-          // await delay(5)
+          await delay(5);
           totalNotes++;
 
           if (point2D.x < -20 || point2D.y < -20) {
