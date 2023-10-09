@@ -148,6 +148,9 @@ a:hover {
 .cursor-x {
     cursor: ew-resize;
 }
+.tool-header {
+    color: #313131;
+}
 
 .react-draggable strong {
     background: #ddd;

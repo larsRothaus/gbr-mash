@@ -4,10 +4,6 @@ import { Point2D } from '../../dtos/Point2D';
 import { GbrNode } from '../../dtos/GbrNode';
 import { GbrDataModel } from '../../models/GbrDataModel';
 
-import { ipcRenderer } from 'electron';
-
-const allEqual = arr => arr.every(val => val === arr[0]);
-
 const delay = async (ms: number) => new Promise(resolve => {
   setTimeout(resolve, ms);
 });
@@ -70,21 +66,35 @@ export class SvgRenderView extends React.Component<Props, State> {
       }
       const widthPx = Math.floor(this.svg.width.baseVal.value);
       const widthUnit = Math.floor(this.svg.width.baseVal.valueInSpecifiedUnits);
+      const xScaleFactor = widthPx / widthUnit;
       const heightPx = Math.floor(this.svg.height.baseVal.value);
       const heightUnit = Math.floor(this.svg.height.baseVal.valueInSpecifiedUnits);
-      console.log(`## [SvgRenderView] widthPx:${widthPx}widthUnit:${widthUnit}heightPx:${heightPx}heightUnit:${heightUnit}`);
+      const yScaleFactor = heightPx / heightUnit;
+
+
+      const resolution = 20;
+      const masterScale =  1;//.25;
+      const pxToMmScaleFactor = 2.83; //1; //// (typeof widthUnit === 'number' && typeof heightUnit === 'number') ? 2.83 : 1;
+
+      const scaleFactor = .6;
+
+      const scalePoint2D = (point: Point2D | DOMPoint): Point2D => {
+        return {
+          x: (point.x / pxToMmScaleFactor) * masterScale,
+          y: (point.y / pxToMmScaleFactor) * masterScale
+        };
+      };
+
       let objects = [];
 
       objects = [...this.svg.querySelectorAll('path')];
       objects = [...objects, ...this.svg.querySelectorAll('rect')];
       objects = [...objects, ...this.svg.querySelectorAll('ellipse')];
 
-      const resolution = 5;
 
       const completedNodes: GbrNode[] = [];
       let currentNode: GbrNode = new GbrNode();
 
-      const scaleFactor = .25;
 
       let totalNotes = 0;
 
@@ -97,21 +107,8 @@ export class SvgRenderView extends React.Component<Props, State> {
         const totalLength = objects[obj].getTotalLength();
         console.log(`## [SvgRenderView] node:${currentNode.refId} | totalLength:${totalLength}`);
         let d = objects[obj].getAttribute('d');
-        let vx = d.split(' ');
-        let mvX = 0;
-        let mvY = 0;
-        // if(vx[0].toLowerCase() === 'm'){
-        //   let moveXy = vx[1].split(',');
-        //   let x = parseInt(moveXy[0]);
-        //   let y = parseInt(moveXy[1]);
-        //   if(isNaN(x) || isNaN(y)){
-        //     throw new Error(`Error class:SvgRenderView[] : x is nan !`);
-        //   }
-        //   mvX = x;
-        //   mvY = y;
-        // }
-        let startPoint = objects[obj].getPointAtLength(0);
-        let endPoint = objects[obj].getPointAtLength(totalLength);
+        let startPoint = scalePoint2D(objects[obj].getPointAtLength(0));
+        let endPoint = scalePoint2D(objects[obj].getPointAtLength(totalLength));
 
         objects[obj].addEventListener('click', (e) => {
           console.log(`## [svg] client`, e);
@@ -123,18 +120,7 @@ export class SvgRenderView extends React.Component<Props, State> {
 
         ctx.moveTo(startPoint.x * scaleFactor, startPoint.y * scaleFactor);
         ctx.beginPath();
-        // let r = Math.floor(Math.random() * 255);
-        // let g = Math.floor(Math.random() * 255);$
-        // let b = Math.floor((Math.random() * 127) + 127);
-
         ctx.fillStyle = 'red';
-
-        // let currentProgress = 0;
-        // let lastPoint: Point2D = {
-        //   ...start
-        // }
-
-        //@ts-ignore
 
         const totalInterpolation = Math.floor(totalLength / resolution);
 
@@ -157,7 +143,7 @@ export class SvgRenderView extends React.Component<Props, State> {
         currentNode.addPoint(startPoint);
         ctx.lineTo(startPoint.x * scaleFactor, startPoint.y * scaleFactor);
         for (let a = 0; a < interpolationPoints.length; a++) {
-          let point2D = objects[obj].getPointAtLength(interpolationPoints[a]);
+          let point2D = scalePoint2D(objects[obj].getPointAtLength(interpolationPoints[a]));
           lastValidPoint = point2D;
 
           currentNode.addPoint({
@@ -185,27 +171,6 @@ export class SvgRenderView extends React.Component<Props, State> {
       console.log(`## [SvgRenderView] componentDidMount | Finn `, completedNodes);
       console.log(`## [SvgRenderView]  | `, widthPx, widthUnit, heightPx, heightUnit);
       console.log(`## [SvgRenderView] Total Notes; | `, totalNotes);
-
-
-      ///////// Optimizer ////////////
-      for (let o in completedNodes) {
-        const xs = completedNodes[o].points.map(value => value.x);
-        const ys = completedNodes[o].points.map(value => value.y);
-        const xIsStraight = allEqual(xs);
-        const yIsStraight = allEqual(ys);
-        if (xIsStraight || yIsStraight) {
-          console.log(`## [SvgRenderView] is ${yIsStraight ? 'Y' : 'X'} a straight Line:`);
-          console.log(`## [SvgRenderView] simplifying node`);
-          const nNode = new GbrNode();
-          nNode.type = completedNodes[o].type;
-          nNode.refId = completedNodes[o].refId;
-          nNode.addPoint(completedNodes[o].startEndVectors.start);
-          nNode.addPoint(completedNodes[o].startEndVectors.end);
-          nNode.close();
-          completedNodes[o] = nNode;
-        }
-      }
-
 
       ///////// Convert ////////////
       for (let n in completedNodes) {

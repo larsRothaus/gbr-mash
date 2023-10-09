@@ -49,18 +49,22 @@ export const PlasmicGbrLoad__VariantProps = new Array<VariantPropType>();
 
 export type PlasmicGbrLoad__ArgsType = {
   loadFile?: () => void;
+  clearLoaded?: () => void;
 };
 type ArgPropType = keyof PlasmicGbrLoad__ArgsType;
-export const PlasmicGbrLoad__ArgProps = new Array<ArgPropType>('loadFile');
+export const PlasmicGbrLoad__ArgProps = new Array<ArgPropType>(
+  'loadFile',
+  'clearLoaded'
+);
 
 export type PlasmicGbrLoad__OverridesType = {
   root?: p.Flex<'div'>;
-  button?: p.Flex<typeof AntdButton>;
-  text?: p.Flex<'div'>;
+  freeBox?: p.Flex<'div'>;
 };
 
 export interface DefaultGbrLoadProps {
   loadFile?: () => void;
+  clearLoaded?: () => void;
   className?: string;
 }
 
@@ -103,56 +107,86 @@ function PlasmicGbrLoad__RenderFunc(props: {
         sty.root
       )}
     >
-      <AntdButton
-        data-plasmic-name={'button'}
-        data-plasmic-override={overrides.button}
-        className={classNames('__wab_instance', sty.button)}
-        onClick={async () => {
-          const $steps = {};
-          $steps['runLoadFile'] = true
-            ? (() => {
-                const actionArgs = { eventRef: $props['loadFile'] };
-                return (({ eventRef, args }) => {
-                  return eventRef?.(...(args ?? []));
-                })?.apply(null, [actionArgs]);
-              })()
-            : undefined;
-          if (
-            typeof $steps['runLoadFile'] === 'object' &&
-            typeof $steps['runLoadFile'].then === 'function'
-          ) {
-            $steps['runLoadFile'] = await $steps['runLoadFile'];
-          }
-        }}
+      <div
+        data-plasmic-name={'freeBox'}
+        data-plasmic-override={overrides.freeBox}
+        className={classNames(projectcss.all, sty.freeBox)}
       >
-        <div
-          data-plasmic-name={'text'}
-          data-plasmic-override={overrides.text}
-          className={classNames(
-            projectcss.all,
-            projectcss.__wab_text,
-            sty.text
-          )}
+        <AntdButton
+          className={classNames('__wab_instance', sty.button___7MPaN)}
+          onClick={async () => {
+            const $steps = {};
+            $steps['runLoadFile'] = true
+              ? (() => {
+                  const actionArgs = { eventRef: $props['loadFile'] };
+                  return (({ eventRef, args }) => {
+                    return eventRef?.(...(args ?? []));
+                  })?.apply(null, [actionArgs]);
+                })()
+              : undefined;
+            if (
+              typeof $steps['runLoadFile'] === 'object' &&
+              typeof $steps['runLoadFile'].then === 'function'
+            ) {
+              $steps['runLoadFile'] = await $steps['runLoadFile'];
+            }
+          }}
         >
-          {'Load File'}
-        </div>
-      </AntdButton>
+          <div
+            className={classNames(
+              projectcss.all,
+              projectcss.__wab_text,
+              sty.text__slqSa
+            )}
+          >
+            {'Load File'}
+          </div>
+        </AntdButton>
+        <AntdButton
+          className={classNames('__wab_instance', sty.button__e34Zb)}
+          onClick={async () => {
+            const $steps = {};
+            $steps['runClearLoaded'] = true
+              ? (() => {
+                  const actionArgs = { eventRef: $props['clearLoaded'] };
+                  return (({ eventRef, args }) => {
+                    return eventRef?.(...(args ?? []));
+                  })?.apply(null, [actionArgs]);
+                })()
+              : undefined;
+            if (
+              typeof $steps['runClearLoaded'] === 'object' &&
+              typeof $steps['runClearLoaded'].then === 'function'
+            ) {
+              $steps['runClearLoaded'] = await $steps['runClearLoaded'];
+            }
+          }}
+        >
+          <div
+            className={classNames(
+              projectcss.all,
+              projectcss.__wab_text,
+              sty.text__rw0F1
+            )}
+          >
+            {'Clear'}
+          </div>
+        </AntdButton>
+      </div>
     </div>
   ) as React.ReactElement | null;
 }
 
 const PlasmicDescendants = {
-  root: ['root', 'button', 'text'],
-  button: ['button', 'text'],
-  text: ['text'],
+  root: ['root', 'freeBox'],
+  freeBox: ['freeBox'],
 } as const;
 type NodeNameType = keyof typeof PlasmicDescendants;
 type DescendantsType<T extends NodeNameType> =
   (typeof PlasmicDescendants)[T][number];
 type NodeDefaultElementType = {
   root: 'div';
-  button: typeof AntdButton;
-  text: 'div';
+  freeBox: 'div';
 };
 
 type ReservedPropsType = 'variants' | 'args' | 'overrides';
@@ -215,8 +249,7 @@ export const PlasmicGbrLoad = Object.assign(
   makeNodeComponent('root'),
   {
     // Helper components rendering sub-elements
-    button: makeNodeComponent('button'),
-    text: makeNodeComponent('text'),
+    freeBox: makeNodeComponent('freeBox'),
 
     // Metadata about props expected for PlasmicGbrLoad
     internalVariantProps: PlasmicGbrLoad__VariantProps,

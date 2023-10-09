@@ -92,7 +92,7 @@ class GbrEditor extends React.Component<Props, State> {
         <div style={{
           position: 'absolute',
           top: 0,
-          right: 1200,
+          right: 1500,
           height: 0
         }} className={'GbrLoadTool'}>
           <GbrToolContainer open={false} heading={'Load'} nodeData={this.props.nodeData}>
@@ -103,6 +103,9 @@ class GbrEditor extends React.Component<Props, State> {
                 this.setState({
                   svgData:data
                 })
+              }}
+              clearLoaded={() => {
+                this.updateViewNodes([]);
               }}
             />
           </GbrToolContainer>

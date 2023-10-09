@@ -72,7 +72,7 @@ class GbrToolContainer extends React.Component<Props, State> {
               open: this.state.open ? false : true
             });
           }}>
-            <div>{` |  ${this.props.heading}  | `}</div>
+            <div className='tool-header'>{` |  ${this.props.heading}  | `}</div>
           </strong>
           <div style={{ overflow: 'hidden', height: `${open ? 'auto' : '0px'}`, background: 'gray' , }}>
             {this.props.children}
