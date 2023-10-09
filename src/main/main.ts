@@ -213,7 +213,6 @@ const createWindow = async () => {
         emuViewTitle = webContents.getTitle();
       }
       emuView?.show();
-      debugger;
     });
     emuView.on('resize', (e: any) => {
       updateEmuView();

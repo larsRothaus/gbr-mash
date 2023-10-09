@@ -20,11 +20,6 @@ const iframeStyle = {
   width: '100%',
   height: '100vh'
 };
-const iframeStyle_ = {
-  width: '100%',
-  height: '100%'
-};
-
 
 export class SvgRenderView extends React.Component<Props, State> {
   private frame!: HTMLIFrameElement;
@@ -39,7 +34,6 @@ export class SvgRenderView extends React.Component<Props, State> {
     this.canvas = document.getElementById('canvas');
     this.preview = document.getElementById('preview');
     this.readyBtn = document.getElementById('readyBtn');
-
 
     this.canvas.hidden = true;
     let ctx = this.canvas.getContext('2d');
@@ -61,7 +55,6 @@ export class SvgRenderView extends React.Component<Props, State> {
         return;
       }
 
-
       const widthPx = Math.floor(svg.width.baseVal.value);
       const widthUnit = Math.floor(svg.width.baseVal.valueInSpecifiedUnits);
       const heightPx = Math.floor(svg.height.baseVal.value);
@@ -79,12 +72,14 @@ export class SvgRenderView extends React.Component<Props, State> {
       }
 
       // const resourceUrl = 'http://127.0.0.1:8080/Wave700x1000_test_v2.svg';
-      // const resourceUrl = 'http://localhost:8080/pik.svg';
-      //const resourceUrl = 'http://127.0.0.1:8080/single_wave_100x70.svg';
-      //const resourceUrl = 'http://127.0.0.1:8080/WAVE_60X60_UPD2022.svg';
+      // const resourceUrl = 'http://127.0.0.1:8080/single_wave_100x70.svg';
       // const resourceUrl = 'http://localhost:8080/Wave700x1000_Artwork_m_test.svg';
-      //  const resourceUrl = 'http://127.0.0.1:8080/ARCH_120X180_UPD2023_FUCKALL_test_1.svg';
-      const resourceUrl = 'http://127.0.0.1:8080/Geometric_1200x1350_UPD2023_FUCK_non_dynamic.svg';
+
+      // const resourceUrl = 'http://127.0.0.1:8080/WAVE_60X60_UPD2022.svg';
+      const resourceUrl = 'http://127.0.0.1:8080/WAVE_60X60_UPD2023_Non_dynamic.svg';
+        // const resourceUrl = 'http://127.0.0.1:8080/WAVE_60X120_UPD2023_Non_dynamic.svg';
+      // const resourceUrl = 'http://127.0.0.1:8080/ARCH_120X180_UPD2023_FUCKALL_test_2.svg';
+      // const resourceUrl = 'http://127.0.0.1:8080/Geometric_1200x1350_UPD2023_FUCK_non_dynamic.svg';
 
       const res = await fetch(resourceUrl);
       const content = await res.text();
@@ -117,8 +112,10 @@ export class SvgRenderView extends React.Component<Props, State> {
       const heightUnit = Math.floor(this.svg.height.baseVal.valueInSpecifiedUnits);
       const yScaleFactor = heightPx / heightUnit;
 
-      const masterScale = .25;
-      const pxToMmScaleFactor = (typeof widthUnit === 'number' && typeof heightUnit === 'number') ? 2.83 : 1;
+
+      const resolution = 20;
+      const masterScale =  1;//.25;
+      const pxToMmScaleFactor = 2.83; //1; //// (typeof widthUnit === 'number' && typeof heightUnit === 'number') ? 2.83 : 1;
 
       const scalePoint2D = (point: Point2D | DOMPoint): Point2D => {
         return {
@@ -126,8 +123,7 @@ export class SvgRenderView extends React.Component<Props, State> {
           y: (point.y / pxToMmScaleFactor) * masterScale
         };
       };
-      console.log(`## [SvgRenderView] widthPx:${widthPx}widthUnit:${widthUnit}heightPx:${heightPx}heightUnit:${heightUnit}heightPxScaled:${heightPx * xScaleFactor}widthPxScales:${widthUnit * yScaleFactor}`);
-      debugger;
+
       let objects = [];
 
       objects = [...this.svg.querySelectorAll('path')];
@@ -135,7 +131,8 @@ export class SvgRenderView extends React.Component<Props, State> {
       objects = [...objects, ...this.svg.querySelectorAll('ellipse')];
       objects = [...objects, ...this.svg.querySelectorAll('line')];
 
-      const resolution = 40;
+      //const resolution = 40;
+
 
       const completedNodes: GbrNode[] = [];
       let currentNode: GbrNode = new GbrNode();
@@ -152,19 +149,6 @@ export class SvgRenderView extends React.Component<Props, State> {
         const totalLength = objects[obj].getTotalLength();
         console.log(`## [SvgRenderView] node:${currentNode.refId} | totalLength:${totalLength}`);
         let d = objects[obj].getAttribute('d');
-        let vx = d.split(' ');
-        let mvX = 0;
-        let mvY = 0;
-        // if(vx[0].toLowerCase() === 'm'){
-        //   let moveXy = vx[1].split(',');
-        //   let x = parseInt(moveXy[0]);
-        //   let y = parseInt(moveXy[1]);
-        //   if(isNaN(x) || isNaN(y)){
-        //     throw new Error(`Error class:SvgRenderView[] : x is nan !`);
-        //   }
-        //   mvX = x;
-        //   mvY = y;
-        // }
         let startPoint = scalePoint2D(objects[obj].getPointAtLength(0));
         let endPoint = scalePoint2D(objects[obj].getPointAtLength(totalLength));
 
@@ -178,18 +162,7 @@ export class SvgRenderView extends React.Component<Props, State> {
 
         ctx.moveTo(startPoint.x, startPoint.y);
         ctx.beginPath();
-        // let r = Math.floor(Math.random() * 255);
-        // let g = Math.floor(Math.random() * 255);$
-        // let b = Math.floor((Math.random() * 127) + 127);
-
         ctx.fillStyle = 'red';
-
-        // let currentProgress = 0;
-        // let lastPoint: Point2D = {
-        //   ...start
-        // }
-
-        //@ts-ignore
 
         const totalInterpolation = Math.floor(totalLength / resolution);
 
@@ -213,16 +186,7 @@ export class SvgRenderView extends React.Component<Props, State> {
         ctx.lineTo(startPoint.x, startPoint.y);
         for (let a = 0; a < interpolationPoints.length; a++) {
           let point2D = scalePoint2D(objects[obj].getPointAtLength(interpolationPoints[a]));
-          // if (lastPoint.x === point2D.x || lastPoint.y === point2D.y) {
-          //   if(interpolationPoints.length-1 !== a){
-          //     currentProgress += resolution;
-          //     continue;
-          //   }
-          // }
-
           lastValidPoint = point2D;
-
-
           currentNode.addPoint({
             x: point2D.x,
             y: point2D.y
@@ -230,7 +194,6 @@ export class SvgRenderView extends React.Component<Props, State> {
 
           ctx.lineTo(point2D.x, point2D.y);
           ctx.stroke();
-          // console.log(`## [svg] x:${point2D.x}, y:${point2D.y}`);
           await delay(5);
           totalNotes++;
 
@@ -276,9 +239,6 @@ export class SvgRenderView extends React.Component<Props, State> {
           this.props.completeHandler(this.state.dataModel);
         }
       });
-
-      //this.download(JSON.stringify(completedNodes, null, 2), "test_data.json", "text/plain")
-
 
     });
 

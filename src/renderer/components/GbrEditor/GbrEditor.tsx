@@ -130,7 +130,6 @@ class GbrEditor extends React.Component<Props, State> {
         }} className={'GbrFrameTool'}>
           <GbrToolContainer open={false} heading={'Frame'} nodeData={this.props.nodeData}>
             <GbrFrameTool generateFrames={(cellSizeX, cellSizeY, cellCountX, cellCountY) => {
-              debugger;
               const frameData = this.gbrFrameGenerator.generateFrameViewNode({
                 cellSizeX,
                 cellSizeY,

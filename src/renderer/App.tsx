@@ -74,9 +74,9 @@ class MainView extends React.Component<Props, State> {
     return (
       <div className='MainView'>
         {/* for testing GbrEditor stl */}
-        {/*<GbrEditor nodeData={this.state?.nodeData}></GbrEditor>*/}
+        <GbrEditor nodeData={this.state?.nodeData}></GbrEditor>
 
-        {this.viewSelector()}
+        {/*{this.viewSelector()}*/}
 
         {/*<button ref={c => this.fileInput = c}> openFile</button>*/}
         {/*<button onClick={()=>{*/}
