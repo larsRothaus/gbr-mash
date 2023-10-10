@@ -521,6 +521,19 @@
           "cssFilePath": "plasmic/arturel/PlasmicGbrLoad.module.css",
           "scheme": "blackbox",
           "componentType": "component"
+        },
+        {
+          "id": "2FrFNBw3REdi",
+          "name": "TestTool",
+          "type": "managed",
+          "projectId": "dgFPhDvLY4vKuXTDNeS2uD",
+          "renderModuleFilePath": "plasmic/arturel/PlasmicTestTool.tsx",
+          "importSpec": {
+            "modulePath": "TestTool.tsx"
+          },
+          "cssFilePath": "plasmic/arturel/PlasmicTestTool.module.css",
+          "scheme": "blackbox",
+          "componentType": "component"
         }
       ],
       "icons": [

@@ -3,34 +3,34 @@
 import * as React from 'react';
 import {
   PlasmicGbrCloneTool,
-  DefaultGbrCloneToolProps,
+  DefaultGbrCloneToolProps
 } from './plasmic/arturel/PlasmicGbrCloneTool';
 import { HTMLElementRefOf } from '@plasmicapp/react-web';
 import { GbrDataModel } from '../renderer/models/GbrDataModel';
 
 export interface CloneInfo {
-  cx:number
-  cy:number
-  px:number
-  py:number
-}
-export interface GbrCloneToolProps extends DefaultGbrCloneToolProps {
-  nodeData?: GbrDataModel
-  cloneItems:(cloneInfo:CloneInfo)=>void
+  cx: number;
+  cy: number;
+  px: number;
+  py: number;
 }
 
+export interface GbrCloneToolProps extends DefaultGbrCloneToolProps {
+  nodeData?: GbrDataModel;
+  cloneItems: (cloneInfo: CloneInfo) => void;
+}
 
 
 function GbrCloneTool_(props: GbrCloneToolProps, ref: HTMLElementRefOf<'div'>) {
   const [cloneInfo, setCloneInfo] = React.useState<CloneInfo>({
-    cy:0,
-    cx:0,
-    py:0,
-    px:0
-  })
+    cy: 0,
+    cx: 0,
+    py: 0,
+    px: 0
+  });
 
 
-  return <PlasmicGbrCloneTool root={{ ref }} onChange={(cx, cy, px,py) => {
+  return <PlasmicGbrCloneTool root={{ ref }} onChange={(cx, cy, px, py) => {
     console.log(`## [GbrCloneTool] cx:${cx}, cy:${cy} | `);
     // setCloneInfo({
     //   cx: cx ?? cloneInfo.cx,
@@ -41,14 +41,23 @@ function GbrCloneTool_(props: GbrCloneToolProps, ref: HTMLElementRefOf<'div'>) {
         cx: cx ?? cloneInfo.cx,
         cy: cy ?? cloneInfo.cy,
         px: px ?? cloneInfo.px,
-        py: py ?? cloneInfo.py,
+        py: py ?? cloneInfo.py
       }
     );
-  }} clone={()=>{
-    props.cloneItems(cloneInfo);
-  }} clear={()=>{
+  }} clone={() => {
+    // props.cloneItems(cloneInfo);
+  }} clear={() => {
     props.clear && props.clear();
-  }}/>
+  }}
+  nClone={(cx, cy, px, py) => {
+    props.cloneItems({
+      cx,
+      cy,
+      px,
+      py
+    });
+  }}
+  />;
 }
 
 const GbrCloneTool = React.forwardRef(GbrCloneTool_);

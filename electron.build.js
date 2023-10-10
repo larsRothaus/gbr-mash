@@ -34,11 +34,11 @@ const vmpSign = (command, packagePath) => new Promise(resolve => {
  * @see https://www.electron.build/configuration/configuration
  */
 const options = {
-  productName: "UselessEmu-Later",
+  productName: "Arturel-GBRTool",
   appId: "com.media.useless",
-  electronDownload: {
-    "mirror": "https://github.com/castlabs/electron-releases/releases/download/v"
-  },
+  // electronDownload: {
+  //   "mirror": "https://github.com/castlabs/electron-releases/releases/download/v"
+  // },
 
   // "store” | “normal” | "maximum". - For testing builds, use 'store' to reduce build time significantly.
   compression: "normal",

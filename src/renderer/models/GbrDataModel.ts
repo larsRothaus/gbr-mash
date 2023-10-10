@@ -139,23 +139,15 @@ export class GbrDataModel extends EventEmitter {
   public nodes: GbrViewNode[] = [];
   public frame: Konva.Rect;
   public container: Konva.Layer;
+  public origFrameSize: Frame;
   public frameSize: Frame;
   public isOriginal: boolean = true;
 
   constructor(nodes: GbrNode[], frameSize: Frame, config?: GbrDataModelConfiguration) {
     super();
     this.frameSize = frameSize;
-    const sWidth = 2;
-    this.frame = new Konva.Rect({
-      x: 0 - (sWidth / 2),
-      y: 0 - (sWidth / 2),
-      stroke: 'red',
-      strokeWidth: sWidth,
-      dash: [10, 10],
-      width: this.frameSize.width + (sWidth),
-      height: this.frameSize.height + (sWidth),
-      id: 'temp'
-    });
+    this.origFrameSize = frameSize;
+    this.frame = this.createFrame(this.frameSize);
     this.nodes = nodes.map((value, index) => {
       const viewNode = new GbrViewNode(index, value);
       if (config?.color) {
@@ -167,6 +159,24 @@ export class GbrDataModel extends EventEmitter {
       clearBeforeDraw: true
     });
     this.render();
+  }
+
+  private createFrame(size: Frame, visualOffset: number = 2, rerender: boolean = false): Konva.Rect {
+
+    this.frame = new Konva.Rect({
+      x: 0 - (visualOffset / 2),
+      y: 0 - (visualOffset / 2),
+      stroke: 'red',
+      strokeWidth: visualOffset,
+      dash: [10, 10],
+      width: size.width + (visualOffset),
+      height: size.width + (visualOffset),
+      id: 'temp'
+    });
+    if (rerender) {
+      this.render();
+    }
+    return this.frame;
   }
 
   public testUpdate() {
@@ -323,24 +333,29 @@ export class GbrDataModel extends EventEmitter {
   }
 
   public setVisibility(value: boolean) {
-   this.container.visible(value);
+    this.container.visible(value);
   }
 
-  public hasToolPath():boolean {
+  setSize(tmmWidth:number, tmmHeight:number){
+    const widthScaleFactor = this.origFrameSize.width / tmmWidth;
+    const heightScaleFactor = this.origFrameSize.height / tmmHeight;
+  }
+
+  public hasToolPath(): boolean {
     this.getGbrNodes().forEach(value => {
-      if(value.type === GbrNodeType.ToolUp){
+      if (value.type === GbrNodeType.ToolUp) {
         return true;
       }
-    })
+    });
     return false;
   }
 
   public setToolPathVisibility(value: boolean) {
     this.nodes.forEach(node => {
-      if(node.type === GbrNodeType.ToolUp){
+      if (node.type === GbrNodeType.ToolUp) {
         node.visible = value;
       }
-    })
+    });
   }
 
   public offset(x: number, y: number): void {

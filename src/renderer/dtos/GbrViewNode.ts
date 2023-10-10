@@ -29,6 +29,7 @@ export class GbrViewNode {
   private vectorConfig: Konva.LineConfig;
   private selectedState: boolean = false;
 
+
   constructor(id: number, node: GbrNode, reuse?: Konva.LineConfig) {
     this.id = id;
     this.node = node;
@@ -109,18 +110,36 @@ export class GbrViewNode {
     if(!this.vectorConfig.points){
       throw new Error(`Error class:GbrViewNode[offset] : No vector points!`);
     }
-    let currentVectors: Point2D[] = this.node.points;
 
-
-    // this.vectorConfig.points = [];
-    // for (let v in currentVectors) {
-    //   const { x, y } = currentVectors[v];
-    //   //@ts-ignore
-    //   this.vectorConfig.points.push(x);
-    //   //@ts-ignore
-    //   this.vectorConfig.points.push(y);
-    // }
      let xor = 1;
+    for(let i=0;i<this.vectorConfig.points.length;i++){
+      if(xor){
+        this.vectorConfig.points[i] = this.vectorConfig.points[i] + x;
+        xor = 0;
+      }else{
+        this.vectorConfig.points[i] = this.vectorConfig.points[i] + y;
+        xor = 1;
+      }
+    }
+  }
+
+  public setScale(scaleX:number, scaleY:number){
+    for (let i in this.node.points) {
+      this.node.points[i].x = this.node.points[i].x + x;
+      this.node.points[i].y = this.node.points[i].y + y;
+    }
+
+    this.node.close();
+
+    if(this.startLabel && this.endLabel){
+      this.updateLabelPlacement();
+    }
+
+    if(!this.vectorConfig.points){
+      throw new Error(`Error class:GbrViewNode[offset] : No vector points!`);
+    }
+
+    let xor = 1;
     for(let i=0;i<this.vectorConfig.points.length;i++){
       if(xor){
         this.vectorConfig.points[i] = this.vectorConfig.points[i] + x;

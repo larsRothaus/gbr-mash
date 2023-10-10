@@ -153,7 +153,7 @@ export class SvgRenderView extends React.Component<Props, State> {
 
           ctx.lineTo(point2D.x * scaleFactor, point2D.y * scaleFactor);
           ctx.stroke();
-          // await delay(resolution);
+          await delay(1);
           totalNotes++;
 
           if (point2D.x < -20 || point2D.y < -20) {

@@ -52,12 +52,14 @@ export type PlasmicGbrCloneTool__ArgsType = {
   clone?: () => void;
   clear?: () => void;
   onChange?: (cx: number, cy: number, px: number, py: number) => void;
+  nClone?: (cx: number, cy: number, px: number, py: number) => void;
 };
 type ArgPropType = keyof PlasmicGbrCloneTool__ArgsType;
 export const PlasmicGbrCloneTool__ArgProps = new Array<ArgPropType>(
   'clone',
   'clear',
-  'onChange'
+  'onChange',
+  'nClone'
 );
 
 export type PlasmicGbrCloneTool__OverridesType = {
@@ -74,6 +76,7 @@ export interface DefaultGbrCloneToolProps {
   clone?: () => void;
   clear?: () => void;
   onChange?: (cx: number, cy: number, px: number, py: number) => void;
+  nClone?: (cx: number, cy: number, px: number, py: number) => void;
   className?: string;
 }
 
@@ -168,6 +171,35 @@ function PlasmicGbrCloneTool__RenderFunc(props: {
           className={classNames('__wab_instance', sty.cx)}
           min={1}
           onChange={p.generateStateOnChangeProp($state, ['cx', 'value'])}
+          onPressEnter={async (event) => {
+            const $steps = {};
+            $steps['updateCxValue'] = true
+              ? (() => {
+                  const actionArgs = {
+                    variable: {
+                      objRoot: $state,
+                      variablePath: ['cx', 'value'],
+                    },
+                    operation: 0,
+                  };
+                  return (({ variable, value, startIndex, deleteCount }) => {
+                    if (!variable) {
+                      return;
+                    }
+                    const { objRoot, variablePath } = variable;
+
+                    p.set(objRoot, variablePath, value);
+                    return value;
+                  })?.apply(null, [actionArgs]);
+                })()
+              : undefined;
+            if (
+              typeof $steps['updateCxValue'] === 'object' &&
+              typeof $steps['updateCxValue'].then === 'function'
+            ) {
+              $steps['updateCxValue'] = await $steps['updateCxValue'];
+            }
+          }}
           placeholder={'0'}
           value={p.generateStateValueProp($state, ['cx', 'value'])}
         />
@@ -248,10 +280,10 @@ function PlasmicGbrCloneTool__RenderFunc(props: {
           className={classNames('__wab_instance', sty.clone)}
           onClick={async () => {
             const $steps = {};
-            $steps['runOnChange'] = true
+            $steps['runNClone'] = true
               ? (() => {
                   const actionArgs = {
-                    eventRef: $props['onChange'],
+                    eventRef: $props['nClone'],
                     args: [
                       (() => {
                         try {
@@ -261,7 +293,7 @@ function PlasmicGbrCloneTool__RenderFunc(props: {
                             e instanceof TypeError ||
                             e?.plasmicType === 'PlasmicUndefinedDataError'
                           ) {
-                            return 1;
+                            return undefined;
                           }
                           throw e;
                         }
@@ -274,7 +306,7 @@ function PlasmicGbrCloneTool__RenderFunc(props: {
                             e instanceof TypeError ||
                             e?.plasmicType === 'PlasmicUndefinedDataError'
                           ) {
-                            return 1;
+                            return undefined;
                           }
                           throw e;
                         }
@@ -287,7 +319,7 @@ function PlasmicGbrCloneTool__RenderFunc(props: {
                             e instanceof TypeError ||
                             e?.plasmicType === 'PlasmicUndefinedDataError'
                           ) {
-                            return 0;
+                            return undefined;
                           }
                           throw e;
                         }
@@ -300,7 +332,7 @@ function PlasmicGbrCloneTool__RenderFunc(props: {
                             e instanceof TypeError ||
                             e?.plasmicType === 'PlasmicUndefinedDataError'
                           ) {
-                            return 0;
+                            return undefined;
                           }
                           throw e;
                         }
@@ -313,10 +345,10 @@ function PlasmicGbrCloneTool__RenderFunc(props: {
                 })()
               : undefined;
             if (
-              typeof $steps['runOnChange'] === 'object' &&
-              typeof $steps['runOnChange'].then === 'function'
+              typeof $steps['runNClone'] === 'object' &&
+              typeof $steps['runNClone'].then === 'function'
             ) {
-              $steps['runOnChange'] = await $steps['runOnChange'];
+              $steps['runNClone'] = await $steps['runNClone'];
             }
           }}
         >

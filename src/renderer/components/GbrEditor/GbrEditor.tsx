@@ -24,8 +24,6 @@ import { SvgRenderView } from '../SvgTool/SvgRenderView';
 import { GbrViewNode } from '../../dtos/GbrViewNode';
 
 type Props = {
-  nodeData?: GbrDataModel
-
 };
 
 type State = {
@@ -42,13 +40,14 @@ class GbrEditor extends React.Component<Props, State> {
 
   private currentViewNodes?: GbrDataModel[];
   private toolPathViewNode?: GbrDataModel;
+  private nodeData?: GbrDataModel
 
 
   componentDidMount() {
     this.setState({
       viewNodeLayers: {
         ruler: this.ruler,
-        viewNodes: this.props.nodeData ? [this.props.nodeData] : []
+        viewNodes: this.nodeData ? [this.nodeData] : []
       }
     });
   }
@@ -85,8 +84,8 @@ class GbrEditor extends React.Component<Props, State> {
           right: 0,
           height: 0
         }} className={'GbrEditorToolBox'}>
-          <GbrToolContainer open={false} heading={'Tool'} nodeData={this.props.nodeData}>
-            <GbrEditorToolBox nodeData={this.props.nodeData} />
+          <GbrToolContainer open={false} heading={'Tool'} nodeData={this.nodeData}>
+            <GbrEditorToolBox nodeData={this.nodeData} />
           </GbrToolContainer>
         </div>
         <div style={{
@@ -95,7 +94,7 @@ class GbrEditor extends React.Component<Props, State> {
           right: 1500,
           height: 0
         }} className={'GbrLoadTool'}>
-          <GbrToolContainer open={false} heading={'Load'} nodeData={this.props.nodeData}>
+          <GbrToolContainer open={false} heading={'Load'} nodeData={this.nodeData}>
             <GbrLoad
               loadFile={async () => {
                 console.log(`## [GbrEditor] Working | `);
@@ -116,16 +115,17 @@ class GbrEditor extends React.Component<Props, State> {
           right: 300,
           height: 0
         }} className={'GbrCloneTool'}>
-          <GbrToolContainer open={false} heading={'Clone'} nodeData={this.props.nodeData}>
+          <GbrToolContainer open={false} heading={'Clone'} nodeData={this.nodeData}>
             <GbrCloneTool cloneItems={cloneInfo => {
-              if (this.props.nodeData) {
-                const viewItems = this.gbrCloneGenerator.generateCloneItems(this.props.nodeData, cloneInfo);
+
+              if (this.nodeData) {
+                const viewItems = this.gbrCloneGenerator.generateCloneItems(this.nodeData, cloneInfo);
                 this.updateViewNodes(viewItems);
               }
               //
             }} clear={() => {
-              if (this.props.nodeData) {
-                this.updateViewNodes([this.props.nodeData]);
+              if (this.nodeData) {
+                this.updateViewNodes([this.nodeData]);
               }
 
             }} />
@@ -137,7 +137,7 @@ class GbrEditor extends React.Component<Props, State> {
           right: 600,
           height: 0
         }} className={'GbrViewTool'}>
-          <GbrToolContainer open={false} heading={'View'} nodeData={this.props.nodeData}>
+          <GbrToolContainer open={false} heading={'View'} nodeData={this.nodeData}>
             <GbrViewTool visibilityChange={(showLabels) => {
               if (this.state.viewNodeLayers && this.state.viewNodeLayers.viewNodes) {
                 this.state.viewNodeLayers.viewNodes.forEach(value => value.setLabelVisibility(showLabels));
@@ -152,7 +152,7 @@ class GbrEditor extends React.Component<Props, State> {
           right: 900,
           height: 0
         }} className={'GbrFrameTool'}>
-          <GbrToolContainer open={false} heading={'Frame'} nodeData={this.props.nodeData}>
+          <GbrToolContainer open={false} heading={'Frame'} nodeData={this.nodeData}>
             <GbrFrameTool generateFrames={(cellSizeX, cellSizeY, cellCountX, cellCountY) => {
               debugger;
               const frameData = this.gbrFrameGenerator.generateFrameViewNode({
@@ -174,7 +174,7 @@ class GbrEditor extends React.Component<Props, State> {
           right: 1200,
           height: 0
         }} className={'GbrToolContainer'}>
-          <GbrToolContainer open={false} heading={'ToolPath'} nodeData={this.props.nodeData}>
+          <GbrToolContainer open={false} heading={'ToolPath'} nodeData={this.nodeData}>
             <GbrToolPathTool
               toolPathModeChanged={toolPathMode => {
                 if (toolPathMode) {
@@ -252,6 +252,8 @@ class GbrEditor extends React.Component<Props, State> {
           this.setState({
             svgData:undefined
           })
+
+          this.nodeData = nodes
           this.updateViewNodes([nodes]);
         }} />
       </div>

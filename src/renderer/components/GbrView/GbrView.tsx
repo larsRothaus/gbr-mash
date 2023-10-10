@@ -114,6 +114,12 @@ class GbrView extends React.Component<Props, State> {
       return;
     }
     this.stage.removeChildren();
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+    this.stage.setSize({
+      width,
+      height
+    })
 
     if (layers.ruler) {
       this.stage.add(layers.ruler);

@@ -154,9 +154,9 @@ const createWindow = async () => {
     } else {
       mainWindow.show();
     }
-    if (isDebug) {
-      mainWindow.webContents.openDevTools();
-    }
+    // if (isDebug) {
+    //   mainWindow.webContents.openDevTools();
+    // }
   });
 
   const openDevtools = async (): Promise<boolean> => {
