@@ -534,6 +534,32 @@
           "cssFilePath": "plasmic/arturel/PlasmicTestTool.module.css",
           "scheme": "blackbox",
           "componentType": "component"
+        },
+        {
+          "id": "6Gd6KrI9lbix",
+          "name": "GbtToolBar",
+          "type": "managed",
+          "projectId": "dgFPhDvLY4vKuXTDNeS2uD",
+          "renderModuleFilePath": "plasmic/arturel/PlasmicGbtToolBar.tsx",
+          "importSpec": {
+            "modulePath": "GbtToolBar.tsx"
+          },
+          "cssFilePath": "plasmic/arturel/PlasmicGbtToolBar.module.css",
+          "scheme": "blackbox",
+          "componentType": "component"
+        },
+        {
+          "id": "htrT0eM9VhMx",
+          "name": "GbrScaleAndOffset",
+          "type": "managed",
+          "projectId": "dgFPhDvLY4vKuXTDNeS2uD",
+          "renderModuleFilePath": "plasmic/arturel/PlasmicGbrScaleAndOffset.tsx",
+          "importSpec": {
+            "modulePath": "GbrScaleAndOffset.tsx"
+          },
+          "cssFilePath": "plasmic/arturel/PlasmicGbrScaleAndOffset.module.css",
+          "scheme": "blackbox",
+          "componentType": "component"
         }
       ],
       "icons": [

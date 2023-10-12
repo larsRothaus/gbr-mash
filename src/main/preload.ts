@@ -17,6 +17,12 @@ export interface FileFilter {
 
 
 contextBridge.exposeInMainWorld('electron', {
+  openProject: (cb: (event: any, data: any) => void) => ipcRenderer.on('openProject', cb),
+  openSvg: (cb: (event: any, data: Buffer) => void) => ipcRenderer.on('openSvg', cb),
+  saveProject: (cb: (event: any, data: any) => void) => ipcRenderer.on('saveProject', cb),
+  updateProject: (projectFile:any) => {
+    ipcRenderer.invoke('saveDataReturn', projectFile)
+  },
   openFile: () => ipcRenderer.invoke('dialog:openFile'),
   fileOven: () => ipcRenderer.invoke('dialog'),
   ipcRenderer: {

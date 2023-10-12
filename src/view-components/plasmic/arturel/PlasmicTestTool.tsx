@@ -192,6 +192,7 @@ function PlasmicTestTool__RenderFunc(props: {
         })()}
         onClick={async () => {
           const $steps = {};
+
           $steps['runDoStuff'] = true
             ? (() => {
                 const actionArgs = {

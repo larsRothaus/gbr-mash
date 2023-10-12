@@ -173,6 +173,7 @@ function PlasmicGbrCloneTool__RenderFunc(props: {
           onChange={p.generateStateOnChangeProp($state, ['cx', 'value'])}
           onPressEnter={async (event) => {
             const $steps = {};
+
             $steps['updateCxValue'] = true
               ? (() => {
                   const actionArgs = {
@@ -280,6 +281,7 @@ function PlasmicGbrCloneTool__RenderFunc(props: {
           className={classNames('__wab_instance', sty.clone)}
           onClick={async () => {
             const $steps = {};
+
             $steps['runNClone'] = true
               ? (() => {
                   const actionArgs = {
@@ -368,6 +370,7 @@ function PlasmicGbrCloneTool__RenderFunc(props: {
           className={classNames('__wab_instance', sty.clear)}
           onClick={async () => {
             const $steps = {};
+
             $steps['runClear'] = true
               ? (() => {
                   const actionArgs = { eventRef: $props['clear'] };

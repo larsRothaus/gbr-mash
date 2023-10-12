@@ -3,8 +3,9 @@ import {
   Menu,
   shell,
   BrowserWindow,
-  MenuItemConstructorOptions,
+  MenuItemConstructorOptions, dialog
 } from 'electron';
+import fs from 'fs';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
   selector?: string;
@@ -26,6 +27,7 @@ export default class MenuBuilder {
       this.setupDevelopmentEnvironment();
     }
 
+    console.log(`## [menu] buildMenu | process.platform`,process.platform);
     const template =
       process.platform === 'darwin'
         ? this.buildDarwinTemplate()
@@ -84,6 +86,60 @@ export default class MenuBuilder {
         },
       ],
     };
+
+    const subMenuFile: DarwinMenuItemConstructorOptions = {
+      label: '&File',
+      submenu: [
+        {
+          label: 'load svg',
+          click: async () => {
+            try {
+              const result = await dialog.showOpenDialog(this.mainWindow, {
+                properties: ['openFile', 'openDirectory'],
+                filters: [{
+                  name: 'svg',
+                  extensions: ['svg']
+                }]
+              });
+              if (result.filePaths[0]) {
+                const data = await fs.readFileSync(result.filePaths[0]);
+                this.mainWindow!.webContents.send('openSvg',data);
+              }
+            } catch (e) {
+              console.error(e);
+              throw new Error(`Error class:main[] : we are fucked...!`);
+            }
+          }
+        },
+        {
+          label: 'open project',
+          click: async () => {
+            try {
+              const result = await dialog.showOpenDialog(this.mainWindow!, {
+                properties: ['openFile', 'openDirectory'],
+                filters: [{
+                  name: 'json',
+                  extensions: ['json']
+                }]
+              });
+              if (result.filePaths[0]) {
+                const data = await fs.readFileSync(result.filePaths[0]);
+                this.mainWindow!.webContents.send('openProject',data);
+              }
+            } catch (e) {
+              console.error(e);
+              throw new Error(`Error class:main[] : we are fucked...!`);
+            }
+          }
+        },
+        {
+          label: 'save project',
+          click: async () => {
+            this.mainWindow!.webContents.send('saveProject');
+          }
+        }
+      ]
+    }
     const subMenuEdit: DarwinMenuItemConstructorOptions = {
       label: 'Edit',
       submenu: [
@@ -189,7 +245,7 @@ export default class MenuBuilder {
         ? subMenuViewDev
         : subMenuViewProd;
 
-    return [subMenuAbout, subMenuEdit, subMenuView, subMenuWindow, subMenuHelp];
+    return [subMenuAbout,subMenuFile, subMenuEdit, subMenuView, subMenuWindow, subMenuHelp];
   }
 
   buildDefaultTemplate() {

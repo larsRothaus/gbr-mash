@@ -131,6 +131,7 @@ function PlasmicGbrEditorToolBox__RenderFunc(props: {
         className={classNames('__wab_instance', sty.deselect)}
         onClick={async () => {
           const $steps = {};
+
           $steps['runDeselectAction'] = true
             ? (() => {
                 const actionArgs = { eventRef: $props['deselectAction'] };
@@ -164,6 +165,7 @@ function PlasmicGbrEditorToolBox__RenderFunc(props: {
         className={classNames('__wab_instance', sty.deselect2)}
         onClick={async () => {
           const $steps = {};
+
           $steps['runJoinSelected'] = true
             ? (() => {
                 const actionArgs = { eventRef: $props['joinSelected'] };
@@ -197,6 +199,7 @@ function PlasmicGbrEditorToolBox__RenderFunc(props: {
         className={classNames('__wab_instance', sty.deselect3)}
         onClick={async () => {
           const $steps = {};
+
           $steps['runRemoveMoveNodes'] = true
             ? (() => {
                 const actionArgs = { eventRef: $props['removeMoveNodes'] };
@@ -230,6 +233,7 @@ function PlasmicGbrEditorToolBox__RenderFunc(props: {
         className={classNames('__wab_instance', sty.deselect4)}
         onClick={async () => {
           const $steps = {};
+
           $steps['runReverseNode'] = true
             ? (() => {
                 const actionArgs = { eventRef: $props['reverseNode'] };
@@ -263,6 +267,7 @@ function PlasmicGbrEditorToolBox__RenderFunc(props: {
         className={classNames('__wab_instance', sty.deselect5)}
         onClick={async () => {
           const $steps = {};
+
           $steps['runGenerateToolPath'] = true
             ? (() => {
                 const actionArgs = { eventRef: $props['generateToolPath'] };
@@ -296,6 +301,7 @@ function PlasmicGbrEditorToolBox__RenderFunc(props: {
         className={classNames('__wab_instance', sty.deselect6)}
         onClick={async () => {
           const $steps = {};
+
           $steps['runSaveFile'] = true
             ? (() => {
                 const actionArgs = { eventRef: $props['saveFile'] };

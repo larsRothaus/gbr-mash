@@ -22,13 +22,13 @@ import { Utils } from '../GbrView/Utils';
 import GbrLoad from '../../../view-components/GbrLoad';
 import { SvgRenderView } from '../SvgTool/SvgRenderView';
 import { GbrViewNode } from '../../dtos/GbrViewNode';
+import GbrScaleAndOffset from '../../../view-components/GbrScaleAndOffset';
 
-type Props = {
-};
+type Props = {};
 
 type State = {
   viewNodeLayers?: GbrViewNodeLayers
-  svgData?:Buffer
+  svgData?: Buffer
 };
 
 class GbrEditor extends React.Component<Props, State> {
@@ -40,16 +40,32 @@ class GbrEditor extends React.Component<Props, State> {
 
   private currentViewNodes?: GbrDataModel[];
   private toolPathViewNode?: GbrDataModel;
-  private nodeData?: GbrDataModel
+  private nodeData?: GbrDataModel;
 
 
   componentDidMount() {
+
     this.setState({
       viewNodeLayers: {
         ruler: this.ruler,
         viewNodes: this.nodeData ? [this.nodeData] : []
       }
     });
+
+    window.electron.openProject((event, data) => {
+      alert('currently not supported..');
+    });
+    window.electron.openSvg((event, data) => {
+      this.setState({
+        svgData: data
+      });
+    });
+    window.electron.saveProject((event, data) => {
+      Utils.download(JSON.stringify(this.state.viewNodeLayers), 'projctfile.json', 'text/json');
+
+      // window.electron.updateProject(JSON.parse(JSON.stringify(this.state.viewNodeLayers)))
+    });
+    //
   }
 
   private updateViewNodes(nodes: GbrDataModel[]): void {
@@ -94,19 +110,37 @@ class GbrEditor extends React.Component<Props, State> {
           right: 1500,
           height: 0
         }} className={'GbrLoadTool'}>
-          <GbrToolContainer open={false} heading={'Load'} nodeData={this.nodeData}>
-            <GbrLoad
-              loadFile={async () => {
-                console.log(`## [GbrEditor] Working | `);
-                const data = await window.electron.openFile()
-                this.setState({
-                  svgData:data
-                })
-              }}
-              clearLoaded={() => {
-                this.updateViewNodes([]);
-              }}
-            />
+          <GbrToolContainer open={false} heading={'Scale'} nodeData={this.nodeData}>
+            {/*<GbrLoad*/}
+            {/*  loadFile={async () => {*/}
+            {/*    console.log(`## [GbrEditor] Working | `);*/}
+            {/*    const data = await window.electron.openFile()*/}
+            {/*    this.setState({*/}
+            {/*      svgData:data*/}
+            {/*    })*/}
+            {/*  }}*/}
+            {/*  clearLoaded={() => {*/}
+            {/*    this.updateViewNodes([]);*/}
+            {/*  }}*/}
+            {/*/>*/}
+            <GbrScaleAndOffset scaleAndOffset={(width, height, x, y) => {
+              // if (width && height) {
+              //   this.nodeData?.setSize(width, height);
+              // }
+              // this.nodeData?.(x, y);
+              //@ts-ignore
+              let scaleWidth: number | undefined = undefined;
+              let scaleHeight: number | undefined = undefined;
+              if(width && height){
+                //@ts-ignore
+                scaleWidth = parseInt(width);
+                //@ts-ignore
+                scaleHeight = parseInt(height);
+              }
+              //@ts-ignore
+              this.nodeData?.setScale(parseInt(x), parseInt(y), scaleWidth, scaleHeight);
+              console.log(`## [GbrEditor]  | `, width, height, x, y);
+            }} />
           </GbrToolContainer>
         </div>
         <div style={{
@@ -117,12 +151,10 @@ class GbrEditor extends React.Component<Props, State> {
         }} className={'GbrCloneTool'}>
           <GbrToolContainer open={false} heading={'Clone'} nodeData={this.nodeData}>
             <GbrCloneTool cloneItems={cloneInfo => {
-
               if (this.nodeData) {
                 const viewItems = this.gbrCloneGenerator.generateCloneItems(this.nodeData, cloneInfo);
                 this.updateViewNodes(viewItems);
               }
-              //
             }} clear={() => {
               if (this.nodeData) {
                 this.updateViewNodes([this.nodeData]);
@@ -219,14 +251,14 @@ class GbrEditor extends React.Component<Props, State> {
               }}
               saveDesign={() => {
                 if (this.toolPathViewNode) {
-                  let nodes: GbrNode[] = []
+                  let nodes: GbrNode[] = [];
                   if (this.state.viewNodeLayers?.frameViewNode) {
                     //adding frame nodes
                     this.state.viewNodeLayers.frameViewNode.getGbrNodes().forEach(value => nodes.push(value));
                   }
                   this.toolPathViewNode.getGbrNodes().forEach(value => nodes.push(value));
                   const gbrCode = GBRCodeGenerator.generateCodeFromNotes(nodes);
-                  Utils.download(gbrCode, "design.gbr", "text/plain")
+                  Utils.download(gbrCode, 'design.gbr', 'text/plain');
                 }
               }}
               saveFrames={() => {
@@ -234,7 +266,7 @@ class GbrEditor extends React.Component<Props, State> {
                   //adding frame nodes
                   const nodes = this.state.viewNodeLayers.frameViewNode.getGbrNodes();
                   const gbrCode = GBRCodeGenerator.generateCodeFromNotes(nodes);
-                  Utils.download(gbrCode, "frame.gbr", "text/plain")
+                  Utils.download(gbrCode, 'frame.gbr', 'text/plain');
                 }
               }}
 
@@ -245,15 +277,17 @@ class GbrEditor extends React.Component<Props, State> {
     );
   }
 
-  public renderSvgImported(data:Buffer) {
+  public renderSvgImported(data: Buffer) {
     return (
       <div>
         <SvgRenderView svgData={data} completeHandler={(nodes: GbrDataModel) => {
           this.setState({
-            svgData:undefined
-          })
+            svgData: undefined
+          });
 
-          this.nodeData = nodes
+          this.nodeData = nodes;
+          //@ts-ignore
+          window.node = this.nodeData;
           this.updateViewNodes([nodes]);
         }} />
       </div>
@@ -262,7 +296,7 @@ class GbrEditor extends React.Component<Props, State> {
 
   render() {
 
-    return ((this.state?.svgData != undefined) ? this.renderSvgImported(this.state!.svgData) : this.renderEditor())
+    return ((this.state?.svgData != undefined) ? this.renderSvgImported(this.state!.svgData) : this.renderEditor());
   }
 }
 

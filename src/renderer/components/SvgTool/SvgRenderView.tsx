@@ -27,6 +27,11 @@ const iframeStyle_ = {
 };
 
 
+enum NodeTypes {
+  Line,
+  Path
+}
+
 export class SvgRenderView extends React.Component<Props, State> {
   private frame!: HTMLIFrameElement;
   private createBtn!: HTMLButtonElement;
@@ -66,15 +71,14 @@ export class SvgRenderView extends React.Component<Props, State> {
       }
       const widthPx = Math.floor(this.svg.width.baseVal.value);
       const widthUnit = Math.floor(this.svg.width.baseVal.valueInSpecifiedUnits);
-      const xScaleFactor = widthPx / widthUnit;
       const heightPx = Math.floor(this.svg.height.baseVal.value);
       const heightUnit = Math.floor(this.svg.height.baseVal.valueInSpecifiedUnits);
-      const yScaleFactor = heightPx / heightUnit;
 
 
+      console.log(`## [SvgRenderView]  |`, widthPx,widthUnit,heightPx,heightUnit);
       const resolution = 20;
-      const masterScale =  1;//.25;
-      const pxToMmScaleFactor = 2.83; //1; //// (typeof widthUnit === 'number' && typeof heightUnit === 'number') ? 2.83 : 1;
+      const masterScale = 1;//.25;
+      const pxToMmScaleFactor = 2.8342245989; //1; //// (typeof widthUnit === 'number' && typeof heightUnit === 'number') ? 2.83 : 1;
 
       const scaleFactor = .6;
 
@@ -90,25 +94,46 @@ export class SvgRenderView extends React.Component<Props, State> {
       objects = [...this.svg.querySelectorAll('path')];
       objects = [...objects, ...this.svg.querySelectorAll('rect')];
       objects = [...objects, ...this.svg.querySelectorAll('ellipse')];
+      objects = [...objects, ...this.svg.querySelectorAll('line')];
 
+      // let lines = objects = [...this.svg.querySelectorAll('line')];
+      debugger;
 
       const completedNodes: GbrNode[] = [];
       let currentNode: GbrNode = new GbrNode();
 
-
       let totalNotes = 0;
-
       let progress = 0;
+      let currentNodeType: NodeTypes;
       for (let obj in objects) {
         progress++;
         console.log(`## [SvgRenderView] progress | itemIndex:${progress} ${Math.floor(progress / objects.length * 100)}%`);
         currentNode = new GbrNode();
         currentNode.refId = `TD-${progress}`;
-        const totalLength = objects[obj].getTotalLength();
-        console.log(`## [SvgRenderView] node:${currentNode.refId} | totalLength:${totalLength}`);
-        let d = objects[obj].getAttribute('d');
-        let startPoint = scalePoint2D(objects[obj].getPointAtLength(0));
-        let endPoint = scalePoint2D(objects[obj].getPointAtLength(totalLength));
+        console.log(`## [SvgRenderView] node:${currentNode.refId}`);
+
+        let startPoint: Point2D;
+        let endPoint: Point2D;
+
+        let totalLength: number | undefined = undefined;
+        if (objects[obj].hasAttribute('d')) {
+          totalLength = objects[obj].getTotalLength();
+          startPoint = scalePoint2D(objects[obj].getPointAtLength(0));
+          endPoint = scalePoint2D(objects[obj].getPointAtLength(totalLength));
+          currentNodeType = NodeTypes.Path;
+        } else if (objects[obj].hasAttribute('x1')) {
+          startPoint = scalePoint2D({
+            x: parseInt(objects[obj].getAttribute('x1')),
+            y: parseInt(objects[obj].getAttribute('y1'))
+          });
+          endPoint = scalePoint2D({
+            x: parseInt(objects[obj].getAttribute('x2')),
+            y: parseInt(objects[obj].getAttribute('y2'))
+          });
+
+          console.log(`## [SvgRenderView]  | Line:`,startPoint,endPoint);
+          currentNodeType = NodeTypes.Line;
+        }
 
         objects[obj].addEventListener('click', (e) => {
           console.log(`## [svg] client`, e);
@@ -122,43 +147,47 @@ export class SvgRenderView extends React.Component<Props, State> {
         ctx.beginPath();
         ctx.fillStyle = 'red';
 
-        const totalInterpolation = Math.floor(totalLength / resolution);
+          currentNode.addPoint(startPoint);
 
-        let interpolationPoints = new Array(totalInterpolation).fill(null).map((value, index) => (index + 1) * resolution);
-        interpolationPoints.unshift(0);
-        if (interpolationPoints[interpolationPoints.length - 1] !== totalLength) {
-          interpolationPoints.push(totalLength);
-        }
+        if (currentNodeType === NodeTypes.Path && totalLength ) {
+          const totalInterpolation = Math.floor(totalLength / resolution);
 
-
-        console.log(`## [SvgRenderView] d:`, d.slice(0, 30).toString());
-        console.log(`## [SvgRenderView] start: [x:${startPoint.x},y:${startPoint.y}] end: [x:${endPoint.x},y:${endPoint.y}] `);
-        let r = Math.floor(Math.random() * 255);
-        let g = Math.floor(Math.random() * 255);
-        let b = Math.floor((Math.random() * 127) + 127);
-
-        ctx.strokeStyle = `rgba(${r},${g},${b},1)`;
-
-        let lastValidPoint: Point2D | undefined = undefined;
-        currentNode.addPoint(startPoint);
-        ctx.lineTo(startPoint.x * scaleFactor, startPoint.y * scaleFactor);
-        for (let a = 0; a < interpolationPoints.length; a++) {
-          let point2D = scalePoint2D(objects[obj].getPointAtLength(interpolationPoints[a]));
-          lastValidPoint = point2D;
-
-          currentNode.addPoint({
-            x: point2D.x,
-            y: point2D.y
-          });
-
-          ctx.lineTo(point2D.x * scaleFactor, point2D.y * scaleFactor);
-          ctx.stroke();
-          await delay(1);
-          totalNotes++;
-
-          if (point2D.x < -20 || point2D.y < -20) {
-            throw new Error(`Error class:SvgRenderView[] : Out of Bounce!`);
+          let interpolationPoints = new Array(totalInterpolation).fill(null).map((value, index) => (index + 1) * resolution);
+          interpolationPoints.unshift(0);
+          if (interpolationPoints[interpolationPoints.length - 1] !== totalLength) {
+            interpolationPoints.push(totalLength);
           }
+
+          console.log(`## [SvgRenderView] start: [x:${startPoint.x},y:${startPoint.y}] end: [x:${endPoint.x},y:${endPoint.y}] `);
+          let r = Math.floor(Math.random() * 255);
+          let g = Math.floor(Math.random() * 255);
+          let b = Math.floor((Math.random() * 127) + 127);
+
+          ctx.strokeStyle = `rgba(${r},${g},${b},1)`;
+
+          let lastValidPoint: Point2D | undefined = undefined;
+          ctx.lineTo(startPoint.x * scaleFactor, startPoint.y * scaleFactor);
+          for (let a = 0; a < interpolationPoints.length; a++) {
+            let point2D = scalePoint2D(objects[obj].getPointAtLength(interpolationPoints[a]));
+            lastValidPoint = point2D;
+
+            currentNode.addPoint({
+              x: point2D.x,
+              y: point2D.y
+            });
+
+            ctx.lineTo(point2D.x * scaleFactor, point2D.y * scaleFactor);
+            ctx.stroke();
+            // await delay(1);
+            totalNotes++;
+
+            if (point2D.x < -20 || point2D.y < -20) {
+              throw new Error(`Error class:SvgRenderView[] : Out of Bounce!`);
+            }
+          }
+        }else if(currentNodeType === NodeTypes.Line){
+
+          ctx.lineTo(startPoint.x * scaleFactor, startPoint.y * scaleFactor);
         }
 
         ctx.lineTo(endPoint.x * scaleFactor, endPoint.y * scaleFactor);
@@ -177,8 +206,8 @@ export class SvgRenderView extends React.Component<Props, State> {
         for (let p in completedNodes[n].points) {
           const { x, y } = completedNodes[n].points[p];
           completedNodes[n].points[p] = {
-            x: Math.floor(x * 10),
-            y: Math.floor(y * 10)
+            x: parseInt((x * 10).toFixed()),
+            y: parseInt((y * 10).toFixed())
           };
           completedNodes[n].close();
         }

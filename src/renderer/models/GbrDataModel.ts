@@ -147,6 +147,7 @@ export class GbrDataModel extends EventEmitter {
     super();
     this.frameSize = frameSize;
     this.origFrameSize = frameSize;
+    console.log(`## [GbrDataModel] constructor | frameSize`,frameSize.width,frameSize.height);
     this.frame = this.createFrame(this.frameSize);
     this.nodes = nodes.map((value, index) => {
       const viewNode = new GbrViewNode(index, value);
@@ -336,9 +337,38 @@ export class GbrDataModel extends EventEmitter {
     this.container.visible(value);
   }
 
-  setSize(tmmWidth:number, tmmHeight:number){
-    const widthScaleFactor = this.origFrameSize.width / tmmWidth;
-    const heightScaleFactor = this.origFrameSize.height / tmmHeight;
+  public setScale(offsetX: number, offsetY: number, tmmWidth?: number, tmmHeight?: number) {
+    tmmWidth = tmmWidth ?? this.frameSize.width;
+    tmmHeight = tmmHeight ?? this.frameSize.height;
+    this.frameSize = {
+      width: tmmWidth,
+      height: tmmHeight
+    };
+    const widthScaleFactor = this.frameSize.width / this.origFrameSize.width;
+    const heightScaleFactor = this.frameSize.height / this.origFrameSize.height;
+    this.nodes.forEach(node => {
+      node.setScale(offsetX, offsetY,widthScaleFactor, heightScaleFactor);
+    });
+
+    if (this.frame) {
+      this.frame.setSize(this.frameSize);
+    }
+  }
+
+  public setSize(tmmWidth: number, tmmHeight: number) {
+    this.frameSize = {
+      width: tmmWidth,
+      height: tmmHeight
+    };
+    const widthScaleFactor = tmmWidth / this.origFrameSize.width;
+    const heightScaleFactor = tmmHeight / this.origFrameSize.height;
+    this.nodes.forEach(node => {
+      //node.setScale(widthScaleFactor, heightScaleFactor);
+    });
+
+    if (this.frame) {
+      this.frame.setSize(this.frameSize);
+    }
   }
 
   public hasToolPath(): boolean {
@@ -358,16 +388,16 @@ export class GbrDataModel extends EventEmitter {
     });
   }
 
-  public offset(x: number, y: number): void {
-    this.frame.setPosition({
-      x: x - 1,
-      y: y - 1
-    });
-    for (let i in this.nodes) {
-      this.nodes[i].offset(x, y);
-    }
-    this.render();
-  }
+  // public offset(x: number, y: number): void {
+  //   this.frame.setPosition({
+  //     x: x - 1,
+  //     y: y - 1
+  //   });
+  //   for (let i in this.nodes) {
+  //     this.nodes[i].offset(x, y);
+  //   }
+  //   this.render();
+  // }
 
   public getGbrNodes(): GbrNode[] {
     return this.nodes.map(value => value.node);

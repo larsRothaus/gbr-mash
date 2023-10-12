@@ -1,0 +1,48 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  height: auto;
+  justify-content: flex-start;
+  align-items: center;
+  min-width: 0;
+}
+.dropdown:global(.__wab_instance) {
+  max-width: 100%;
+  object-fit: cover;
+  position: relative;
+}
+.menuItem__bk9DM:global(.__wab_instance) {
+  max-width: 100%;
+  object-fit: cover;
+}
+.text__dETi {
+  position: relative;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  min-width: 0;
+}
+.menuItem___0WIuL:global(.__wab_instance) {
+  max-width: 100%;
+  object-fit: cover;
+}
+.text__w1Ni6 {
+  position: relative;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  min-width: 0;
+}
+.button:global(.__wab_instance) {
+  max-width: 100%;
+  object-fit: cover;
+}
+.text__s3DAg {
+  position: relative;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  min-width: 0;
+}
