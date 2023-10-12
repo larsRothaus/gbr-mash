@@ -29,7 +29,7 @@ export class GbrCloneGenerator {
         } else {
           console.log(`## [GbrView] renderData | adding clone..`);
           const clone = masterNode.clone(`${x}${y}`);
-          clone.offset(x * px, y * py);
+          clone.setScale(x * px, y * py)
           cloneViews.push(clone);
         }
       }

@@ -178,6 +178,7 @@ function PlasmicGbrToolPathTool__RenderFunc(props: {
             ]).apply(null, eventArgs);
             (async (checked) => {
               const $steps = {};
+
               $steps['runToolPathModeChanged'] = true
                 ? (() => {
                     const actionArgs = {
@@ -238,6 +239,7 @@ function PlasmicGbrToolPathTool__RenderFunc(props: {
             ]).apply(null, eventArgs);
             (async (checked) => {
               const $steps = {};
+
               $steps['runShowFrames'] = true
                 ? (() => {
                     const actionArgs = {
@@ -315,6 +317,7 @@ function PlasmicGbrToolPathTool__RenderFunc(props: {
           })()}
           onClick={async () => {
             const $steps = {};
+
             $steps['runGenerateToolPath'] = true
               ? (() => {
                   const actionArgs = {
@@ -352,6 +355,7 @@ function PlasmicGbrToolPathTool__RenderFunc(props: {
           className={classNames('__wab_instance', sty.button___222V)}
           onClick={async () => {
             const $steps = {};
+
             $steps['runRemoveExistingToolPath'] = true
               ? (() => {
                   const actionArgs = {
@@ -388,6 +392,7 @@ function PlasmicGbrToolPathTool__RenderFunc(props: {
           className={classNames('__wab_instance', sty.button__yapZs)}
           onClick={async () => {
             const $steps = {};
+
             $steps['runSaveDesign'] = true
               ? (() => {
                   const actionArgs = { eventRef: $props['saveDesign'] };
@@ -418,6 +423,7 @@ function PlasmicGbrToolPathTool__RenderFunc(props: {
           className={classNames('__wab_instance', sty.button__c7E3)}
           onClick={async () => {
             const $steps = {};
+
             $steps['runSaveFrames'] = true
               ? (() => {
                   const actionArgs = { eventRef: $props['saveFrames'] };

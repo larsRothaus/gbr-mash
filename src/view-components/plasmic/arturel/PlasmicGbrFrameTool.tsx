@@ -256,6 +256,7 @@ function PlasmicGbrFrameTool__RenderFunc(props: {
           className={classNames('__wab_instance', sty.button__qhRjI)}
           onClick={async () => {
             const $steps = {};
+
             $steps['runGenerateFrames'] = true
               ? (() => {
                   const actionArgs = {
@@ -342,6 +343,7 @@ function PlasmicGbrFrameTool__RenderFunc(props: {
           className={classNames('__wab_instance', sty.button___0KBea)}
           onClick={async () => {
             const $steps = {};
+
             $steps['runClearFrames'] = true
               ? (() => {
                   const actionArgs = { eventRef: $props['clearFrames'] };

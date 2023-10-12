@@ -22,12 +22,12 @@ export class GbrGenerator {
 
 export interface GBRCodeGeneratorOptions {
   insertToolUpAfterEveryMove: boolean
-  frameNodes?:GbrNode[]
+
 }
 
 export class GBRCodeGenerator {
   public static generateCodeFromNotes(nodes: GbrNode[], options: Partial<GBRCodeGeneratorOptions> = {}): string {
-
+    
     const lines: string[] = [
       'H1*',
       'G71*',

@@ -167,6 +167,7 @@ function PlasmicGbrViewTool__RenderFunc(props: {
             );
             (async (checked) => {
               const $steps = {};
+
               $steps['runVisibilityChange'] = true
                 ? (() => {
                     const actionArgs = {
