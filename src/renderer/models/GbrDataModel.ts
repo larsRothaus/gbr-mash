@@ -219,17 +219,18 @@ export class GbrDataModel extends EventEmitter {
       return;
     }
     if (selected[0]) {
-      let id = selected[0].id;
-      let nNode = new GbrNode();
-      nNode.type = selected[0].node.type;
-      nNode.refId = selected[0].node.refId;
-      nNode.points = selected[0].node.points.reverse();
-      nNode.close();
-
-      this.removeNodes([id]);
-
-      let nViewNode = new GbrViewNode(id, nNode);
-      this.nodes.push(nViewNode);
+      selected[0].reverse();
+      // let id = selected[0].id;
+      // let nNode = new GbrNode();
+      // nNode.type = selected[0].node.type;
+      // nNode.refId = selected[0].node.refId;
+      // nNode.points = selected[0].node.points.reverse();
+      // nNode.close();
+      //
+      // this.removeNodes([id]);
+      //
+      // let nViewNode = new GbrViewNode(id, nNode);
+      // this.nodes.push(nViewNode);
 
       this.emit(GbrDataModelEvents.Updated);
     }

@@ -8,6 +8,8 @@ import { ipcRenderer } from 'electron';
 
 const allEqual = arr => arr.every(val => val === arr[0]);
 
+
+
 const delay = async (ms: number) => new Promise(resolve => {
   setTimeout(resolve, ms);
 });
@@ -88,8 +90,8 @@ export class SvgRenderView extends React.Component<Props, State> {
 
       const scalePoint2D = (point: Point2D | DOMPoint): Point2D => {
         return {
-          x: (point.x / pxToMmScaleFactor) * masterScale,
-          y: (point.y / pxToMmScaleFactor) * masterScale
+          x: parseFloat(((point.x / pxToMmScaleFactor) * masterScale).toFixed(3)),
+          y: parseFloat(((point.y / pxToMmScaleFactor) * masterScale).toFixed(3))
         };
       };
 
@@ -99,9 +101,6 @@ export class SvgRenderView extends React.Component<Props, State> {
       objects = [...objects, ...this.svg.querySelectorAll('rect')];
       objects = [...objects, ...this.svg.querySelectorAll('ellipse')];
       objects = [...objects, ...this.svg.querySelectorAll('line')];
-
-      // let lines = objects = [...this.svg.querySelectorAll('line')];
-      debugger;
 
       const completedNodes: GbrNode[] = [];
       let currentNode: GbrNode = new GbrNode();
@@ -212,7 +211,7 @@ export class SvgRenderView extends React.Component<Props, State> {
         const ys = completedNodes[o].points.map(value => value.y);
         const xIsStraight = allEqual(xs);
         const yIsStraight = allEqual(ys);
-        if (xIsStraight || yIsStraight) {
+          if (xIsStraight || yIsStraight) {
           console.log(`## [SvgRenderView] is ${yIsStraight ? 'Y' : 'X'} a straight Line:`);
           console.log(`## [SvgRenderView] simplifying node`);
           const nNode = new GbrNode();
@@ -226,6 +225,32 @@ export class SvgRenderView extends React.Component<Props, State> {
       }
 
 
+      ///////// Straight Orientation ////////////
+      for (let so in completedNodes) {
+       // X ==> X
+        let shouldReverse = false;
+        const {start,end} = completedNodes[so].startEndVectors;
+
+        const xDiff = Math.abs(start.x - end.x);
+        const yDiff = Math.abs(start.y - end.y);
+
+        if(xDiff > yDiff){
+          // Horizontal dominance
+          if(end.x > start.x){
+            shouldReverse = true;
+          }
+        }else{
+          // Vertical dominance
+          if(end.y > start.y){
+            shouldReverse = true;
+          }
+        }
+
+        if(shouldReverse){
+          completedNodes[so].reverse();
+        }
+
+      }
       ///////// Convert ////////////
       for (let n in completedNodes) {
         for (let p in completedNodes[n].points) {

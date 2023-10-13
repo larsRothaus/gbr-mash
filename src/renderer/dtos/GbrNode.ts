@@ -35,6 +35,11 @@ export class GbrNode {
     this.refId = id;
   }
 
+  public reverse(){
+    this.points = this.points.reverse();
+    this.close();
+  }
+
   public close(): void {
     this.startEndVectors.start = this.points[0];
     this.startEndVectors.end = this.points[this.points.length - 1];

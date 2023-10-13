@@ -127,9 +127,33 @@ export class GbrViewNode {
 
   }
 
-  public setScale(offsetX:number, offsetY:number,scaleX: number, scaleY: number) {
-    scaleX = scaleX === 0 ? 1: scaleX;
-    scaleY = scaleY === 0 ? 1: scaleY;
+  public reverse(): void {
+    this.node.reverse();
+    if (this.startLabel && this.endLabel) {
+      this.updateLabelPlacement();
+    }
+
+    if (!this.vectorConfig.points) {
+      throw new Error(`Error class:GbrViewNode[offset] : No vector points!`);
+    }
+
+    let xor = 1;
+    for (let i = 0; i < this.vectorConfig.points.length; i++) {
+      const nodeIndex = Math.floor((i ?? 1) / 2);
+      if (xor) {
+        this.vectorConfig.points[i] = this.node.points[nodeIndex].x;
+        xor = 0;
+      } else {
+        this.vectorConfig.points[i] = this.node.points[nodeIndex].y;
+        xor = 1;
+      }
+    }
+
+  }
+
+  public setScale(offsetX: number, offsetY: number, scaleX: number, scaleY: number) {
+    scaleX = scaleX === 0 ? 1 : scaleX;
+    scaleY = scaleY === 0 ? 1 : scaleY;
 
     console.log(`## [GbrViewNode] setScale | scaleX:${scaleX} scaleY:${scaleY}`);
     if (!this.origNode) {
@@ -139,7 +163,7 @@ export class GbrViewNode {
     }
 
     for (let i in this.node.points) {
-      console.log(`## [GbrViewNode] setScale | pre X:`,this.node.points[i].x ,(this.node.points[i].x * scaleX) + offsetX);
+      console.log(`## [GbrViewNode] setScale | pre X:`, this.node.points[i].x, (this.node.points[i].x * scaleX) + offsetX);
       this.node.points[i].x = Math.round((this.node.points[i].x * scaleX) + offsetX);
       this.node.points[i].y = Math.round((this.node.points[i].y * scaleY) + offsetY);
     }
@@ -191,7 +215,7 @@ export class GbrViewNode {
       const displacementFactor = (this.id % 2 === 0) ? 20 : -20;
 
 
-      if(!this.startLabel){
+      if (!this.startLabel) {
         this.startLabel = new Konva.Text({
           x: this.node.startEndVectors.start.x + xAjust + displacementFactor,
           y: this.node.startEndVectors.start.y + yAjust + displacementFactor,
@@ -201,14 +225,14 @@ export class GbrViewNode {
           fontFamily: 'Monaco',
           fill: this.strokeNutral
         });
-      }else{
+      } else {
         this.startLabel.setPosition({
           x: this.node.startEndVectors.start.x + xAjust + displacementFactor,
           y: this.node.startEndVectors.start.y + yAjust + displacementFactor
-        })
+        });
       }
 
-      if(!this.endLabel){
+      if (!this.endLabel) {
         this.endLabel = new Konva.Text({
           x: this.node.startEndVectors.end.x + xAjust,
           y: this.node.startEndVectors.end.y + yAjust,
@@ -218,11 +242,11 @@ export class GbrViewNode {
           fontFamily: 'Monaco',
           fill: this.strokeNutral
         });
-      }else{
+      } else {
         this.endLabel.setPosition({
           x: this.node.startEndVectors.end.x + xAjust,
           y: this.node.startEndVectors.end.y + yAjust
-        })
+        });
       }
 
     }
