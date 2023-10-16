@@ -1,0 +1,103 @@
+.root {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 400px;
+  height: auto;
+  max-width: 100%;
+  padding: 8px;
+}
+.freeBox__ezvgE {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: flex-start;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  min-width: 0;
+  padding: 8px 8px 8px 0px;
+}
+.label {
+  position: relative;
+  width: 62px;
+  height: auto;
+  max-width: 100%;
+  flex-shrink: 0;
+}
+.value {
+  position: relative;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  min-width: 0;
+}
+.freeBox__od7Li {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: flex-start;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  min-width: 0;
+  padding: 8px 8px 8px 0px;
+}
+.label2 {
+  position: relative;
+  width: 62px;
+  height: auto;
+  max-width: 100%;
+  flex-shrink: 0;
+}
+.value2 {
+  position: relative;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  min-width: 0;
+}
+.freeBox__vbOgD {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: flex-start;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  min-width: 0;
+  padding: 8px 8px 8px 0px;
+}
+.label3 {
+  position: relative;
+  width: 62px;
+  height: auto;
+  max-width: 100%;
+  flex-shrink: 0;
+}
+.value3 {
+  position: relative;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  min-width: 0;
+}
+.freeBox__heiw6 {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  height: 500px;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: auto;
+  background: #d4d4d4;
+  flex-shrink: 0;
+}
+.gbrCoordinateViewItem:global(.__wab_instance) {
+  position: relative;
+}

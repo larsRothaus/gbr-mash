@@ -560,6 +560,45 @@
           "cssFilePath": "plasmic/arturel/PlasmicGbrScaleAndOffset.module.css",
           "scheme": "blackbox",
           "componentType": "component"
+        },
+        {
+          "id": "xDqDP0kwNAZW",
+          "name": "GbrViewNodeController",
+          "type": "managed",
+          "projectId": "dgFPhDvLY4vKuXTDNeS2uD",
+          "renderModuleFilePath": "plasmic/arturel/PlasmicGbrViewNodeController.tsx",
+          "importSpec": {
+            "modulePath": "GbrViewNodeController.tsx"
+          },
+          "cssFilePath": "plasmic/arturel/PlasmicGbrViewNodeController.module.css",
+          "scheme": "blackbox",
+          "componentType": "component"
+        },
+        {
+          "id": "di9u-oXGa0_E",
+          "name": "GbrCoordinateView",
+          "type": "managed",
+          "projectId": "dgFPhDvLY4vKuXTDNeS2uD",
+          "renderModuleFilePath": "plasmic/arturel/PlasmicGbrCoordinateView.tsx",
+          "importSpec": {
+            "modulePath": "GbrCoordinateView.tsx"
+          },
+          "cssFilePath": "plasmic/arturel/PlasmicGbrCoordinateView.module.css",
+          "scheme": "blackbox",
+          "componentType": "component"
+        },
+        {
+          "id": "1n2yq6wOjOZQ",
+          "name": "GbrCoordinateViewItem",
+          "type": "managed",
+          "projectId": "dgFPhDvLY4vKuXTDNeS2uD",
+          "renderModuleFilePath": "plasmic/arturel/PlasmicGbrCoordinateViewItem.tsx",
+          "importSpec": {
+            "modulePath": "GbrCoordinateViewItem.tsx"
+          },
+          "cssFilePath": "plasmic/arturel/PlasmicGbrCoordinateViewItem.module.css",
+          "scheme": "blackbox",
+          "componentType": "component"
         }
       ],
       "icons": [
@@ -574,7 +613,18 @@
           "moduleFilePath": "plasmic/arturel/icons/PlasmicIcon__Icon2.tsx"
         }
       ],
-      "images": [],
+      "images": [
+        {
+          "id": "MziYZaevNWRL",
+          "name": "down.png",
+          "filePath": "plasmic/arturel/images/downpng.png"
+        },
+        {
+          "id": "uLclUKlXZcZp",
+          "name": "image",
+          "filePath": "plasmic/arturel/images/image.png"
+        }
+      ],
       "indirect": false,
       "globalContextsFilePath": "plasmic/arturel/PlasmicGlobalContextsProvider.tsx",
       "codeComponents": [

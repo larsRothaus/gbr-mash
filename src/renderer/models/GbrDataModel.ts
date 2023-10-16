@@ -160,6 +160,14 @@ export class GbrDataModel extends EventEmitter {
       clearBeforeDraw: true
     });
     this.render();
+
+
+    //@ts-ignore
+    window.getInfo = ()=>{
+      const line = this.getSelected()[0];
+
+      debugger;
+    }
   }
 
   private createFrame(size: Frame, visualOffset: number = 2, rerender: boolean = false): Konva.Rect {

@@ -1,0 +1,62 @@
+.root {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: flex-start;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  position: relative;
+  min-width: 0;
+  padding: 8px;
+}
+.xLabel {
+  position: relative;
+  width: 26px;
+  height: auto;
+  max-width: 100%;
+  margin-right: 0px;
+  padding-left: 0px;
+  flex-shrink: 0;
+}
+.idv {
+  position: relative;
+  width: 30px;
+  height: auto;
+  max-width: 100%;
+  margin-right: 0px;
+  flex-shrink: 0;
+}
+.yLabel {
+  position: relative;
+  width: 26px;
+  height: auto;
+  max-width: 100%;
+  margin-right: 0px;
+  padding-left: 0px;
+  flex-shrink: 0;
+}
+.y {
+  position: relative;
+  width: 100px;
+  height: auto;
+  max-width: 100%;
+  margin-right: 0px;
+  flex-shrink: 0;
+}
+.yLabel2 {
+  position: relative;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  margin-right: 12px;
+  padding-left: 0px;
+}
+.x2 {
+  position: relative;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  margin-right: 0px;
+  min-width: 0;
+}
