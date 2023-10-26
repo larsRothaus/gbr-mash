@@ -11,6 +11,7 @@
   max-width: 100%;
   object-fit: cover;
   position: relative;
+  display: none;
 }
 .text__gdlxJ {
   position: relative;
@@ -19,7 +20,7 @@
   max-width: 100%;
   min-width: 0;
 }
-.freeBox {
+.freeBox__kdF57 {
   display: flex;
   position: relative;
   flex-direction: row;
@@ -39,6 +40,29 @@
   min-width: 0;
 }
 ._switch:global(.__wab_instance) {
+  max-width: 100%;
+  object-fit: cover;
+}
+.freeBox__buJsI {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: flex-start;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  min-width: 0;
+  padding: 8px;
+}
+.text__pGfSa {
+  position: relative;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  min-width: 0;
+}
+.perimeterOutline:global(.__wab_instance) {
   max-width: 100%;
   object-fit: cover;
 }

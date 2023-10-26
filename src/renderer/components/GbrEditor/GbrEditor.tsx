@@ -95,186 +95,194 @@ class GbrEditor extends React.Component<Props, State> {
         <div className={'GbrEditor'}>
           <GbrView ref={instance => this.gbrView = instance} viewNodeLayers={this.state?.viewNodeLayers} />
         </div>
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          height: 0
-        }} className={'GbrEditorToolBox'}>
-          <GbrToolContainer open={false} heading={'Tool'} nodeData={this.nodeData}>
-            <GbrEditorToolBox nodeData={this.nodeData} />
-          </GbrToolContainer>
-        </div>
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          right: 1500,
-          height: 0
-        }} className={'GbrLoadTool'}>
-          <GbrToolContainer open={false} heading={'Scale'} nodeData={this.nodeData}>
-            {/*<GbrLoad*/}
-            {/*  loadFile={async () => {*/}
-            {/*    console.log(`## [GbrEditor] Working | `);*/}
-            {/*    const data = await window.electron.openFile()*/}
-            {/*    this.setState({*/}
-            {/*      svgData:data*/}
-            {/*    })*/}
-            {/*  }}*/}
-            {/*  clearLoaded={() => {*/}
-            {/*    this.updateViewNodes([]);*/}
-            {/*  }}*/}
-            {/*/>*/}
-            <GbrScaleAndOffset scaleAndOffset={(width, height, x, y) => {
-              // if (width && height) {
-              //   this.nodeData?.setSize(width, height);
-              // }
-              // this.nodeData?.(x, y);
-              //@ts-ignore
-              let scaleWidth: number | undefined = undefined;
-              let scaleHeight: number | undefined = undefined;
-              if(width && height){
-                //@ts-ignore
-                scaleWidth = parseInt(width);
-                //@ts-ignore
-                scaleHeight = parseInt(height);
-              }
-              //@ts-ignore
-              this.nodeData?.setScale(parseInt(x), parseInt(y), scaleWidth, scaleHeight);
-              console.log(`## [GbrEditor]  | `, width, height, x, y);
-            }} />
-          </GbrToolContainer>
-        </div>
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          right: 300,
-          height: 0
-        }} className={'GbrCloneTool'}>
-          <GbrToolContainer open={false} heading={'Clone'} nodeData={this.nodeData}>
-            <GbrCloneTool cloneItems={cloneInfo => {
-              if (this.nodeData) {
-                const viewItems = this.gbrCloneGenerator.generateCloneItems(this.nodeData, cloneInfo);
-                this.updateViewNodes(viewItems);
-              }
-            }} clear={() => {
-              if (this.nodeData) {
-                this.updateViewNodes([this.nodeData]);
-              }
+        <div className={'tool-bar'}>
+          <GbrToolContainer open={true} draggable={true} heading={''} nodeData={this.nodeData}>
+            <div style={{
+              //position: 'absolute',
+              //top: 0,
+              //right: 1500,
+              //height: 0
+            }} className={'GbrLoadTool'}>
+              <GbrToolContainer open={false} draggable={false} heading={'Scale'} nodeData={this.nodeData}>
+                {/*<GbrLoad*/}
+                {/*  loadFile={async () => {*/}
+                {/*    console.log(`## [GbrEditor] Working | `);*/}
+                {/*    const data = await window.electron.openFile()*/}
+                {/*    this.setState({*/}
+                {/*      svgData:data*/}
+                {/*    })*/}
+                {/*  }}*/}
+                {/*  clearLoaded={() => {*/}
+                {/*    this.updateViewNodes([]);*/}
+                {/*  }}*/}
+                {/*/>*/}
+                <GbrScaleAndOffset scaleAndOffset={(width, height, x, y) => {
+                  // if (width && height) {
+                  //   this.nodeData?.setSize(width, height);
+                  // }
+                  // this.nodeData?.(x, y);
+                  //@ts-ignore
+                  let scaleWidth: number | undefined = undefined;
+                  let scaleHeight: number | undefined = undefined;
+                  if (width && height) {
+                    //@ts-ignore
+                    scaleWidth = parseInt(width);
+                    //@ts-ignore
+                    scaleHeight = parseInt(height);
+                  }
+                  //@ts-ignore
+                  this.nodeData?.setScale(parseInt(x), parseInt(y), scaleWidth, scaleHeight);
+                  console.log(`## [GbrEditor]  | `, width, height, x, y);
+                }} />
+              </GbrToolContainer>
+            </div>
+            <div style={{
+              //position: 'absolute',
+              //top: 0,
+              //right: 300,
+              //height: 0
+            }} className={'GbrCloneTool'}>
+              <GbrToolContainer open={false} draggable={false} heading={'Clone'} nodeData={this.nodeData}>
+                <GbrCloneTool cloneItems={cloneInfo => {
+                  if (this.nodeData) {
+                    const viewItems = this.gbrCloneGenerator.generateCloneItems(this.nodeData, cloneInfo);
+                    this.updateViewNodes(viewItems);
+                  }
+                }} clear={() => {
+                  if (this.nodeData) {
+                    this.updateViewNodes([this.nodeData]);
+                  }
 
-            }} />
-          </GbrToolContainer>
-        </div>
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          right: 600,
-          height: 0
-        }} className={'GbrViewTool'}>
-          <GbrToolContainer open={false} heading={'View'} nodeData={this.nodeData}>
-            <GbrViewTool visibilityChange={(showLabels) => {
-              if (this.state.viewNodeLayers && this.state.viewNodeLayers.viewNodes) {
-                this.state.viewNodeLayers.viewNodes.forEach(value => value.setLabelVisibility(showLabels));
-              }
-            }
-            } />
-          </GbrToolContainer>
-        </div>
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          right: 900,
-          height: 0
-        }} className={'GbrFrameTool'}>
-          <GbrToolContainer open={false} heading={'Frame'} nodeData={this.nodeData}>
-            <GbrFrameTool generateFrames={(cellSizeX, cellSizeY, cellCountX, cellCountY) => {
-              const frameData = this.gbrFrameGenerator.generateFrameViewNode({
-                cellSizeX,
-                cellSizeY,
-                cellCountX,
-                cellCountY
-              });
-              this.updateFrameNode(frameData);
-
-            }} clearFrames={() => {
-              this.updateFrameNode(undefined);
-            }} />
-          </GbrToolContainer>
-        </div>
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          right: 1200,
-          height: 0
-        }} className={'GbrToolContainer'}>
-          <GbrToolContainer open={false} heading={'ToolPath'} nodeData={this.nodeData}>
-            <GbrToolPathTool
-              toolPathModeChanged={toolPathMode => {
-                if (toolPathMode) {
+                }} />
+              </GbrToolContainer>
+            </div>
+            <div style={{
+              //position: 'absolute',
+              //top: 0,
+              //right: 600,
+              //height: 0
+            }} className={'GbrViewTool'}>
+              <GbrToolContainer open={false} draggable={false} heading={'View'} nodeData={this.nodeData}>
+                <GbrViewTool visibilityChange={(showLabels) => {
                   if (this.state.viewNodeLayers && this.state.viewNodeLayers.viewNodes) {
-                    this.currentViewNodes = this.state.viewNodeLayers.viewNodes;
-                    const gbrNodes: GbrNode[] = [];
-                    for (let i in this.currentViewNodes) {
-                      this.currentViewNodes[i].nodes.forEach(value => gbrNodes.push(value.node));
+                    this.state.viewNodeLayers.viewNodes.forEach(value => value.setLabelVisibility(showLabels));
+                  }
+                }}
+                 viewportVisibilityChanged={show => {
+                   if (this.state.viewNodeLayers && this.state.viewNodeLayers.viewNodes) {
+                     this.state.viewNodeLayers.viewNodes.forEach(value => value.setFrameVisibility(show));
+                   }
+                }} />
+              </GbrToolContainer>
+            </div>
+            <div style={{
+              //position: 'absolute',
+              //top: 0,
+              //right: 900,
+              //height: 0
+            }} className={'GbrFrameTool'}>
+              <GbrToolContainer open={false} draggable={false} heading={'Frame'} nodeData={this.nodeData}>
+                <GbrFrameTool generateFrames={(cellSizeX, cellSizeY, cellCountX, cellCountY) => {
+                  const frameData = this.gbrFrameGenerator.generateFrameViewNode({
+                    cellSizeX,
+                    cellSizeY,
+                    cellCountX,
+                    cellCountY
+                  });
+                  this.updateFrameNode(frameData);
+
+                }} clearFrames={() => {
+                  this.updateFrameNode(undefined);
+                }} />
+              </GbrToolContainer>
+            </div>
+            <div style={{
+              //position: 'absolute',
+              //top: 0,
+              //right: 1200,
+              //height: 0
+            }} className={'GbrToolContainer'}>
+              <GbrToolContainer open={false} draggable={false} heading={'ToolPath'} nodeData={this.nodeData}>
+                <GbrToolPathTool
+                  toolPathModeChanged={toolPathMode => {
+                    if (toolPathMode) {
+                      if (this.state.viewNodeLayers && this.state.viewNodeLayers.viewNodes) {
+                        this.currentViewNodes = this.state.viewNodeLayers.viewNodes;
+                        const gbrNodes: GbrNode[] = [];
+                        for (let i in this.currentViewNodes) {
+                          this.currentViewNodes[i].nodes.forEach(value => gbrNodes.push(value.node));
+                        }
+                        this.toolPathViewNode = new GbrDataModel(gbrNodes, {
+                          width: 24000,
+                          height: 12000
+                        }, {
+                          color: { r: 200, g: 200, b: 200 }
+                        });
+
+                        this.updateViewNodes([this.toolPathViewNode]);
+                      }
+                    } else {
+                      this.toolPathViewNode = undefined;
+                      if (this.currentViewNodes) {
+                        this.updateViewNodes(this.currentViewNodes);
+                        this.currentViewNodes = undefined;
+                      }
                     }
-                    this.toolPathViewNode = new GbrDataModel(gbrNodes, {
-                      width: 24000,
-                      height: 12000
-                    }, {
-                      color: { r: 200, g: 200, b: 200 }
-                    });
+                  }}
+                  makeUnidirectional={() => {
+                    this.nodeData?.makeUnidirectional();
 
-                    this.updateViewNodes([this.toolPathViewNode]);
-                  }
-                } else {
-                  this.toolPathViewNode = undefined;
-                  if (this.currentViewNodes) {
-                    this.updateViewNodes(this.currentViewNodes);
-                    this.currentViewNodes = undefined;
-                  }
-                }
-              }}
-              makeUnidirectional={() => {
-                this.nodeData?.makeUnidirectional();
+                  }}
+                  generateToolPath={includeFrames => {
+                    if (this.toolPathViewNode) {
+                      this.toolPathViewNode.removeMoveNodes();
+                      this.toolPathViewNode.generateToolPath();
+                    }
+                  }}
+                  removeExistingToolPath={() => {
+                    if (this.state.viewNodeLayers && this.state.viewNodeLayers.viewNodes) {
+                      this.state.viewNodeLayers.viewNodes.forEach(value => value.removeMoveNodes());
+                    }
+                  }}
+                  showFrames={show => {
+                    if (this.state.viewNodeLayers?.frameViewNode) {
+                      this.state.viewNodeLayers?.frameViewNode.setToolPathVisibility(show);
+                    }
+                  }}
+                  saveDesign={() => {
+                    if (this.toolPathViewNode) {
+                      let nodes: GbrNode[] = [];
+                      if (this.state.viewNodeLayers?.frameViewNode) {
+                        //adding frame nodes
+                        this.state.viewNodeLayers.frameViewNode.getGbrNodes().forEach(value => nodes.push(value));
+                      }
+                      this.toolPathViewNode.getGbrNodes().forEach(value => nodes.push(value));
+                      const gbrCode = GBRCodeGenerator.generateCodeFromNotes(nodes);
+                      Utils.download(gbrCode, 'design.gbr', 'text/plain');
+                    }
+                  }}
+                  saveFrames={() => {
+                    if (this.state.viewNodeLayers?.frameViewNode) {
+                      //adding frame nodes
+                      const nodes = this.state.viewNodeLayers.frameViewNode.getGbrNodes();
+                      const gbrCode = GBRCodeGenerator.generateCodeFromNotes(nodes);
+                      Utils.download(gbrCode, 'frame.gbr', 'text/plain');
+                    }
+                  }}
 
-              }}
-              generateToolPath={includeFrames => {
-                if (this.toolPathViewNode) {
-                  this.toolPathViewNode.removeMoveNodes();
-                  this.toolPathViewNode.generateToolPath();
-                }
-              }}
-              removeExistingToolPath={() => {
-                if (this.state.viewNodeLayers && this.state.viewNodeLayers.viewNodes) {
-                  this.state.viewNodeLayers.viewNodes.forEach(value => value.removeMoveNodes());
-                }
-              }}
-              showFrames={show => {
-                if (this.state.viewNodeLayers?.frameViewNode) {
-                  this.state.viewNodeLayers?.frameViewNode.setToolPathVisibility(show);
-                }
-              }}
-              saveDesign={() => {
-                if (this.toolPathViewNode) {
-                  let nodes: GbrNode[] = [];
-                  if (this.state.viewNodeLayers?.frameViewNode) {
-                    //adding frame nodes
-                    this.state.viewNodeLayers.frameViewNode.getGbrNodes().forEach(value => nodes.push(value));
-                  }
-                  this.toolPathViewNode.getGbrNodes().forEach(value => nodes.push(value));
-                  const gbrCode = GBRCodeGenerator.generateCodeFromNotes(nodes);
-                  Utils.download(gbrCode, 'design.gbr', 'text/plain');
-                }
-              }}
-              saveFrames={() => {
-                if (this.state.viewNodeLayers?.frameViewNode) {
-                  //adding frame nodes
-                  const nodes = this.state.viewNodeLayers.frameViewNode.getGbrNodes();
-                  const gbrCode = GBRCodeGenerator.generateCodeFromNotes(nodes);
-                  Utils.download(gbrCode, 'frame.gbr', 'text/plain');
-                }
-              }}
-
-            />
+                />
+              </GbrToolContainer>
+              <div style={{
+                //position: 'absolute',
+                //top: 0,
+                //right: 0,
+                //height: 0
+              }} className={'GbrEditorToolBox'}>
+                <GbrToolContainer open={false} draggable={false} heading={'utils'} nodeData={this.nodeData}>
+                  <GbrEditorToolBox nodeData={this.nodeData} />
+                </GbrToolContainer>
+              </div>
+            </div>
           </GbrToolContainer>
         </div>
       </div>

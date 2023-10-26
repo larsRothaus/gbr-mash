@@ -51,21 +51,24 @@ export const PlasmicGbrViewTool__VariantProps = new Array<VariantPropType>();
 
 export type PlasmicGbrViewTool__ArgsType = {
   visibilityChange?: (showLabels: boolean) => void;
+  viewportVisibilityChanged?: (show: boolean) => void;
 };
 type ArgPropType = keyof PlasmicGbrViewTool__ArgsType;
 export const PlasmicGbrViewTool__ArgProps = new Array<ArgPropType>(
-  'visibilityChange'
+  'visibilityChange',
+  'viewportVisibilityChanged'
 );
 
 export type PlasmicGbrViewTool__OverridesType = {
   root?: p.Flex<'div'>;
   button?: p.Flex<typeof AntdButton>;
-  freeBox?: p.Flex<'div'>;
   _switch?: p.Flex<typeof AntdSwitch>;
+  perimeterOutline?: p.Flex<typeof AntdSwitch>;
 };
 
 export interface DefaultGbrViewToolProps {
   visibilityChange?: (showLabels: boolean) => void;
+  viewportVisibilityChanged?: (show: boolean) => void;
   className?: string;
 }
 
@@ -96,6 +99,12 @@ function PlasmicGbrViewTool__RenderFunc(props: {
     () => [
       {
         path: '_switch.checked',
+        type: 'private',
+        variableType: 'boolean',
+        initFunc: ({ $props, $state, $queries, $ctx }) => true,
+      },
+      {
+        path: 'perimeterOutline.checked',
         type: 'private',
         variableType: 'boolean',
         initFunc: ({ $props, $state, $queries, $ctx }) => true,
@@ -142,11 +151,7 @@ function PlasmicGbrViewTool__RenderFunc(props: {
           {'Button'}
         </div>
       </AntdButton>
-      <div
-        data-plasmic-name={'freeBox'}
-        data-plasmic-override={overrides.freeBox}
-        className={classNames(projectcss.all, sty.freeBox)}
-      >
+      <div className={classNames(projectcss.all, sty.freeBox__kdF57)}>
         <div
           className={classNames(
             projectcss.all,
@@ -208,15 +213,81 @@ function PlasmicGbrViewTool__RenderFunc(props: {
           }}
         />
       </div>
+      <div className={classNames(projectcss.all, sty.freeBox__buJsI)}>
+        <div
+          className={classNames(
+            projectcss.all,
+            projectcss.__wab_text,
+            sty.text__pGfSa
+          )}
+        >
+          {'Show design perimeter'}
+        </div>
+        <AntdSwitch
+          data-plasmic-name={'perimeterOutline'}
+          data-plasmic-override={overrides.perimeterOutline}
+          checked={p.generateStateValueProp($state, [
+            'perimeterOutline',
+            'checked',
+          ])}
+          className={classNames('__wab_instance', sty.perimeterOutline)}
+          defaultChecked={true}
+          onChange={async (...eventArgs: any) => {
+            p.generateStateOnChangeProp($state, [
+              'perimeterOutline',
+              'checked',
+            ]).apply(null, eventArgs);
+            (async (checked) => {
+              const $steps = {};
+
+              $steps['runViewportVisibilityChanged'] = true
+                ? (() => {
+                    const actionArgs = {
+                      eventRef: $props['viewportVisibilityChanged'],
+                      args: [
+                        (() => {
+                          try {
+                            return $state.perimeterOutline.checked;
+                          } catch (e) {
+                            if (
+                              e instanceof TypeError ||
+                              e?.plasmicType === 'PlasmicUndefinedDataError'
+                            ) {
+                              return undefined;
+                            }
+                            throw e;
+                          }
+                        })(),
+                      ],
+                    };
+                    return (({ eventRef, args }) => {
+                      return eventRef?.(...(args ?? []));
+                    })?.apply(null, [actionArgs]);
+                  })()
+                : undefined;
+              if (
+                $steps['runViewportVisibilityChanged'] != null &&
+                typeof $steps['runViewportVisibilityChanged'] === 'object' &&
+                typeof $steps['runViewportVisibilityChanged'].then ===
+                  'function'
+              ) {
+                $steps['runViewportVisibilityChanged'] = await $steps[
+                  'runViewportVisibilityChanged'
+                ];
+              }
+            }).apply(null, eventArgs);
+          }}
+        />
+      </div>
     </div>
   ) as React.ReactElement | null;
 }
 
 const PlasmicDescendants = {
-  root: ['root', 'button', 'freeBox', '_switch'],
+  root: ['root', 'button', '_switch', 'perimeterOutline'],
   button: ['button'],
-  freeBox: ['freeBox', '_switch'],
   _switch: ['_switch'],
+  perimeterOutline: ['perimeterOutline'],
 } as const;
 type NodeNameType = keyof typeof PlasmicDescendants;
 type DescendantsType<T extends NodeNameType> =
@@ -224,8 +295,8 @@ type DescendantsType<T extends NodeNameType> =
 type NodeDefaultElementType = {
   root: 'div';
   button: typeof AntdButton;
-  freeBox: 'div';
   _switch: typeof AntdSwitch;
+  perimeterOutline: typeof AntdSwitch;
 };
 
 type ReservedPropsType = 'variants' | 'args' | 'overrides';
@@ -289,8 +360,8 @@ export const PlasmicGbrViewTool = Object.assign(
   {
     // Helper components rendering sub-elements
     button: makeNodeComponent('button'),
-    freeBox: makeNodeComponent('freeBox'),
     _switch: makeNodeComponent('_switch'),
+    perimeterOutline: makeNodeComponent('perimeterOutline'),
 
     // Metadata about props expected for PlasmicGbrViewTool
     internalVariantProps: PlasmicGbrViewTool__VariantProps,

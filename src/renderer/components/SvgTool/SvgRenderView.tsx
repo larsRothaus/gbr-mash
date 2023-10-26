@@ -8,9 +8,7 @@ import { ipcRenderer } from 'electron';
 
 const allEqual = arr => arr.every(val => val === arr[0]);
 
-
-
-const delay = async (ms: number) => new Promise(resolve => {
+export const delay = async (ms: number) => new Promise(resolve => {
   setTimeout(resolve, ms);
 });
 type Props = {
@@ -44,6 +42,7 @@ export class SvgRenderView extends React.Component<Props, State> {
   private readyBtn!: HTMLButtonElement;
   private svg: SVGSVGElement | null = null;
   private canvas: HTMLCanvasElement;
+  private ctx!:CanvasRenderingContext2D
 
   componentDidMount() {
 
@@ -51,7 +50,8 @@ export class SvgRenderView extends React.Component<Props, State> {
     this.readyBtn = document.getElementById('readyBtn');
 
     this.canvas.hidden = true;
-    let ctx = this.canvas.getContext('2d');
+    this.ctx = this.canvas.getContext('2d');
+
     this.frame = document.getElementById('frame') as HTMLIFrameElement;
     this.createBtn = document.getElementById('create') as HTMLButtonElement;
 
@@ -68,7 +68,8 @@ export class SvgRenderView extends React.Component<Props, State> {
       return;
     }
 
-    this.createBtn.addEventListener('click', async () => {
+    const generateGbrProject = async () => {
+      let ctx = this.ctx
       this.frame.hidden = true;
       this.canvas.hidden = false;
       if (!this.svg) {
@@ -150,7 +151,7 @@ export class SvgRenderView extends React.Component<Props, State> {
         ctx.beginPath();
         ctx.fillStyle = 'red';
 
-          currentNode.addPoint(startPoint);
+        currentNode.addPoint(startPoint);
 
         if (currentNodeType === NodeTypes.Path && totalLength ) {
           const totalInterpolation = Math.floor(totalLength / resolution);
@@ -181,7 +182,7 @@ export class SvgRenderView extends React.Component<Props, State> {
 
             ctx.lineTo(point2D.x * scaleFactor, point2D.y * scaleFactor);
             ctx.stroke();
-            // await delay(1);
+            await delay(.5);
             totalNotes++;
 
             if (point2D.x < -20 || point2D.y < -20) {
@@ -211,7 +212,7 @@ export class SvgRenderView extends React.Component<Props, State> {
         const ys = completedNodes[o].points.map(value => value.y);
         const xIsStraight = allEqual(xs);
         const yIsStraight = allEqual(ys);
-          if (xIsStraight || yIsStraight) {
+        if (xIsStraight || yIsStraight) {
           console.log(`## [SvgRenderView] is ${yIsStraight ? 'Y' : 'X'} a straight Line:`);
           console.log(`## [SvgRenderView] simplifying node`);
           const nNode = new GbrNode();
@@ -277,11 +278,20 @@ export class SvgRenderView extends React.Component<Props, State> {
         }
       });
 
-      //this.download(JSON.stringify(completedNodes, null, 2), "test_data.json", "text/plain")
+    }
 
 
-    });
+    setTimeout( ()=>{
+      generateGbrProject();
+    },1000);
 
+    this.createBtn.addEventListener('click',()=>{
+      this.setState({
+        dataModel:undefined
+      })
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      generateGbrProject();
+    })
   }
 
   componentDidUpdate() {
@@ -293,9 +303,9 @@ export class SvgRenderView extends React.Component<Props, State> {
     const { dataModel } = this.state ?? {};
     return (
       <div>
-        <button id={'create'}>create gbr nodes</button>
+        <button id={'create'}>re-generate</button>
         <button id={'readyBtn'} disabled={!dataModel}>import</button>
-        <iframe hidden={false} style={iframeStyle} id={'frame'} width={window.innerWidth}
+        <iframe hidden={true} style={iframeStyle} id={'frame'} width={window.innerWidth}
                 height={window.innerHeight}></iframe>
         <canvas id={'canvas'} style={{
           scale: .2

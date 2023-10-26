@@ -229,7 +229,6 @@ export class GbrViewNode {
 
       const displacementFactor = (this.id % 2 === 0) ? 20 : -20;
 
-
       if (!this.startLabel) {
         this.startLabel = new Konva.Text({
           x: this.node.startEndVectors.start.x + xAjust + displacementFactor,
@@ -358,6 +357,10 @@ export class GbrViewNode {
       this.startLabel.visible(value);
       this.endLabel.visible(value);
     }
+  }
+
+  public setVisibility(value: boolean) {
+    this.viewItem.visible(value);
   }
 
 }

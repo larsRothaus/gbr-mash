@@ -12,19 +12,21 @@ import { EventEmitter } from 'events';
 import { Point2D } from '../dtos/Point2D';
 import { GBRCodeGenerator } from '../components/GbrGenerator/GbrGenerator';
 import Konva from 'konva';
+import { delay } from '../components/SvgTool/SvgRenderView';
 
 
 export const getVectorDist = (seed: Point2D, candidate: Point2D): number => {
   return Math.sqrt(Math.pow((candidate.x - seed.x), 2) + Math.pow((candidate.y - seed.y), 2));
 };
 
-export const optimizeToolPathUtil = (nodes: GbrViewNode[], keepIndex: boolean = false): GbrViewNode[] => {
+export const optimizeToolPathUtil = (nodes: GbrViewNode[], selectedSeedNode?:GbrViewNode): GbrViewNode[] => {
   const optimizeNodeIds: number[] = [];
   const optimizevectors: GbrViewNode[] = [];
   if (!nodes.length) {
     return [];
   }
-  let seedNode: GbrViewNode = nodes[0];
+
+  let seedNode: GbrViewNode = selectedSeedNode ?? nodes[0];
 
   while (nodes.length != optimizevectors.length) {
     if (!seedNode.node.startEndVectors?.start || !seedNode.node.startEndVectors?.end) {
@@ -49,6 +51,9 @@ export const optimizeToolPathUtil = (nodes: GbrViewNode[], keepIndex: boolean = 
         continue;
       }
       let dist = getVectorDist(seedVector, node.node.startEndVectors.start);
+      // let directionalDelta = Math.abs(seedNode.node.cuttingDirection - node.node.cuttingDirection);
+      // dist = dist * (directionalDelta / 10);
+      // console.log(`## [GbrDataModel] optimizeToolPathUtil | directionalDelta:${directionalDelta}`);
       if (dist < bestDist) {
         bestDist = dist;
         currentBest = node;
@@ -147,7 +152,7 @@ export class GbrDataModel extends EventEmitter {
     super();
     this.frameSize = frameSize;
     this.origFrameSize = frameSize;
-    console.log(`## [GbrDataModel] constructor | frameSize`,frameSize.width,frameSize.height);
+    console.log(`## [GbrDataModel] constructor | frameSize`, frameSize.width, frameSize.height);
     this.frame = this.createFrame(this.frameSize);
     this.nodes = nodes.map((value, index) => {
       const viewNode = new GbrViewNode(index, value);
@@ -163,11 +168,11 @@ export class GbrDataModel extends EventEmitter {
 
 
     //@ts-ignore
-    window.getInfo = ()=>{
+    window.getInfo = () => {
       const line = this.getSelected()[0];
 
       debugger;
-    }
+    };
   }
 
   private createFrame(size: Frame, visualOffset: number = 2, rerender: boolean = false): Konva.Rect {
@@ -306,10 +311,20 @@ export class GbrDataModel extends EventEmitter {
         rest.push(value);
       }
     }
-    let optimized = optimizeToolPathUtil(tbo);
+    const selected = this.getSelected();
+    let seedNode:GbrViewNode | undefined = undefined;
+    if(selected.length > 0){
+      seedNode = selected[0]
+    }
+    let optimized = optimizeToolPathUtil(tbo, seedNode);
     this.nodes = adjustTUNodes([...rest, ...optimized]);
-    // this.emit(GbrDataModelEvents.Updated);
+    this.nodes.forEach(value => value.setVisibility(false))
+    //@ts-ignore
+    window.nn = this.nodes;
     this.render();
+    this.nodes.forEach((v,i) => setTimeout(()=>{v.setVisibility(true)}, i * 200))
+
+
   }
 
   public saveWorkFile(): void {
@@ -346,6 +361,10 @@ export class GbrDataModel extends EventEmitter {
     this.container.visible(value);
   }
 
+  public setFrameVisibility(value: boolean) {
+    this.frame.visible(value);
+  }
+
   public setScale(offsetX: number, offsetY: number, tmmWidth?: number, tmmHeight?: number) {
     tmmWidth = tmmWidth ?? this.frameSize.width;
     tmmHeight = tmmHeight ?? this.frameSize.height;
@@ -356,7 +375,7 @@ export class GbrDataModel extends EventEmitter {
     const widthScaleFactor = this.frameSize.width / this.origFrameSize.width;
     const heightScaleFactor = this.frameSize.height / this.origFrameSize.height;
     this.nodes.forEach(node => {
-      node.setScale(offsetX, offsetY,widthScaleFactor, heightScaleFactor);
+      node.setScale(offsetX, offsetY, widthScaleFactor, heightScaleFactor);
     });
 
     if (this.frame) {
@@ -397,31 +416,31 @@ export class GbrDataModel extends EventEmitter {
     });
   }
 
-  public makeUnidirectional():void {
+  public makeUnidirectional(): void {
     const completedNodes = this.nodes;
     ///////// Straight Orientation ////////////
     for (let so in this.nodes) {
       // X ==> X
       let shouldReverse = false;
 
-      const {start,end} = this.nodes[so].node.startEndVectors;
+      const { start, end } = this.nodes[so].node.startEndVectors;
 
       const xDiff = Math.abs(start.x - end.x);
       const yDiff = Math.abs(start.y - end.y);
 
-      if(xDiff > yDiff){
+      if (xDiff > yDiff) {
         // Horizontal dominance
-        if(end.x > start.x){
+        if (end.x > start.x) {
           shouldReverse = true;
         }
-      }else{
+      } else {
         // Vertical dominance
-        if(end.y > start.y){
+        if (end.y > start.y) {
           shouldReverse = true;
         }
       }
 
-      if(shouldReverse){
+      if (shouldReverse) {
         completedNodes[so].reverse();
       }
     }
