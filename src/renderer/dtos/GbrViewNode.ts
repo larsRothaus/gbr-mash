@@ -17,7 +17,8 @@ export class GbrViewNode {
   public node: GbrNode;
   public type: GbrNodeType;
 
-  public viewItem: Konva.Line;
+  // public viewItem: Konva.Line;
+  public viewItem: Konva.Arrow;
 
   public startLabel?: Konva.Text;
   public endLabel?: Konva.Text;
@@ -63,9 +64,10 @@ export class GbrViewNode {
 
   }
 
-  private buildViewItem(): Konva.Line {
+  private buildViewItem(): Konva.Arrow {
 
     let currentVectors: Point2D[] = this.node.points;
+
 
     if (this.type === GbrNodeType.ToolUp) {
       if (currentVectors.length === 2 && currentVectors[0].x === currentVectors[1].x && currentVectors[0].y === currentVectors[1].y) {
@@ -92,7 +94,20 @@ export class GbrViewNode {
     }
 
 
-    this.viewItem = new Konva.Line(this.vectorConfig);
+    //@ts-ignore
+    this.viewItem = new Konva.Arrow({
+      x: this.vectorConfig.x,
+      y: this.vectorConfig.y,
+      points: this.vectorConfig.points,
+      fillPatternRepeat:'repeat',
+      pointerAtBeginning:false,
+      pointerAtEnding: true,
+      pointerLength: 10,
+      pointerWidth: 10,
+      fill: this.strokeNutral,
+      stroke: this.strokeNutral,
+      strokeWidth: 4,
+    });
     return this.viewItem;
   }
 
@@ -322,11 +337,15 @@ export class GbrViewNode {
     if (this.selectedState) {
       this.selectedState = true;
       //@ts-ignore
-      this.viewItem.setStroke('green');
+      // this.viewItem.setStroke('green');
+      //@ts-ignore
+      this.viewItem.strokeWidth(14);
     } else {
       this.selectedState = false;
       //@ts-ignore
-      this.viewItem.setStroke(this.strokeNutral);
+      // this.viewItem.setStroke(this.strokeNutral);
+      //@ts-ignore
+      this.viewItem.strokeWidth(4);
     }
   }
 

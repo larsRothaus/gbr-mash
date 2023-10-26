@@ -37,6 +37,7 @@ import { AntdButton } from '@plasmicpkgs/antd5/skinny/registerButton'; // plasmi
 import '@plasmicapp/react-web/lib/plasmic.css';
 
 import plasmic_antd_5_hostless_css from '../antd_5_hostless/plasmic_antd_5_hostless.module.css'; // plasmic-import: ohDidvG9XsCeFumugENU3J/projectcss
+import plasmic_plasmic_rich_components_css from '../plasmic_rich_components/plasmic_plasmic_rich_components.module.css'; // plasmic-import: jkU633o1Cz7HrJdwdxhVHk/projectcss
 import projectcss from './plasmic_arturel.module.css'; // plasmic-import: dgFPhDvLY4vKuXTDNeS2uD/projectcss
 import sty from './PlasmicGbrEditorToolBox.module.css'; // plasmic-import: 3fSRvGY02nPI/css
 
@@ -122,6 +123,7 @@ function PlasmicGbrEditorToolBox__RenderFunc(props: {
         projectcss.plasmic_mixins,
         projectcss.plasmic_tokens,
         plasmic_antd_5_hostless_css.plasmic_tokens,
+        plasmic_plasmic_rich_components_css.plasmic_tokens,
         sty.root
       )}
     >
@@ -141,6 +143,7 @@ function PlasmicGbrEditorToolBox__RenderFunc(props: {
               })()
             : undefined;
           if (
+            $steps['runDeselectAction'] != null &&
             typeof $steps['runDeselectAction'] === 'object' &&
             typeof $steps['runDeselectAction'].then === 'function'
           ) {
@@ -175,6 +178,7 @@ function PlasmicGbrEditorToolBox__RenderFunc(props: {
               })()
             : undefined;
           if (
+            $steps['runJoinSelected'] != null &&
             typeof $steps['runJoinSelected'] === 'object' &&
             typeof $steps['runJoinSelected'].then === 'function'
           ) {
@@ -209,6 +213,7 @@ function PlasmicGbrEditorToolBox__RenderFunc(props: {
               })()
             : undefined;
           if (
+            $steps['runRemoveMoveNodes'] != null &&
             typeof $steps['runRemoveMoveNodes'] === 'object' &&
             typeof $steps['runRemoveMoveNodes'].then === 'function'
           ) {
@@ -243,6 +248,7 @@ function PlasmicGbrEditorToolBox__RenderFunc(props: {
               })()
             : undefined;
           if (
+            $steps['runReverseNode'] != null &&
             typeof $steps['runReverseNode'] === 'object' &&
             typeof $steps['runReverseNode'].then === 'function'
           ) {
@@ -277,6 +283,7 @@ function PlasmicGbrEditorToolBox__RenderFunc(props: {
               })()
             : undefined;
           if (
+            $steps['runGenerateToolPath'] != null &&
             typeof $steps['runGenerateToolPath'] === 'object' &&
             typeof $steps['runGenerateToolPath'].then === 'function'
           ) {
@@ -311,6 +318,7 @@ function PlasmicGbrEditorToolBox__RenderFunc(props: {
               })()
             : undefined;
           if (
+            $steps['runSaveFile'] != null &&
             typeof $steps['runSaveFile'] === 'object' &&
             typeof $steps['runSaveFile'].then === 'function'
           ) {

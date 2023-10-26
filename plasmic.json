@@ -599,6 +599,32 @@
           "cssFilePath": "plasmic/arturel/PlasmicGbrCoordinateViewItem.module.css",
           "scheme": "blackbox",
           "componentType": "component"
+        },
+        {
+          "id": "WAfeEKolJYVh",
+          "name": "Test",
+          "type": "managed",
+          "projectId": "dgFPhDvLY4vKuXTDNeS2uD",
+          "renderModuleFilePath": "plasmic/arturel/PlasmicTest.tsx",
+          "importSpec": {
+            "modulePath": "Test.tsx"
+          },
+          "cssFilePath": "plasmic/arturel/PlasmicTest.module.css",
+          "scheme": "blackbox",
+          "componentType": "component"
+        },
+        {
+          "id": "paGL4XKTn0Fb",
+          "name": "NodeItem",
+          "type": "managed",
+          "projectId": "dgFPhDvLY4vKuXTDNeS2uD",
+          "renderModuleFilePath": "plasmic/arturel/PlasmicNodeItem.tsx",
+          "importSpec": {
+            "modulePath": "NodeItem.tsx"
+          },
+          "cssFilePath": "plasmic/arturel/PlasmicNodeItem.module.css",
+          "scheme": "blackbox",
+          "componentType": "component"
         }
       ],
       "icons": [

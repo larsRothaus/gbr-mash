@@ -45,6 +45,7 @@ class GbrEditor extends React.Component<Props, State> {
 
   componentDidMount() {
 
+
     this.setState({
       viewNodeLayers: {
         ruler: this.ruler,
@@ -231,6 +232,10 @@ class GbrEditor extends React.Component<Props, State> {
                     this.currentViewNodes = undefined;
                   }
                 }
+              }}
+              makeUnidirectional={() => {
+                this.nodeData?.makeUnidirectional();
+
               }}
               generateToolPath={includeFrames => {
                 if (this.toolPathViewNode) {

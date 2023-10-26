@@ -397,16 +397,36 @@ export class GbrDataModel extends EventEmitter {
     });
   }
 
-  // public offset(x: number, y: number): void {
-  //   this.frame.setPosition({
-  //     x: x - 1,
-  //     y: y - 1
-  //   });
-  //   for (let i in this.nodes) {
-  //     this.nodes[i].offset(x, y);
-  //   }
-  //   this.render();
-  // }
+  public makeUnidirectional():void {
+    const completedNodes = this.nodes;
+    ///////// Straight Orientation ////////////
+    for (let so in this.nodes) {
+      // X ==> X
+      let shouldReverse = false;
+
+      const {start,end} = this.nodes[so].node.startEndVectors;
+
+      const xDiff = Math.abs(start.x - end.x);
+      const yDiff = Math.abs(start.y - end.y);
+
+      if(xDiff > yDiff){
+        // Horizontal dominance
+        if(end.x > start.x){
+          shouldReverse = true;
+        }
+      }else{
+        // Vertical dominance
+        if(end.y > start.y){
+          shouldReverse = true;
+        }
+      }
+
+      if(shouldReverse){
+        completedNodes[so].reverse();
+      }
+    }
+
+  }
 
   public getGbrNodes(): GbrNode[] {
     return this.nodes.map(value => value.node);

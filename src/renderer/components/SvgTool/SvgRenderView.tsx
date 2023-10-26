@@ -225,32 +225,32 @@ export class SvgRenderView extends React.Component<Props, State> {
       }
 
 
-      ///////// Straight Orientation ////////////
-      for (let so in completedNodes) {
-       // X ==> X
-        let shouldReverse = false;
-        const {start,end} = completedNodes[so].startEndVectors;
+      // ///////// Straight Orientation ////////////
+      // for (let so in completedNodes) {
+      //  // X ==> X
+      //   let shouldReverse = false;
+      //   const {start,end} = completedNodes[so].startEndVectors;
+      //
+      //   const xDiff = Math.abs(start.x - end.x);
+      //   const yDiff = Math.abs(start.y - end.y);
+      //
+      //   if(xDiff > yDiff){
+      //     // Horizontal dominance
+      //     if(end.x > start.x){
+      //       shouldReverse = true;
+      //     }
+      //   }else{
+      //     // Vertical dominance
+      //     if(end.y > start.y){
+      //       shouldReverse = true;
+      //     }
+      //   }
+      //
+      //   if(shouldReverse){
+      //     completedNodes[so].reverse();
+      //   }
+      // }
 
-        const xDiff = Math.abs(start.x - end.x);
-        const yDiff = Math.abs(start.y - end.y);
-
-        if(xDiff > yDiff){
-          // Horizontal dominance
-          if(end.x > start.x){
-            shouldReverse = true;
-          }
-        }else{
-          // Vertical dominance
-          if(end.y > start.y){
-            shouldReverse = true;
-          }
-        }
-
-        if(shouldReverse){
-          completedNodes[so].reverse();
-        }
-
-      }
       ///////// Convert ////////////
       for (let n in completedNodes) {
         for (let p in completedNodes[n].points) {

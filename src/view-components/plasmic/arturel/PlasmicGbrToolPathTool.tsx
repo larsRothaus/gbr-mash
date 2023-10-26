@@ -38,16 +38,22 @@ import { AntdButton } from '@plasmicpkgs/antd5/skinny/registerButton'; // plasmi
 import '@plasmicapp/react-web/lib/plasmic.css';
 
 import plasmic_antd_5_hostless_css from '../antd_5_hostless/plasmic_antd_5_hostless.module.css'; // plasmic-import: ohDidvG9XsCeFumugENU3J/projectcss
+import plasmic_plasmic_rich_components_css from '../plasmic_rich_components/plasmic_plasmic_rich_components.module.css'; // plasmic-import: jkU633o1Cz7HrJdwdxhVHk/projectcss
 import projectcss from './plasmic_arturel.module.css'; // plasmic-import: dgFPhDvLY4vKuXTDNeS2uD/projectcss
 import sty from './PlasmicGbrToolPathTool.module.css'; // plasmic-import: yPi8m4SnU-qf/css
 
 createPlasmicElementProxy;
 
-export type PlasmicGbrToolPathTool__VariantMembers = {};
-export type PlasmicGbrToolPathTool__VariantsArgs = {};
+export type PlasmicGbrToolPathTool__VariantMembers = {
+  confirmationPopOver: 'confirmationPopOver';
+};
+export type PlasmicGbrToolPathTool__VariantsArgs = {
+  confirmationPopOver?: SingleBooleanChoiceArg<'confirmationPopOver'>;
+};
 type VariantPropType = keyof PlasmicGbrToolPathTool__VariantsArgs;
-export const PlasmicGbrToolPathTool__VariantProps =
-  new Array<VariantPropType>();
+export const PlasmicGbrToolPathTool__VariantProps = new Array<VariantPropType>(
+  'confirmationPopOver'
+);
 
 export type PlasmicGbrToolPathTool__ArgsType = {
   toolPathModeChanged?: (toolPathMode: boolean) => void;
@@ -56,6 +62,7 @@ export type PlasmicGbrToolPathTool__ArgsType = {
   showFrames?: (show: boolean) => void;
   saveDesign?: () => void;
   saveFrames?: () => void;
+  makeUnidirectional?: () => void;
 };
 type ArgPropType = keyof PlasmicGbrToolPathTool__ArgsType;
 export const PlasmicGbrToolPathTool__ArgProps = new Array<ArgPropType>(
@@ -64,7 +71,8 @@ export const PlasmicGbrToolPathTool__ArgProps = new Array<ArgPropType>(
   'generateToolPath',
   'showFrames',
   'saveDesign',
-  'saveFrames'
+  'saveFrames',
+  'makeUnidirectional'
 );
 
 export type PlasmicGbrToolPathTool__OverridesType = {
@@ -72,6 +80,7 @@ export type PlasmicGbrToolPathTool__OverridesType = {
   toolPathMode?: p.Flex<typeof AntdSwitch>;
   showFrames?: p.Flex<typeof AntdSwitch>;
   includeFrames?: p.Flex<typeof AntdSwitch>;
+  confirmation?: p.Flex<'div'>;
 };
 
 export interface DefaultGbrToolPathToolProps {
@@ -81,6 +90,8 @@ export interface DefaultGbrToolPathToolProps {
   showFrames?: (show: boolean) => void;
   saveDesign?: () => void;
   saveFrames?: () => void;
+  makeUnidirectional?: () => void;
+  confirmationPopOver?: SingleBooleanChoiceArg<'confirmationPopOver'>;
   className?: string;
 }
 
@@ -127,6 +138,13 @@ function PlasmicGbrToolPathTool__RenderFunc(props: {
         variableType: 'boolean',
         initFunc: ({ $props, $state, $queries, $ctx }) => undefined,
       },
+      {
+        path: 'confirmationPopOver',
+        type: 'private',
+        variableType: 'variant',
+        initFunc: ({ $props, $state, $queries, $ctx }) =>
+          $props.confirmationPopOver,
+      },
     ],
     [$props, $ctx, $refs]
   );
@@ -150,7 +168,15 @@ function PlasmicGbrToolPathTool__RenderFunc(props: {
         projectcss.plasmic_mixins,
         projectcss.plasmic_tokens,
         plasmic_antd_5_hostless_css.plasmic_tokens,
-        sty.root
+        plasmic_plasmic_rich_components_css.plasmic_tokens,
+        sty.root,
+        {
+          [sty.rootconfirmationPopOver]: hasVariant(
+            $state,
+            'confirmationPopOver',
+            'confirmationPopOver'
+          ),
+        }
       )}
     >
       <div className={classNames(projectcss.all, sty.freeBox__ipg69)}>
@@ -205,6 +231,7 @@ function PlasmicGbrToolPathTool__RenderFunc(props: {
                   })()
                 : undefined;
               if (
+                $steps['runToolPathModeChanged'] != null &&
                 typeof $steps['runToolPathModeChanged'] === 'object' &&
                 typeof $steps['runToolPathModeChanged'].then === 'function'
               ) {
@@ -266,6 +293,7 @@ function PlasmicGbrToolPathTool__RenderFunc(props: {
                   })()
                 : undefined;
               if (
+                $steps['runShowFrames'] != null &&
                 typeof $steps['runShowFrames'] === 'object' &&
                 typeof $steps['runShowFrames'].then === 'function'
               ) {
@@ -299,6 +327,68 @@ function PlasmicGbrToolPathTool__RenderFunc(props: {
           ])}
         />
       </div>
+      <div className={classNames(projectcss.all, sty.freeBox___5PwX)}>
+        <div
+          className={classNames(
+            projectcss.all,
+            projectcss.__wab_text,
+            sty.text__pK5Z8
+          )}
+        >
+          {'Make tool-path '}
+        </div>
+        <AntdButton
+          className={classNames('__wab_instance', sty.button__aSrOb)}
+          onClick={async () => {
+            const $steps = {};
+
+            $steps['updateConfirmationPopOver'] = true
+              ? (() => {
+                  const actionArgs = {
+                    vgroup: 'confirmationPopOver',
+                    operation: 4,
+                  };
+                  return (({ vgroup, value }) => {
+                    if (typeof value === 'string') {
+                      value = [value];
+                    }
+
+                    p.set($state, vgroup, true);
+                    return true;
+                  })?.apply(null, [actionArgs]);
+                })()
+              : undefined;
+            if (
+              $steps['updateConfirmationPopOver'] != null &&
+              typeof $steps['updateConfirmationPopOver'] === 'object' &&
+              typeof $steps['updateConfirmationPopOver'].then === 'function'
+            ) {
+              $steps['updateConfirmationPopOver'] = await $steps[
+                'updateConfirmationPopOver'
+              ];
+            }
+          }}
+          size={'small'}
+          type={'primary'}
+        >
+          <div
+            className={classNames(
+              projectcss.all,
+              projectcss.__wab_text,
+              sty.text__kefKq
+            )}
+          >
+            <React.Fragment>
+              <span
+                className={'plasmic_default__all plasmic_default__span'}
+                style={{ fontWeight: 700 }}
+              >
+                {'unidirectional'}
+              </span>
+            </React.Fragment>
+          </div>
+        </AntdButton>
+      </div>
       <div className={classNames(projectcss.all, sty.freeBox__k9Mac)}>
         <AntdButton
           className={classNames('__wab_instance', sty.button__r2Obz)}
@@ -330,6 +420,7 @@ function PlasmicGbrToolPathTool__RenderFunc(props: {
                 })()
               : undefined;
             if (
+              $steps['runGenerateToolPath'] != null &&
               typeof $steps['runGenerateToolPath'] === 'object' &&
               typeof $steps['runGenerateToolPath'].then === 'function'
             ) {
@@ -367,6 +458,7 @@ function PlasmicGbrToolPathTool__RenderFunc(props: {
                 })()
               : undefined;
             if (
+              $steps['runRemoveExistingToolPath'] != null &&
               typeof $steps['runRemoveExistingToolPath'] === 'object' &&
               typeof $steps['runRemoveExistingToolPath'].then === 'function'
             ) {
@@ -402,6 +494,7 @@ function PlasmicGbrToolPathTool__RenderFunc(props: {
                 })()
               : undefined;
             if (
+              $steps['runSaveDesign'] != null &&
               typeof $steps['runSaveDesign'] === 'object' &&
               typeof $steps['runSaveDesign'].then === 'function'
             ) {
@@ -433,6 +526,7 @@ function PlasmicGbrToolPathTool__RenderFunc(props: {
                 })()
               : undefined;
             if (
+              $steps['runSaveFrames'] != null &&
               typeof $steps['runSaveFrames'] === 'object' &&
               typeof $steps['runSaveFrames'].then === 'function'
             ) {
@@ -451,15 +545,147 @@ function PlasmicGbrToolPathTool__RenderFunc(props: {
           </div>
         </AntdButton>
       </div>
+      <div
+        data-plasmic-name={'confirmation'}
+        data-plasmic-override={overrides.confirmation}
+        className={classNames(projectcss.all, sty.confirmation, {
+          [sty.confirmationconfirmationPopOver]: hasVariant(
+            $state,
+            'confirmationPopOver',
+            'confirmationPopOver'
+          ),
+        })}
+      >
+        <div
+          className={classNames(
+            projectcss.all,
+            projectcss.__wab_text,
+            sty.text__iEAe
+          )}
+        >
+          {'Are you sure you ?'}
+        </div>
+        <p.Stack
+          as={'div'}
+          hasGap={true}
+          className={classNames(projectcss.all, sty.freeBox__sTQp)}
+        >
+          <AntdButton
+            className={classNames('__wab_instance', sty.button__c79On)}
+            onClick={async () => {
+              const $steps = {};
+
+              $steps['updateConfirmationPopOver'] = true
+                ? (() => {
+                    const actionArgs = {
+                      vgroup: 'confirmationPopOver',
+                      operation: 6,
+                    };
+                    return (({ vgroup, value }) => {
+                      if (typeof value === 'string') {
+                        value = [value];
+                      }
+
+                      p.set($state, vgroup, false);
+                      return false;
+                    })?.apply(null, [actionArgs]);
+                  })()
+                : undefined;
+              if (
+                $steps['updateConfirmationPopOver'] != null &&
+                typeof $steps['updateConfirmationPopOver'] === 'object' &&
+                typeof $steps['updateConfirmationPopOver'].then === 'function'
+              ) {
+                $steps['updateConfirmationPopOver'] = await $steps[
+                  'updateConfirmationPopOver'
+                ];
+              }
+
+              $steps['runMakeUnidirectional'] = true
+                ? (() => {
+                    const actionArgs = {
+                      eventRef: $props['makeUnidirectional'],
+                    };
+                    return (({ eventRef, args }) => {
+                      return eventRef?.(...(args ?? []));
+                    })?.apply(null, [actionArgs]);
+                  })()
+                : undefined;
+              if (
+                $steps['runMakeUnidirectional'] != null &&
+                typeof $steps['runMakeUnidirectional'] === 'object' &&
+                typeof $steps['runMakeUnidirectional'].then === 'function'
+              ) {
+                $steps['runMakeUnidirectional'] = await $steps[
+                  'runMakeUnidirectional'
+                ];
+              }
+            }}
+          >
+            <div
+              className={classNames(
+                projectcss.all,
+                projectcss.__wab_text,
+                sty.text__iDeCz
+              )}
+            >
+              {'Sure'}
+            </div>
+          </AntdButton>
+          <AntdButton
+            className={classNames('__wab_instance', sty.button___2OGzk)}
+            onClick={async () => {
+              const $steps = {};
+
+              $steps['updateConfirmationPopOver'] = true
+                ? (() => {
+                    const actionArgs = {
+                      vgroup: 'confirmationPopOver',
+                      operation: 6,
+                    };
+                    return (({ vgroup, value }) => {
+                      if (typeof value === 'string') {
+                        value = [value];
+                      }
+
+                      p.set($state, vgroup, false);
+                      return false;
+                    })?.apply(null, [actionArgs]);
+                  })()
+                : undefined;
+              if (
+                $steps['updateConfirmationPopOver'] != null &&
+                typeof $steps['updateConfirmationPopOver'] === 'object' &&
+                typeof $steps['updateConfirmationPopOver'].then === 'function'
+              ) {
+                $steps['updateConfirmationPopOver'] = await $steps[
+                  'updateConfirmationPopOver'
+                ];
+              }
+            }}
+          >
+            <div
+              className={classNames(
+                projectcss.all,
+                projectcss.__wab_text,
+                sty.text__gUnb6
+              )}
+            >
+              {'Fuck NO!'}
+            </div>
+          </AntdButton>
+        </p.Stack>
+      </div>
     </div>
   ) as React.ReactElement | null;
 }
 
 const PlasmicDescendants = {
-  root: ['root', 'toolPathMode', 'showFrames', 'includeFrames'],
+  root: ['root', 'toolPathMode', 'showFrames', 'includeFrames', 'confirmation'],
   toolPathMode: ['toolPathMode'],
   showFrames: ['showFrames'],
   includeFrames: ['includeFrames'],
+  confirmation: ['confirmation'],
 } as const;
 type NodeNameType = keyof typeof PlasmicDescendants;
 type DescendantsType<T extends NodeNameType> =
@@ -469,6 +695,7 @@ type NodeDefaultElementType = {
   toolPathMode: typeof AntdSwitch;
   showFrames: typeof AntdSwitch;
   includeFrames: typeof AntdSwitch;
+  confirmation: 'div';
 };
 
 type ReservedPropsType = 'variants' | 'args' | 'overrides';
@@ -534,6 +761,7 @@ export const PlasmicGbrToolPathTool = Object.assign(
     toolPathMode: makeNodeComponent('toolPathMode'),
     showFrames: makeNodeComponent('showFrames'),
     includeFrames: makeNodeComponent('includeFrames'),
+    confirmation: makeNodeComponent('confirmation'),
 
     // Metadata about props expected for PlasmicGbrToolPathTool
     internalVariantProps: PlasmicGbrToolPathTool__VariantProps,

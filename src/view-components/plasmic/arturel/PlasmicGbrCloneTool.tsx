@@ -38,6 +38,7 @@ import { AntdButton } from '@plasmicpkgs/antd5/skinny/registerButton'; // plasmi
 import '@plasmicapp/react-web/lib/plasmic.css';
 
 import plasmic_antd_5_hostless_css from '../antd_5_hostless/plasmic_antd_5_hostless.module.css'; // plasmic-import: ohDidvG9XsCeFumugENU3J/projectcss
+import plasmic_plasmic_rich_components_css from '../plasmic_rich_components/plasmic_plasmic_rich_components.module.css'; // plasmic-import: jkU633o1Cz7HrJdwdxhVHk/projectcss
 import projectcss from './plasmic_arturel.module.css'; // plasmic-import: dgFPhDvLY4vKuXTDNeS2uD/projectcss
 import sty from './PlasmicGbrCloneTool.module.css'; // plasmic-import: 05mOR9eSl0_B/css
 
@@ -152,6 +153,7 @@ function PlasmicGbrCloneTool__RenderFunc(props: {
         projectcss.plasmic_mixins,
         projectcss.plasmic_tokens,
         plasmic_antd_5_hostless_css.plasmic_tokens,
+        plasmic_plasmic_rich_components_css.plasmic_tokens,
         sty.root
       )}
     >
@@ -195,6 +197,7 @@ function PlasmicGbrCloneTool__RenderFunc(props: {
                 })()
               : undefined;
             if (
+              $steps['updateCxValue'] != null &&
               typeof $steps['updateCxValue'] === 'object' &&
               typeof $steps['updateCxValue'].then === 'function'
             ) {
@@ -347,6 +350,7 @@ function PlasmicGbrCloneTool__RenderFunc(props: {
                 })()
               : undefined;
             if (
+              $steps['runNClone'] != null &&
               typeof $steps['runNClone'] === 'object' &&
               typeof $steps['runNClone'].then === 'function'
             ) {
@@ -380,6 +384,7 @@ function PlasmicGbrCloneTool__RenderFunc(props: {
                 })()
               : undefined;
             if (
+              $steps['runClear'] != null &&
               typeof $steps['runClear'] === 'object' &&
               typeof $steps['runClear'].then === 'function'
             ) {

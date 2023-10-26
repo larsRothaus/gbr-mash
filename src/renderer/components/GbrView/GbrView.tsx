@@ -50,6 +50,16 @@ class GbrView extends React.Component<Props, State> {
   }
 
   componentDidMount() {
+    window.addEventListener('resize', ()=>{
+      if(this.stage){
+        this.stage.draw()
+        this.stage.size({
+          width:  window.innerWidth,
+          height:  window.innerHeight
+        });
+      }
+    })
+
     this.stage = this.setupStage();
     this.setupControls();
     if (this.props.viewNodeLayers) {

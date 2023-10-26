@@ -1,0 +1,83 @@
+.root {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: flex-start;
+  width: 100%;
+  height: 41px;
+  max-width: 100%;
+  position: relative;
+  min-width: 0;
+  padding: 0px;
+}
+.text__lSfiy {
+  position: relative;
+  width: auto;
+  height: 29px;
+  max-width: 100%;
+  padding-top: 3px;
+  white-space: pre;
+  user-select: none;
+}
+.select:global(.__wab_instance) {
+  max-width: 100%;
+  object-fit: cover;
+  position: relative;
+  width: 98px;
+  margin-left: 6px;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+.text__mqE2E {
+  position: relative;
+  width: auto;
+  height: 33px;
+  max-width: 100%;
+  padding-top: 3px;
+  user-select: none;
+  white-space: pre;
+}
+.xs:global(.__wab_instance) {
+  max-width: 100%;
+  object-fit: cover;
+  position: relative;
+  height: 35px;
+  width: 118px;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+.text__aei1 {
+  position: relative;
+  width: auto;
+  height: 29px;
+  max-width: 100%;
+  padding-top: 3px;
+  user-select: none;
+  white-space: pre;
+}
+.xs2:global(.__wab_instance) {
+  max-width: 100%;
+  object-fit: cover;
+  position: relative;
+  height: 35px;
+  width: 118px;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+.text__stMr2 {
+  position: relative;
+  width: auto;
+  height: 29px;
+  max-width: 100%;
+  padding-top: 3px;
+  user-select: none;
+  white-space: pre;
+}
+.xs3:global(.__wab_instance) {
+  max-width: 100%;
+  object-fit: cover;
+  position: relative;
+  height: 35px;
+  width: 118px;
+  flex-shrink: 0;
+}
